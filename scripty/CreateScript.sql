@@ -267,7 +267,7 @@ BEGIN
     INSERT INTO STUDIJNI_OBORY(id_obor, nazev, popis)
     VALUES (obor_id, nazev_in, popis_in);
 END;
-/ /*DELETE procedute complete
+/ /*DELETE procedure complete
 Vazební tabulka pøedmìt x studijní obor
 */
 CREATE OR REPLACE PROCEDURE insert_obor_predmet (id_obor_in INTEGER , id_predmet_in INTEGER)
@@ -276,7 +276,8 @@ BEGIN
     INSERT INTO OBOR_PREDMET(studijni_obor_id_obor, predmet_id_predmet)
     VALUES (id_obor_in, id_predmet_in);
 END;
-/ /*Vazební tabulka uživatel x skupina*/
+/ /*DELETE procedure complete
+Vazební tabulka uživatel x skupina*/
 CREATE OR REPLACE PROCEDURE insert_uzivatel_skupina (id_uzivatel_in INTEGER , id_skupina_in INTEGER)
 IS
 BEGIN
@@ -304,8 +305,7 @@ CREATE OR REPLACE PROCEDURE delete_predmet (id_in IN NUMBER)
 BEGIN
     DELETE FROM PREDMETY WHERE PREDMETY.ID_PREDMET = id_in;
     /*skupiny*/
-    /*obor_predmet*/
-    DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.predmet_id_predmet  = id_in;
+    delete_obor_predmet(id_in, 0);
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_hodnoceni (id_in IN NUMBER)
