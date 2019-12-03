@@ -229,7 +229,7 @@ END;
 
 /*Neovìøené procedury*/
 
-/*DELETE done*/
+/*DELETE procedure done*/
 CREATE OR REPLACE PROCEDURE insert_hodnoceni (hodnoceni_in INTEGER , popis_in in VARCHAR2, id_uzivatel_in INTEGER, id_skupina_in INTEGER )
 IS
 hodnoceni_id INTEGER;
@@ -239,6 +239,7 @@ BEGIN
     VALUES (hodnoceni_id, hodnoceni_in, popis_in, id_uzivatel_in, id_skupina_in);
 END;
 /
+/*DELETE procedure done*/
 CREATE OR REPLACE PROCEDURE insert_zprava (nazev_in in VARCHAR2 , telo_in in VARCHAR2, datum_vytvoreni_in in DATE , id_odesilatel_in INTEGER, id_prijemce_in INTEGER, id_skupina_in INTEGER )
 IS
 zprava_id INTEGER;
@@ -248,6 +249,7 @@ BEGIN
     VALUES (zprava_id, nazev_in, telo_in, datum_vytvoreni_in, id_odesilatel_in, id_prijemce_in, id_skupina_in);
 END;
 /
+/*DELETE procedure incomplete*/
 CREATE OR REPLACE PROCEDURE insert_predmet (nazev_in in VARCHAR2, popis_in in VARCHAR2)
 IS
 predmet_id INTEGER;
@@ -265,7 +267,9 @@ BEGIN
     INSERT INTO STUDIJNI_OBORY(id_obor, nazev, popis)
     VALUES (obor_id, nazev_in, popis_in);
 END;
-/ /*Vazební tabulka pøedmìt x studijní obor*/
+/ /*DELETE procedute complete
+Vazební tabulka pøedmìt x studijní obor
+*/
 CREATE OR REPLACE PROCEDURE insert_obor_predmet (id_obor_in INTEGER , id_predmet_in INTEGER)
 IS
 BEGIN
@@ -289,10 +293,65 @@ BEGIN
     VALUES (id_skupina, nazev_in, popis_in, id_predmet_in);
 END;
 /
+
+
+
+
+
+
+CREATE OR REPLACE PROCEDURE delete_predmet (id_in IN NUMBER)
+    IS
+BEGIN
+    DELETE FROM PREDMETY WHERE PREDMETY.ID_PREDMET = id_in;
+    /*skupiny*/
+    /*obor_predmet*/
+    DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.predmet_id_predmet  = id_in;
+END;
+/
 CREATE OR REPLACE PROCEDURE delete_hodnoceni (id_in IN NUMBER)
     IS
 BEGIN
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
+END;
+/
+CREATE OR REPLACE PROCEDURE delete_zprava (id_in IN NUMBER)
+    IS
+BEGIN
+    DELETE FROM ZPRAVY WHERE ZPRAVY.ID_ZPRAVA = id_in;
+END;
+/
+
+/* DELETE obor_predmet
+    id_in: element ID;
+    Element type:
+        0 - Obor
+        1> - Predmet
+ */
+CREATE OR REPLACE PROCEDURE delete_obor_predmet (id_in IN NUMBER, element_type_in IN NUMBER)
+    IS
+BEGIN
+    IF element_type_in = 0 THEN
+        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_in;
+    ELSE
+        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.STUDIJNI_OBOR_ID_OBOR = id_in;
+    END IF;
+END;
+/
+
+/* DELETE uzivatel_skupina
+    id_in: element ID;
+    Element type:
+        0 - uzivatel
+        1> - skupina
+ */
+CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina (id_in IN NUMBER, element_type_in IN NUMBER)
+    IS
+BEGIN
+    IF element_type_in = 0 THEN
+        DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_SKUPINA.UZIVATEL_ID_UZIVATEL = id_in;
+    ELSE
+        DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_SKUPINA.SKUPINA_ID_SKUPINA = id_in;
+    END IF;
 END;
 /
 /*Ovìøené procedury*/
