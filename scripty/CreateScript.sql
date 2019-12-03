@@ -609,6 +609,14 @@ END;
 /
 /*=======Triggery=====*/
 /*=======Funkce=====*/
+CREATE OR REPLACE FUNCTION fnc_hash_user( username_in in varchar2, password_in in varchar2 ) return varchar2
+    IS
+BEGIN
+    RETURN ltrim( to_char( dbms_utility.get_hash_value( upper(username_in)||'/'||upper(password_in),
+                                                        1000000000, power(2,30) ),
+                           rpad( 'X',29,'X')||'X' ) );
+END;
+/
 CREATE OR REPLACE FUNCTION fnc_rating_average(id integer)
     RETURN number
     IS
