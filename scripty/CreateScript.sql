@@ -229,6 +229,7 @@ END;
 
 /*Neovìøené procedury*/
 
+/*DELETE done*/
 CREATE OR REPLACE PROCEDURE insert_hodnoceni (hodnoceni_in INTEGER , popis_in in VARCHAR2, id_uzivatel_in INTEGER, id_skupina_in INTEGER )
 IS
 hodnoceni_id INTEGER;
@@ -288,7 +289,12 @@ BEGIN
     VALUES (id_skupina, nazev_in, popis_in, id_predmet_in);
 END;
 /
-
+CREATE OR REPLACE PROCEDURE delete_hodnoceni (id_in IN NUMBER)
+    IS
+BEGIN
+    DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
+END;
+/
 /*Ovìøené procedury*/
 
 CREATE OR REPLACE PROCEDURE insert_student
