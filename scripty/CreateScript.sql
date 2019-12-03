@@ -227,6 +227,68 @@ END;
 /
 /*==================Procedury===============*/
 
+/*Neovìøené procedury*/
+
+CREATE OR REPLACE PROCEDURE insert_hodnoceni (hodnoceni_in INTEGER , popis_in in VARCHAR2, id_uzivatel_in INTEGER, id_skupina_in INTEGER )
+IS
+hodnoceni_id INTEGER;
+BEGIN
+    SELECT MAX(hodnoceni.id_hodnoceni) into hodnoceni_id from HODNOCENI;
+    INSERT INTO HODNOCENI(id_hodnoceni, hodnota_hodnoceni, popis, id_uzivatel, id_skupina)
+    VALUES (hodnoceni_id, hodnoceni_in, popis_in, id_uzivatel_in, id_skupina_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_zprava (nazev_in in VARCHAR2 , telo_in in VARCHAR2, datum_vytvoreni_in in DATE , id_odesilatel_in INTEGER, id_prijemce_in INTEGER, id_skupina_in INTEGER )
+IS
+zprava_id INTEGER;
+BEGIN
+    SELECT MAX(id_zprava) into zprava_id from ZPRAVY;
+    INSERT INTO ZPRAVY(id_zprava, nazev, telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce, id_skupina_prijemce)
+    VALUES (zprava_id, nazev_in, telo_in, datum_vytvoreni_in, id_odesilatel_in, id_prijemce_in, id_skupina_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_predmet (nazev_in in VARCHAR2, popis_in in VARCHAR2)
+IS
+predmet_id INTEGER;
+BEGIN
+    SELECT MAX(predmety.id_predmet) into predmet_id from PREDMETY;
+    INSERT INTO PREDMETY(id_predmet, nazev, popis)
+    VALUES (predmet_id, nazev_in, popis_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_studijni_obor (nazev_in in VARCHAR2, popis_in in VARCHAR2)
+IS
+obor_id INTEGER;
+BEGIN
+    SELECT MAX(id_obor) into obor_id from STUDIJNI_OBORY;
+    INSERT INTO STUDIJNI_OBORY(id_obor, nazev, popis)
+    VALUES (obor_id, nazev_in, popis_in);
+END;
+/ /*Vazební tabulka pøedmìt x studijní obor*/
+CREATE OR REPLACE PROCEDURE insert_obor_predmet (id_obor_in INTEGER , id_predmet_in INTEGER)
+BEGIN
+    INSERT INTO OBOR_PREDMET(studijni_obor_id_obor, predmet_id_predmet)
+    VALUES (id_obor_in, id_predmet_in);
+END;
+/ /*Vazební tabulka uživatel x skupina*/
+CREATE OR REPLACE PROCEDURE insert_uzivatel_skupina (id_uzivatel_in INTEGER , id_skupina_in INTEGER)
+BEGIN
+    INSERT INTO UZIVATEL_SKUPINA(uzivatel_id_uzivatel, skupina_id_skupina)
+    VALUES (id_uzivatel_in, id_skupina_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_skupina (nazev_in in VARCHAR2, popis_in in VARCHAR2, id_predmet_in INTEGER)
+IS
+skupina_id INTEGER;
+BEGIN
+    SELECT MAX(id_skupina) into skupina_id from SKUPINY;
+    INSERT INTO SKUPINY(id_skupina, nazev, popis, id_predmet)
+    VALUES (id_skupina, nazev_in, popis_in, id_predmet_in);
+END;
+/
+
+/*Ovìøené procedury*/
+
 CREATE OR REPLACE PROCEDURE insert_student
 (jmeno_in IN VARCHAR2, prijmeni_in IN VARCHAR2, email_in VARCHAR2, heslo_in VARCHAR2, datum_vytvoreni_in DATE, rok_studia_in VARCHAR2, id_obor_in INTEGER)
 IS
