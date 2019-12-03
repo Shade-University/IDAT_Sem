@@ -266,12 +266,14 @@ BEGIN
 END;
 / /*Vazební tabulka pøedmìt x studijní obor*/
 CREATE OR REPLACE PROCEDURE insert_obor_predmet (id_obor_in INTEGER , id_predmet_in INTEGER)
+IS
 BEGIN
     INSERT INTO OBOR_PREDMET(studijni_obor_id_obor, predmet_id_predmet)
     VALUES (id_obor_in, id_predmet_in);
 END;
 / /*Vazební tabulka uživatel x skupina*/
 CREATE OR REPLACE PROCEDURE insert_uzivatel_skupina (id_uzivatel_in INTEGER , id_skupina_in INTEGER)
+IS
 BEGIN
     INSERT INTO UZIVATEL_SKUPINA(uzivatel_id_uzivatel, skupina_id_skupina)
     VALUES (id_uzivatel_in, id_skupina_in);
