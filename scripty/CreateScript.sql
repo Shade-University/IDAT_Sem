@@ -606,16 +606,34 @@ BEGIN
     INTO :new.id_zprava
     FROM dual;
 END;
+/
 /*=======Triggery=====*/
 /*=======Funkce=====*/
 CREATE OR REPLACE FUNCTION fnc_rating_average(id integer)
-    RETURN integer
+    RETURN number
     IS
-    average integer;
+    average number;
 BEGIN
     SELECT AVG(hodnota_hodnoceni) into average FROM getRatings where id_skupina = id;
     return average;
 END;
+/
+CREATE OR REPLACE FUNCTION fnc_get_top_rated_group
+    RETURN integer
+    IS
+    max_value  integer := 0;
+    max_id     integer;
+    temp_value integer;
+begin
+    FOR id IN (SELECT id_skupina from skupiny)
+        LOOP
+            temp_value := fnc_rating_average(id.id_skupina);
+            if (temp_value > max_value) then
+                max_value := temp_value; max_id := id.id_skupina;
+            end if;
+        end loop;
+    return max_id;
+end;
 /*=======Funkce=====*/
 
 
