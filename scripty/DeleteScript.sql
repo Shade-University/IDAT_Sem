@@ -31,3 +31,26 @@ drop PROCEDURE delete_group;
 drop PROCEDURE insert_student;
 drop PROCEDURE insert_ucitel;
 drop PROCEDURE delete_field;
+
+drop procedure delete_uzivatel_skupina;
+drop procedure delete_obor_predmet;
+drop procedure delete_zprava;
+drop procedure delete_hodnoceni;
+drop procedure delete_predmet;
+drop procedure insert_skupina;
+drop procedure insert_uzivatel_skupina;
+drop procedure insert_obor_predmet;
+drop procedure insert_studijni_obor;
+drop procedure insert_predmet;
+drop procedure insert_zprava;
+drop procedure insert_hodnoceni;
+
+drop function fnc_rating_average;
+
+drop trigger hodnoceni_trigger;
+drop trigger uzivatele_trigger;
+drop trigger predmety_trigger;
+drop trigger skupiny_trigger;
+drop trigger obory_trigger;
+drop trigger zpravy_trigger;
+
