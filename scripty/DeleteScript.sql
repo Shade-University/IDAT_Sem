@@ -17,6 +17,7 @@ drop sequence INCREMENT_PREDMETY;
 drop sequence INCREMENT_SKUPINY;
 drop sequence INCREMENT_UZIVATELE;
 drop sequence INCREMENT_ZPRAVY;
+drop sequence INCREMENT_SOUBORY;
 
 drop view getUsers;
 drop view getStudents;
@@ -50,8 +51,6 @@ drop procedure insert_hodnoceni;
 drop function fnc_rating_average;
 drop function FNC_GET_TOP_RATED_GROUP;
 drop function fnc_hash_user;
-drop function get_hash;
-drop function GETHASH;
 
 drop trigger hodnoceni_trigger;
 drop trigger uzivatele_trigger;

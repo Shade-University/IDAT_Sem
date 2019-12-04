@@ -530,11 +530,11 @@ BEGIN
     elsif (LENGTH(:NEW.heslo) < 2) then
         raise_application_error(-20001, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
     end if;
-    if (updating) then
-        :NEW.heslo := fnc_hash_user(:NEW.email, :NEW.heslo);
-    elsif (inserting) then
+
+    :NEW.heslo := fnc_hash_user(:NEW.email, :NEW.heslo);
+
+    if (inserting) then
         :NEW.datum_vytvoreni := sysdate;
-        :NEW.heslo := fnc_hash_user(:NEW.email, :NEW.heslo);
         SELECT increment_uzivatele.nextval
         INTO :NEW.id_uzivatel
         FROM dual;

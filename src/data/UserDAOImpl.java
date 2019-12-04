@@ -1,11 +1,6 @@
 package data;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -59,10 +54,19 @@ public class UserDAOImpl implements UserDAO {
     public Uzivatel getUserByLogin(String email, String password) {
 
         try {
+            CallableStatement pstm = conn.prepareCall(
+                    "{ ? = call fnc_hash_user(?,?) }"
+            );
+            pstm.registerOutParameter(1, Types.VARCHAR);
+            pstm.setString(2, email);
+            pstm.setString(3, password);
+
+            pstm.execute();
+
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT * FROM GETUSERS WHERE email=? AND heslo=?");
             preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, pstm.getString(1));
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
