@@ -171,6 +171,17 @@ ALTER TABLE studenti
 ALTER TABLE ucitele
     ADD CONSTRAINT uzivatel_ucitel FOREIGN KEY (id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
+
+create table soubory
+(
+    id_souboru      INTEGER NOT NULL
+        primary key,
+    typ_souboru     VARCHAR2(255),
+    "soubor"        BLOB    not null,
+    popis           VARCHAR2(255),
+    "nazev_souboru" VARCHAR2(255)
+);
+
 /*=============StrukturaDB============*/
 /*=============Sekvence============*/
 CREATE SEQUENCE increment_hodnoceni
@@ -189,6 +200,9 @@ CREATE SEQUENCE increment_obory
     START WITH 1;
 
 CREATE SEQUENCE increment_zpravy
+    START WITH 1;
+
+CREATE SEQUENCE increment_soubory
     START WITH 1;
 /*=============Sekvence============*/
 /*==================Procedury===============*/
@@ -607,6 +621,18 @@ BEGIN
         end if;
     end if;
 
+END;
+/
+CREATE OR REPLACE TRIGGER soubory_trigger
+    BEFORE INSERT OR UPDATE
+    ON SOUBORY
+    FOR EACH ROW
+BEGIN
+    if (inserting) then
+        SELECT increment_soubory.nextval
+        INTO :NEW.id_souboru
+        FROM dual;
+    end if;
 END;
 /
 /*=======Triggery=====*/
