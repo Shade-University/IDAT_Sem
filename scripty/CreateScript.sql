@@ -235,9 +235,6 @@ CREATE SEQUENCE increment_soubory
     START WITH 1;
 /*=============Sekvence============*/
 /*==================Procedury===============*/
-
-/*Neovìøené procedury*/
-
 /*----Insert procedury----*/
 CREATE OR REPLACE PROCEDURE insert_hodnoceni(hodnoceni_in INTEGER, popis_in in VARCHAR2, id_uzivatel_in INTEGER,
                                              id_skupina_in INTEGER)
