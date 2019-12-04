@@ -63,12 +63,23 @@ ALTER TABLE studijni_obory
 CREATE TABLE ucitele
 (
     id_uzivatel INTEGER      NOT NULL,
-    katedra     VARCHAR2(50) NOT NULL,
-    id_predmet  INTEGER      NOT NULL
+    katedra     VARCHAR2(50) NOT NULL
 );
 
 ALTER TABLE ucitele
     ADD CONSTRAINT ucitel_pk PRIMARY KEY (id_uzivatel);
+
+create table UCITELE_PREDMET
+(
+    UCITELE_ID_UCITEL  int
+        constraint UCITELE_PREDMET_UCITELE_ID_UZIVATEL_fk
+            references UCITELE,
+    PREDMET_ID_PREDMET int
+        constraint UCITELE_PREDMET_PREDMETY_ID_PREDMET_fk
+            references PREDMETY,
+    constraint UCITELE_PREDMET_pk
+        primary key (UCITELE_ID_UCITEL, PREDMET_ID_PREDMET)
+);
 
 CREATE TABLE uzivatel_skupina
 (
