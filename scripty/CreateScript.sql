@@ -11,19 +11,6 @@ CREATE TABLE hodnoceni
     id_uzivatel       INTEGER NOT NULL,
     id_skupina        INTEGER NOT NULL
 );
-
-create table SKUPINA_PREDMET
-(
-    SKUPINA_ID_SKUPINA int
-        constraint SKUPINA_PREDMET_SKUPINY_ID_SKUPINA_fk
-            references SKUPINY,
-    PREDMET_ID_PREDMET int
-        constraint SKUPINA_PREDMET_PREDMETY_ID_PREDMET_fk
-            references PREDMETY,
-    constraint SKUPINA_PREDMET_pk
-        primary key (SKUPINA_ID_SKUPINA, PREDMET_ID_PREDMET)
-);
-
 ALTER TABLE hodnoceni
     ADD CONSTRAINT hodnocení_pk PRIMARY KEY (id_hodnoceni);
 
@@ -32,17 +19,6 @@ CREATE TABLE obor_predmet
     studijni_obor_id_obor INTEGER NOT NULL,
     predmet_id_predmet    INTEGER NOT NULL
 );
-
-ALTER TABLE obor_predmet
-    ADD CONSTRAINT obor_predmet_pk PRIMARY KEY (studijni_obor_id_obor,
-                                                predmet_id_predmet);
-alter table obor_predmet
-    add constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_fk
-        foreign key (STUDIJNI_OBOR_ID_OBOR) references PREDMETY;
-
-alter table obor_predmet
-    add constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_fk
-        foreign key (STUDIJNI_OBOR_ID_OBOR) references STUDIJNI_OBORY;
 
 CREATE TABLE predmety
 (
@@ -139,6 +115,29 @@ CREATE TABLE zpravy_backup
     id_uzivatel_prijemce   INTEGER,
     id_skupina_prijemce    INTEGER
 );
+
+create table SKUPINA_PREDMET
+(
+    SKUPINA_ID_SKUPINA int
+        constraint SKUPINA_PREDMET_SKUPINY_ID_SKUPINA_fk
+            references SKUPINY,
+    PREDMET_ID_PREDMET int
+        constraint SKUPINA_PREDMET_PREDMETY_ID_PREDMET_fk
+            references PREDMETY,
+    constraint SKUPINA_PREDMET_pk
+        primary key (SKUPINA_ID_SKUPINA, PREDMET_ID_PREDMET)
+);
+
+ALTER TABLE obor_predmet
+    ADD CONSTRAINT obor_predmet_pk PRIMARY KEY (studijni_obor_id_obor,
+                                                predmet_id_predmet);
+alter table obor_predmet
+    add constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_fk
+        foreign key (STUDIJNI_OBOR_ID_OBOR) references PREDMETY;
+
+alter table obor_predmet
+    add constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_fk
+        foreign key (STUDIJNI_OBOR_ID_OBOR) references STUDIJNI_OBORY;
 
 ALTER TABLE zpravy
     ADD CONSTRAINT zprava_pk PRIMARY KEY (id_zprava);
@@ -282,8 +281,8 @@ END;
 CREATE OR REPLACE PROCEDURE insert_skupina(nazev_in in VARCHAR2, popis_in in VARCHAR2, id_predmet_in INTEGER)
     IS
 BEGIN
-    INSERT INTO SKUPINY(nazev, popis, id_predmet)
-    VALUES (nazev_in, popis_in, id_predmet_in);
+    INSERT INTO SKUPINY(nazev, popis)
+    VALUES (nazev_in, popis_in);
 END;
 /
 /*=====Insert procedury=====*/
@@ -474,12 +473,8 @@ FROM UZIVATELE u
 CREATE OR REPLACE VIEW getGroups AS
 SELECT s.id_skupina,
        s.nazev      "nazev_skupina",
-       s.popis      "popis_skupina",
-       p.id_predmet "id_skupina_predmet",
-       p.nazev      "nazev_skupina_predmet",
-       p.popis      "popis_skupina_predmet"
-FROM SKUPINY S
-         JOIN PREDMETY P ON S.ID_PREDMET = P.ID_PREDMET;
+       s.popis      "popis_skupina"
+FROM SKUPINY S;
 
 CREATE OR REPLACE VIEW getUsersInGroups AS
 SELECT *
