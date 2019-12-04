@@ -87,8 +87,7 @@ ALTER TABLE studijni_obory
 CREATE TABLE ucitele
 (
     id_uzivatel INTEGER      NOT NULL,
-    katedra     VARCHAR2(50) NOT NULL,
-    id_predmet  INTEGER      NOT NULL
+    katedra     VARCHAR2(50) NOT NULL
 );
 
 ALTER TABLE ucitele
