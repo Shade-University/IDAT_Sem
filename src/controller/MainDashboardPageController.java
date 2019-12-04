@@ -77,7 +77,7 @@ public class MainDashboardPageController implements Initializable {
         return prihlasenyUzivatel;
     }
     
-    public void refreshController(){
+    private void refreshController(){
         if("admin".equals(prihlasenyUzivatel.getUzivatelskyTyp())){
             btnAdmin.setVisible(true);
         }
@@ -107,8 +107,8 @@ public class MainDashboardPageController implements Initializable {
                         listViewUsers.setItems(FXCollections.observableArrayList(
                                 uzivatele));
 
-                        Double rating = ratingDAO.getAverageRating(newValue);
-                        if (rating == -1) { //TODO -1 to nikdy nevrátí
+                        double rating = ratingDAO.getAverageRating(newValue);
+                        if (rating == 0) {
                             lblHodnoceni.setText("Nehodnoceno");
                         } else {
                             lblHodnoceni.setText("Hodnocení: " + new DecimalFormat("#.#").format(rating) + "/5");
@@ -118,12 +118,6 @@ public class MainDashboardPageController implements Initializable {
                 });
     }
 
-    /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
-     */
     private void updateTextArea(Collection<Zprava> kolekce) {
         textAreaChat.clear();
         kolekce.forEach(zprava -> textAreaChat.appendText(zprava + "\n"));
@@ -131,10 +125,7 @@ public class MainDashboardPageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        refreshController();
-        
-
-        //Nastav jméno přihlášeného uživatele a získej jeho skupiny
+        refreshController(); //Nastav jméno přihlášeného uživatele a získej jeho skupiny
     }
 
     @FXML

@@ -111,8 +111,34 @@ CREATE TABLE zpravy
     id_skupina_prijemce    INTEGER
 );
 
+CREATE TABLE zpravy_backup
+(
+    id_zprava              INTEGER       NOT NULL,
+    nazev                  VARCHAR2(50)  NOT NULL,
+    telo                   VARCHAR2(250) NOT NULL,
+    datum_vytvoreni        DATE          NOT NULL,
+    id_uzivatel_odesilatel INTEGER       NOT NULL,
+    id_uzivatel_prijemce   INTEGER,
+    id_skupina_prijemce    INTEGER
+);
+
 ALTER TABLE zpravy
     ADD CONSTRAINT zprava_pk PRIMARY KEY (id_zprava);
+
+ALTER TABLE zpravy
+    ADD CONSTRAINT prijemce_skupina FOREIGN KEY (id_skupina_prijemce)
+        REFERENCES skupiny (id_skupina);
+
+ALTER TABLE zpravy
+    ADD CONSTRAINT prijemce_zprava FOREIGN KEY (id_uzivatel_prijemce)
+        REFERENCES uzivatele (id_uzivatel);
+
+ALTER TABLE zpravy
+    ADD CONSTRAINT odesilatel_zprava FOREIGN KEY (id_uzivatel_odesilatel)
+        REFERENCES uzivatele (id_uzivatel);
+
+ALTER TABLE zpravy_backup
+    ADD CONSTRAINT zprava_backup_pk PRIMARY KEY (id_zprava);
 
 ALTER TABLE hodnoceni
     ADD CONSTRAINT hodnoceni_skupina FOREIGN KEY (id_skupina)
@@ -126,21 +152,9 @@ ALTER TABLE obor_predmet
     ADD CONSTRAINT obor_predmet_studijni_obor_fk FOREIGN KEY (studijni_obor_id_obor)
         REFERENCES studijni_obory (id_obor);
 
-ALTER TABLE zpravy
-    ADD CONSTRAINT odesilatel_zprava FOREIGN KEY (id_uzivatel_odesilatel)
-        REFERENCES uzivatele (id_uzivatel);
-
 ALTER TABLE skupiny
     ADD CONSTRAINT predmet_skupina FOREIGN KEY (id_predmet)
         REFERENCES predmety (id_predmet);
-
-ALTER TABLE zpravy
-    ADD CONSTRAINT prijemce_skupina FOREIGN KEY (id_skupina_prijemce)
-        REFERENCES skupiny (id_skupina);
-
-ALTER TABLE zpravy
-    ADD CONSTRAINT prijemce_zprava FOREIGN KEY (id_uzivatel_prijemce)
-        REFERENCES uzivatele (id_uzivatel);
 
 ALTER TABLE studenti
     ADD CONSTRAINT student_obor FOREIGN KEY (id_obor)
@@ -503,8 +517,8 @@ CREATE OR REPLACE TRIGGER hodnoceni_trigger
     ON HODNOCENI
     FOR EACH ROW
 BEGIN
-    IF (:NEW.hodnota_hodnoceni < 0 OR :NEW.hodnota_hodnoceni > 10) then
-        raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 0-10');
+    IF (:NEW.hodnota_hodnoceni < 1 OR :NEW.hodnota_hodnoceni > 5) then
+        raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 1-5');
     end if;
 
     SELECT increment_hodnoceni.nextval
@@ -591,30 +605,36 @@ END;
 
 /*Otázka. Délku mi vlastnì kontroluje VARCHAR(50). Mìl bych to tady vùbec ošetøovat ?*/
 CREATE OR REPLACE TRIGGER zpravy_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR DELETE
     ON ZPRAVY
     FOR EACH ROW
 BEGIN
-    if (LENGTH(:NEW.nazev) <= 0 or LENGTH(:NEW.nazev) > 30) then
-        raise_application_error(-20001, 'Název zprávy nesmí být prázdný nebo vìtší jak 30 znakù');
-    elsif (LENGTH(:NEW.telo) <= 0 or LENGTH(:NEW.telo) > 250) then
-        raise_application_error(-20001, 'Tìlo zprávy nesmí být prázdné nebo vìtší jak 150 znakù');
+    if (deleting) then
+        INSERT INTO ZPRAVY_BACKUP(id_zprava, nazev, telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce,
+                                  id_skupina_prijemce)
+        VALUES (:old.id_zprava, :old.nazev, :old.telo, :old.datum_vytvoreni, :old.id_uzivatel_odesilatel,
+                :old.id_uzivatel_prijemce, :old.id_skupina_prijemce);
+    else
+        if (LENGTH(:NEW.nazev) <= 0 or LENGTH(:NEW.nazev) > 30) then
+            raise_application_error(-20001, 'Název zprávy nesmí být prázdný nebo vìtší jak 30 znakù');
+        elsif (LENGTH(:NEW.telo) <= 0 or LENGTH(:NEW.telo) > 250) then
+            raise_application_error(-20001, 'Tìlo zprávy nesmí být prázdné nebo vìtší jak 150 znakù');
+        end if;
+        :new.datum_vytvoreni := sysdate;
+        SELECT increment_zpravy.nextval
+        INTO :new.id_zprava
+        FROM dual;
     end if;
-
-    :new.datum_vytvoreni := sysdate;
-    SELECT increment_zpravy.nextval
-    INTO :new.id_zprava
-    FROM dual;
 END;
 /
 /*=======Triggery=====*/
 /*=======Funkce=====*/
-CREATE OR REPLACE FUNCTION fnc_hash_user( username_in in varchar2, password_in in varchar2 ) return varchar2
+CREATE OR REPLACE FUNCTION fnc_hash_user(username_in in varchar2, password_in in varchar2) return varchar2
     IS
 BEGIN
-    RETURN ltrim( to_char( dbms_utility.get_hash_value( upper(username_in)||'/'||upper(password_in),
-                                                        1000000000, power(2,30) ),
-                           rpad( 'X',29,'X')||'X' ) );
+    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(username_in) || '/' || upper(password_in),
+                                                     1000000000, power(2, 30)),
+                         rpad('X', 29, 'X') || 'X'));
 END;
 /
 CREATE OR REPLACE FUNCTION fnc_rating_average(id integer)

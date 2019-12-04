@@ -75,7 +75,7 @@ public class AdministrationPageController implements Initializable {
 
             loader.setLocation(Main.class.getResource("/gui/MainDashboardPage.fxml"));
             loader.load();
-            MainDashboardPageController controller = (MainDashboardPageController) loader.getController();
+            MainDashboardPageController controller = loader.getController();
             controller.initialize(null, null); //Refresh stránky
             Main.switchScene("/gui/MainDashboardPage.fxml");
 
