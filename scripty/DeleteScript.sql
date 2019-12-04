@@ -3,6 +3,7 @@ drop table ZPRAVY cascade constraints;
 drop table UZIVATELE cascade constraints;
 drop table STUDIJNI_OBORY cascade constraints;
 drop table UCITELE cascade constraints;
+drop table UCITELE_PREDMET cascade constraints;
 drop table STUDENTI cascade constraints;
 drop table PREDMETY cascade constraints;
 drop table SKUPINA_PREDMET cascade constraints;
