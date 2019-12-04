@@ -12,6 +12,18 @@ CREATE TABLE hodnoceni
     id_skupina        INTEGER NOT NULL
 );
 
+create table SKUPINA_PREDMET
+(
+    SKUPINA_ID_SKUPINA int
+        constraint SKUPINA_PREDMET_SKUPINY_ID_SKUPINA_fk
+            references SKUPINY,
+    PREDMET_ID_PREDMET int
+        constraint SKUPINA_PREDMET_PREDMETY_ID_PREDMET_fk
+            references PREDMETY,
+    constraint SKUPINA_PREDMET_pk
+        primary key (SKUPINA_ID_SKUPINA, PREDMET_ID_PREDMET)
+);
+
 ALTER TABLE hodnoceni
     ADD CONSTRAINT hodnocení_pk PRIMARY KEY (id_hodnoceni);
 
@@ -24,11 +36,11 @@ CREATE TABLE obor_predmet
 ALTER TABLE obor_predmet
     ADD CONSTRAINT obor_predmet_pk PRIMARY KEY (studijni_obor_id_obor,
                                                 predmet_id_predmet);
-alter table OBOR_PREDMET
+alter table obor_predmet
     add constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_fk
         foreign key (STUDIJNI_OBOR_ID_OBOR) references PREDMETY;
 
-alter table OBOR_PREDMET
+alter table obor_predmet
     add constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_fk
         foreign key (STUDIJNI_OBOR_ID_OBOR) references STUDIJNI_OBORY;
 
@@ -46,8 +58,7 @@ CREATE TABLE skupiny
 (
     id_skupina INTEGER      NOT NULL,
     nazev      VARCHAR2(50) NOT NULL,
-    popis      VARCHAR2(250),
-    id_predmet INTEGER      NOT NULL
+    popis      VARCHAR2(250)
 );
 
 ALTER TABLE skupiny

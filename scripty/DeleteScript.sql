@@ -5,6 +5,7 @@ drop table STUDIJNI_OBORY cascade constraints;
 drop table UCITELE cascade constraints;
 drop table STUDENTI cascade constraints;
 drop table PREDMETY cascade constraints;
+drop table SKUPINA_PREDMET cascade constraints;
 drop table SKUPINY cascade constraints;
 drop table HODNOCENI cascade constraints;
 drop table OBOR_PREDMET cascade constraints;
