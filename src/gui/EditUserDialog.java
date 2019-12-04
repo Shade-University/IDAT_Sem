@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import model.Uzivatel;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class EditUserDialog extends Dialog<Uzivatel> {
@@ -44,13 +43,13 @@ public class EditUserDialog extends Dialog<Uzivatel> {
                 (ButtonType button) -> {
                     if (button == ButtonType.OK) {
                         if (!txtFieldJmeno.getText().isEmpty()
-                        && !txtFieldPrijmeni.getText().isEmpty()
-                        && !txtFieldEmail.getText().isEmpty()){
-                            
+                                && !txtFieldPrijmeni.getText().isEmpty()
+                                && !txtFieldEmail.getText().isEmpty()) {
+
                             uzivatel.setJmeno(txtFieldJmeno.getText());
                             uzivatel.setPrijmeni(txtFieldPrijmeni.getText());
                             uzivatel.setEmail(txtFieldEmail.getText());
-                            
+
                             return uzivatel;
                         } else {
                             Alert alert = new Alert(Alert.AlertType.ERROR);

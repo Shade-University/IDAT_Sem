@@ -20,7 +20,7 @@ public interface UserDAO {
     
     public Uzivatel getUser(ResultSet rs) throws SQLException;
     
-    public void updateUser(Uzivatel uzivatel);
+    public void updateUser(Uzivatel uzivatel)  throws SQLException;
     
     public void insertUser(Uzivatel uzivatel);
     

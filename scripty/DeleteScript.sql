@@ -1,13 +1,15 @@
-drop table 	UZIVATEL_SKUPINA	cascade constraints;
-drop table 	ZPRAVY	cascade constraints;
-drop table 	UZIVATELE	cascade constraints;
-drop table 	STUDIJNI_OBORY	cascade constraints;
-drop table 	UCITELE	cascade constraints;
-drop table 	STUDENTI	cascade constraints;
-drop table 	PREDMETY	cascade constraints;
-drop table 	SKUPINY	cascade constraints;
-drop table 	HODNOCENI	cascade constraints;
-drop table 	OBOR_PREDMET	cascade constraints;
+drop table UZIVATEL_SKUPINA cascade constraints;
+drop table ZPRAVY cascade constraints;
+drop table UZIVATELE cascade constraints;
+drop table STUDIJNI_OBORY cascade constraints;
+drop table UCITELE cascade constraints;
+drop table STUDENTI cascade constraints;
+drop table PREDMETY cascade constraints;
+drop table SKUPINY cascade constraints;
+drop table HODNOCENI cascade constraints;
+drop table OBOR_PREDMET cascade constraints;
+drop table ZPRAVY_BACKUP cascade constraints;
+drop table SOUBORY cascade constraints;
 
 drop sequence INCREMENT_HODNOCENI;
 drop sequence INCREMENT_OBORY;
@@ -46,6 +48,10 @@ drop procedure insert_zprava;
 drop procedure insert_hodnoceni;
 
 drop function fnc_rating_average;
+drop function FNC_GET_TOP_RATED_GROUP;
+drop function fnc_hash_user;
+drop function get_hash;
+drop function GETHASH;
 
 drop trigger hodnoceni_trigger;
 drop trigger uzivatele_trigger;

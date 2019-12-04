@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import model.Obor;
 import model.Predmet;
 import model.Skupina;
@@ -18,7 +19,6 @@ import model.Ucitel;
 import model.Uzivatel;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class UserDAOImpl implements UserDAO {
@@ -145,26 +145,22 @@ public class UserDAOImpl implements UserDAO {
     } //Metoda rozparsuje a vytvoří uživatele
 
     @Override
-    public void updateUser(Uzivatel uzivatel) {
-        try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "UPDATE Uzivatele SET "
-                    + "jmeno = ?, "
-                    + "prijmeni = ?, "
-                    + "email = ? "
-                    + "WHERE id_uzivatel = ?"
-            );
-            pstm.setString(1, uzivatel.getJmeno());
-            pstm.setString(2, uzivatel.getPrijmeni());
-            pstm.setString(3, uzivatel.getEmail());
-            pstm.setInt(4, uzivatel.getId());
+    public void updateUser(Uzivatel uzivatel) throws SQLException{
+        PreparedStatement pstm = conn.prepareStatement(
+                "UPDATE Uzivatele SET "
+                        + "jmeno = ?, "
+                        + "prijmeni = ?, "
+                        + "email = ? "
+                        + "WHERE id_uzivatel = ?"
+        );
+        pstm.setString(1, uzivatel.getJmeno());
+        pstm.setString(2, uzivatel.getPrijmeni());
+        pstm.setString(3, uzivatel.getEmail());
+        pstm.setInt(4, uzivatel.getId());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("User updated");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        pstm.executeUpdate();
+        conn.commit();
+        System.out.println("User updated");
     }
 
     @Override
@@ -195,7 +191,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             CallableStatement pstm = conn.prepareCall(
                     "CALL insert_ucitel"
-                    + "(?, ?, ?, ?, ?, ?, ?)"
+                            + "(?, ?, ?, ?, ?, ?, ?)"
             );
             pstm.setString(1, ucitel.getJmeno());
             pstm.setString(2, ucitel.getPrijmeni());
@@ -217,7 +213,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             CallableStatement pstm = conn.prepareCall(
                     "CALL insert_student"
-                    + "(?, ?, ?, ?, ?, ?, ?)"
+                            + "(?, ?, ?, ?, ?, ?, ?)"
             );
             pstm.setString(1, student.getJmeno());
             pstm.setString(2, student.getPrijmeni());
@@ -293,7 +289,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             PreparedStatement pstm = conn.prepareStatement(
                     "INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)"
+                            + "VALUES (?, ?, ?, ?, ?, ?)"
             );
             pstm.setString(1, admin.getJmeno());
             pstm.setString(2, admin.getPrijmeni());

@@ -7,6 +7,7 @@ import data.UserDAOImpl;
 import gui.Main;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -168,8 +169,13 @@ public class MainDashboardPageController implements Initializable {
     private void btnEditClicked(ActionEvent event) {
         EditUserDialog edit = new EditUserDialog(prihlasenyUzivatel);
         edit.showAndWait().ifPresent((u) -> {
-            userDAO.updateUser(u);
-            
+            try {
+                userDAO.updateUser(u);
+            } catch (SQLException e) {
+                new Alert(AlertType.ERROR, e.getMessage().split("\\n")[0]).showAndWait();
+                return;
+            }
+
             prihlasenyUzivatel = u; //Refresh. Na refresh listů asi prdím
             lblCeleJmeno.setText("Uživatel: " + prihlasenyUzivatel.getJmeno() + " " + prihlasenyUzivatel.getPrijmeni());
         });

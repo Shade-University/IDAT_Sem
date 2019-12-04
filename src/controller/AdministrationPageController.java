@@ -18,6 +18,7 @@ import gui.InsertUserDialog;
 import gui.Main;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +95,11 @@ public class AdministrationPageController implements Initializable {
                 if (user.equals(MainDashboardPageController.getUzivatel())) {
                     MainDashboardPageController.setUzivatel(u);
                 }
-                userDAO.updateUser(u);
+                try {
+                    userDAO.updateUser(u);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 updateUserListView();
             });
         } else {

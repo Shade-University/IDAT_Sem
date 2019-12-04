@@ -144,18 +144,6 @@ ALTER TABLE hodnoceni
     ADD CONSTRAINT hodnoceni_skupina FOREIGN KEY (id_skupina)
         REFERENCES skupiny (id_skupina);
 
-ALTER TABLE obor_predmet
-    ADD CONSTRAINT obor_predmet_predmet_fk FOREIGN KEY (predmet_id_predmet)
-        REFERENCES predmety (id_predmet);
-
-ALTER TABLE obor_predmet
-    ADD CONSTRAINT obor_predmet_studijni_obor_fk FOREIGN KEY (studijni_obor_id_obor)
-        REFERENCES studijni_obory (id_obor);
-
-ALTER TABLE skupiny
-    ADD CONSTRAINT predmet_skupina FOREIGN KEY (id_predmet)
-        REFERENCES predmety (id_predmet);
-
 ALTER TABLE studenti
     ADD CONSTRAINT student_obor FOREIGN KEY (id_obor)
         REFERENCES studijni_obory (id_obor);
@@ -268,6 +256,16 @@ END;
 /
 /*=====Insert procedury=====*/
 /*=====Delete procedury=====*/
+CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_in IN NUMBER, element_type_in IN NUMBER)
+    IS
+BEGIN
+    IF element_type_in = 0 THEN
+        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_in;
+    ELSE
+        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.STUDIJNI_OBOR_ID_OBOR = id_in;
+    END IF;
+END;
+/
 CREATE OR REPLACE PROCEDURE delete_predmet(id_in IN NUMBER)
     IS
 BEGIN
@@ -288,30 +286,6 @@ BEGIN
     DELETE FROM ZPRAVY WHERE ZPRAVY.ID_ZPRAVA = id_in;
 END;
 /
-
-/* DELETE obor_predmet
-    id_in: element ID;
-    Element type:
-        0 - Obor
-        1> - Predmet
- */
-CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_in IN NUMBER, element_type_in IN NUMBER)
-    IS
-BEGIN
-    IF element_type_in = 0 THEN
-        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_in;
-    ELSE
-        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.STUDIJNI_OBOR_ID_OBOR = id_in;
-    END IF;
-END;
-/
-
-/* DELETE uzivatel_skupina
-    id_in: element ID;
-    Element type:
-        0 - uzivatel
-        1> - skupina
- */
 CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(id_in IN NUMBER, element_type_in IN NUMBER)
     IS
 BEGIN
@@ -513,7 +487,7 @@ JOIN PREDMETY pr ON s.id_predmet = pr.id_predmet; */
 /*=======Triggery=====*/
 
 CREATE OR REPLACE TRIGGER hodnoceni_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON HODNOCENI
     FOR EACH ROW
 BEGIN
@@ -521,42 +495,40 @@ BEGIN
         raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 1-5');
     end if;
 
-    SELECT increment_hodnoceni.nextval
-    INTO :new.id_hodnoceni
-    FROM dual;
+    if (inserting) then
+        SELECT increment_hodnoceni.nextval
+        INTO :new.id_hodnoceni
+        FROM dual;
+    end if;
 END;
 /
 
 
 CREATE OR REPLACE TRIGGER uzivatele_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON UZIVATELE
     FOR EACH ROW
-declare
-    email_count integer;
 BEGIN
-    select COUNT(*) into email_count FROM uzivatele where email = :NEW.email;
-
     if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
         raise_application_error(-20001, 'Jméno musí být v rozsahu 3 až 30 znakù');
     elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
         raise_application_error(-20001, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
     elsif (LENGTH(:NEW.heslo) < 2) then
         raise_application_error(-20001, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
-    elsif (email_count > 0) then
-        raise_application_error(-20001, 'Email již existuje');
     end if;
 
-    :NEW.datum_vytvoreni := sysdate;
-    SELECT increment_uzivatele.nextval
-    INTO :NEW.id_uzivatel
-    FROM dual;
+    if (inserting) then
+        :NEW.datum_vytvoreni := sysdate;
+        SELECT increment_uzivatele.nextval
+        INTO :NEW.id_uzivatel
+        FROM dual;
+    end if;
 END;
 /
 
 
 CREATE OR REPLACE TRIGGER predmety_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON PREDMETY
     FOR EACH ROW
 BEGIN
@@ -565,15 +537,17 @@ BEGIN
         raise_application_error(-20001, 'Název musí být v rozsahu 3 až 50 znakù');
     end if;
 
-    SELECT increment_predmety.nextval
-    INTO :new.id_predmet
-    FROM dual;
+    if (inserting) then
+        SELECT increment_predmety.nextval
+        INTO :new.id_predmet
+        FROM dual;
+    end if;
 END;
 /
 
 
 CREATE OR REPLACE TRIGGER skupiny_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON SKUPINY
     FOR EACH ROW
 BEGIN
@@ -581,15 +555,17 @@ BEGIN
         raise_application_error(-20001, 'Název musí být v rozsahu 3 až 30 znakù');
     end if;
 
-    SELECT increment_skupiny.nextval
-    INTO :new.id_skupina
-    FROM dual;
+    if (inserting) then
+        SELECT increment_skupiny.nextval
+        INTO :new.id_skupina
+        FROM dual;
+    end if;
 END;
 /
 
 
 CREATE OR REPLACE TRIGGER obory_trigger
-    BEFORE INSERT
+    BEFORE INSERT OR UPDATE
     ON STUDIJNI_OBORY
     FOR EACH ROW
 BEGIN
@@ -597,15 +573,17 @@ BEGIN
         raise_application_error(-20001, 'Název musí být v rozsahu 3 až 30 znakù');
     end if;
 
-    SELECT increment_obory.nextval
-    INTO :new.id_obor
-    FROM dual;
+    if (inserting) then
+        SELECT increment_obory.nextval
+        INTO :new.id_obor
+        FROM dual;
+    end if;
 END;
 /
 
 /*Otázka. Délku mi vlastnì kontroluje VARCHAR(50). Mìl bych to tady vùbec ošetøovat ?*/
 CREATE OR REPLACE TRIGGER zpravy_trigger
-    BEFORE INSERT OR DELETE
+    BEFORE INSERT OR DELETE OR UPDATE
     ON ZPRAVY
     FOR EACH ROW
 BEGIN
@@ -620,11 +598,15 @@ BEGIN
         elsif (LENGTH(:NEW.telo) <= 0 or LENGTH(:NEW.telo) > 250) then
             raise_application_error(-20001, 'Tìlo zprávy nesmí být prázdné nebo vìtší jak 150 znakù');
         end if;
-        :new.datum_vytvoreni := sysdate;
-        SELECT increment_zpravy.nextval
-        INTO :new.id_zprava
-        FROM dual;
+
+        if (inserting) then
+            :new.datum_vytvoreni := sysdate;
+            SELECT increment_zpravy.nextval
+            INTO :new.id_zprava
+            FROM dual;
+        end if;
     end if;
+
 END;
 /
 /*=======Triggery=====*/
