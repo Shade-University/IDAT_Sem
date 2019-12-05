@@ -69,27 +69,27 @@ CREATE TABLE ucitele
 ALTER TABLE ucitele
     ADD CONSTRAINT ucitel_pk PRIMARY KEY (id_uzivatel);
 
-create table UCITELE_PREDMET
+create table UCITELE_PREDMETY
 (
     UCITELE_ID_UCITEL  int
-        constraint UCITELE_PREDMET_UCITELE_ID_UZIVATEL_fk
+        constraint UCITELE_PREDMETY_UCITELE_ID_UZIVATEL_fk
             references UCITELE,
     PREDMET_ID_PREDMET int
-        constraint UCITELE_PREDMET_PREDMETY_ID_PREDMET_fk
+        constraint UCITELE_PREDMETY_PREDMETY_ID_PREDMET_fk
             references PREDMETY,
     constraint UCITELE_PREDMET_pk
         primary key (UCITELE_ID_UCITEL, PREDMET_ID_PREDMET)
 );
 
-CREATE TABLE uzivatel_skupina
+CREATE TABLE uzivatele_skupiny
 (
-    uzivatel_id_uzivatel INTEGER NOT NULL,
-    skupina_id_skupina   INTEGER NOT NULL
+    uzivatele_id_uzivatel INTEGER NOT NULL,
+    skupiny_id_skupina    INTEGER NOT NULL
 );
 
-ALTER TABLE uzivatel_skupina
-    ADD CONSTRAINT uzivatel_skupina_pk PRIMARY KEY (uzivatel_id_uzivatel,
-                                                    skupina_id_skupina);
+ALTER TABLE uzivatele_skupiny
+    ADD CONSTRAINT uzivatele_skupiny_pk PRIMARY KEY (uzivatele_id_uzivatel,
+                                                    skupiny_id_skupina);
 
 CREATE TABLE uzivatele
 (
@@ -99,7 +99,7 @@ CREATE TABLE uzivatele
     email           VARCHAR2(50) NOT NULL,
     heslo           VARCHAR2(50) NOT NULL,
     datum_vytvoreni DATE         NOT NULL,
-    uzivatel_typ    VARCHAR2(50) NOT NULL
+    uzivatel_typ   VARCHAR2(50)
 );
 
 ALTER TABLE uzivatele
@@ -113,7 +113,9 @@ CREATE TABLE zpravy
     datum_vytvoreni        DATE          NOT NULL,
     id_uzivatel_odesilatel INTEGER       NOT NULL,
     id_uzivatel_prijemce   INTEGER,
-    id_skupina_prijemce    INTEGER
+    id_skupina_prijemce    INTEGER,
+    id_rodic               INTEGER,
+    id_souboru             INTEGER
 );
 
 CREATE TABLE zpravy_backup
@@ -127,16 +129,16 @@ CREATE TABLE zpravy_backup
     id_skupina_prijemce    INTEGER
 );
 
-create table SKUPINA_PREDMET
+create table SKUPINY_PREDMETY
 (
-    SKUPINA_ID_SKUPINA int
-        constraint SKUPINA_PREDMET_SKUPINY_ID_SKUPINA_fk
+    SKUPINY_ID_SKUPINA  int
+        constraint SKUPINY_PREDMETY_SKUPINY_ID_SKUPINA_fk
             references SKUPINY,
-    PREDMET_ID_PREDMET int
-        constraint SKUPINA_PREDMET_PREDMETY_ID_PREDMET_fk
+    PREDMETY_ID_PREDMET int
+        constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_fk
             references PREDMETY,
-    constraint SKUPINA_PREDMET_pk
-        primary key (SKUPINA_ID_SKUPINA, PREDMET_ID_PREDMET)
+    constraint SKUPINA_PREDMETY_pk
+        primary key (SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
 );
 
 ALTER TABLE obor_predmet
@@ -176,20 +178,16 @@ ALTER TABLE studenti
     ADD CONSTRAINT student_obor FOREIGN KEY (id_obor)
         REFERENCES studijni_obory (id_obor);
 
-ALTER TABLE ucitele
-    ADD CONSTRAINT ucitel_predmet FOREIGN KEY (id_predmet)
-        REFERENCES predmety (id_predmet);
-
 ALTER TABLE hodnoceni
     ADD CONSTRAINT uzivatel_hodnoceni FOREIGN KEY (id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
 
-ALTER TABLE uzivatel_skupina
-    ADD CONSTRAINT uzivatel_skupina_skupina_fk FOREIGN KEY (skupina_id_skupina)
+ALTER TABLE uzivatele_skupiny
+    ADD CONSTRAINT uzivatel_skupina_skupina_fk FOREIGN KEY (skupiny_id_skupina)
         REFERENCES skupiny (id_skupina);
 
-ALTER TABLE uzivatel_skupina
-    ADD CONSTRAINT uzivatel_skupina_uzivatel_fk FOREIGN KEY (uzivatel_id_uzivatel)
+ALTER TABLE uzivatele_skupiny
+    ADD CONSTRAINT uzivatel_skupina_uzivatel_fk FOREIGN KEY (uzivatele_id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
 
 ALTER TABLE studenti
@@ -202,18 +200,72 @@ ALTER TABLE ucitele
 
 create table soubory
 (
-    id_souboru NUMBER not null
+    id_souboru    NUMBER        not null
         constraint soubory_pk
             primary key,
     nazev_souboru VARCHAR2(255) not null,
-    typ_souboru VARCHAR2(255) not null,
-    pripona VARCHAR2(255) not null,
-    data BLOB not null,
-    upraveno DATE not null,
-    nahrano DATE not null
+    typ_souboru   VARCHAR2(255) not null,
+    pripona       VARCHAR2(255) not null,
+    data          BLOB          not null,
+    upraveno      DATE          not null,
+    nahrano       DATE          not null
+)
+/
+/*ISKAM*/
+create table konta
+(
+    id_konto     NUMBER not null
+        constraint KONTO_PK
+            primary key,
+    id_uzivatele NUMBER not null
+        constraint KONTO_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    cislo_karty  NUMBER not null
 )
 /
 
+create table produkty
+(
+    id_produktu  NUMBER        not null
+        constraint PRODUKT_PK
+            primary key,
+    nazev        VARCHAR2(255) not null,
+    popis        VARCHAR2(255) not null,
+    skladem      NUMBER,
+    typ          NUMBER        not null,
+    platnost_dny NUMBER
+)
+/
+
+create table transakce
+(
+    id_transakce  NUMBER        not null
+        constraint TRANSAKCE_PK
+            primary key,
+    id_konta      NUMBER        not null
+        constraint TRANSAKCE_KONTO_ID_KONTO_FK
+            references konta,
+    id_produktu   NUMBER        not null
+        constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
+            references produkty,
+    typ_transakce NUMBER        not null,
+    castka        FLOAT         not null,
+    datum         DATE          not null,
+    popis         VARCHAR2(255) not null
+)
+/
+
+create table jidelni_listky
+(
+    id_listku   NUMBER not null
+        constraint JIDELNI_LISTEK_PK
+            primary key,
+    id_produktu NUMBER not null
+        constraint JIDELNI_LISTEK_PRODUKT_ID_PRODUKTU_FK
+            references produkty,
+    datum       DATE   not null
+)
+/
 
 
 /*=============StrukturaDB============*/
@@ -238,6 +290,20 @@ CREATE SEQUENCE increment_zpravy
 
 CREATE SEQUENCE increment_soubory
     START WITH 1;
+
+CREATE SEQUENCE increment_konta
+    START WITH 1;
+
+CREATE SEQUENCE increment_transakce
+    START WITH 1;
+
+CREATE SEQUENCE increment_produkty
+    START WITH 1;
+
+CREATE SEQUENCE increment_jidelni_listky
+    START WITH 1;
+
+
 /*=============Sekvence============*/
 /*==================Procedury===============*/
 /*----Insert procedury----*/
@@ -285,10 +351,10 @@ END;
 /
 /*
 Vazební tabulka uživatel x skupina*/
-CREATE OR REPLACE PROCEDURE insert_uzivatel_skupina(id_uzivatel_in INTEGER, id_skupina_in INTEGER)
+CREATE OR REPLACE PROCEDURE insert_uzivatele_skupiny(id_uzivatel_in INTEGER, id_skupina_in INTEGER)
     IS
 BEGIN
-    INSERT INTO UZIVATEL_SKUPINA(uzivatel_id_uzivatel, skupina_id_skupina)
+    INSERT INTO UZIVATELE_SKUPINY(uzivatele_id_uzivatel, skupiny_id_skupina)
     VALUES (id_uzivatel_in, id_skupina_in);
 END;
 /
@@ -297,6 +363,13 @@ CREATE OR REPLACE PROCEDURE insert_skupina(nazev_in in VARCHAR2, popis_in in VAR
 BEGIN
     INSERT INTO SKUPINY(nazev, popis)
     VALUES (nazev_in, popis_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_konta(uzivatel_id_in in int, cislo_karty_in in VARCHAR2)
+    IS
+BEGIN
+    INSERT INTO konta(id_uzivatele, cislo_karty)
+    VALUES (uzivatel_id_in, cislo_karty_in);
 END;
 /
 /*=====Insert procedury=====*/
@@ -335,14 +408,13 @@ CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(id_in IN NUMBER, element_typ
     IS
 BEGIN
     IF element_type_in = 0 THEN
-        DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_SKUPINA.UZIVATEL_ID_UZIVATEL = id_in;
+        DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_SKUPINY.UZIVATELE_ID_UZIVATEL = id_in;
     ELSE
-        DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_SKUPINA.SKUPINA_ID_SKUPINA = id_in;
+        DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_SKUPINY.SKUPINY_ID_SKUPINA = id_in;
     END IF;
 END;
 /
 /*=====Delete procedury=====*/
-/*Ovìøené procedury - poté pøesun na správné místo*/
 
 CREATE OR REPLACE PROCEDURE insert_student(jmeno_in IN VARCHAR2, prijmeni_in IN VARCHAR2, email_in VARCHAR2,
                                            heslo_in VARCHAR2, datum_vytvoreni_in DATE, rok_studia_in VARCHAR2,
@@ -376,7 +448,7 @@ CREATE OR REPLACE PROCEDURE delete_ucitel(id_in IN NUMBER)
 BEGIN
     DELETE FROM UCITELE WHERE UCITELE.id_uzivatel = id_in;
     DELETE FROM ZPRAVY WHERE zpravy.id_uzivatel_odesilatel = id_in OR id_uzivatel_prijemce = id_in;
-    DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_ID_UZIVATEL = id_in;
+    DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_ID_UZIVATEL = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
     DELETE FROM UZIVATELE WHERE UZIVATELE.id_uzivatel = id_in;
 END;
@@ -386,7 +458,7 @@ CREATE OR REPLACE PROCEDURE delete_student(id_in IN NUMBER)
 BEGIN
     DELETE FROM STUDENTI WHERE STUDENTI.id_uzivatel = id_in;
     DELETE FROM ZPRAVY WHERE zpravy.id_uzivatel_odesilatel = id_in OR id_uzivatel_prijemce = id_in;
-    DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_ID_UZIVATEL = id_in;
+    DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_ID_UZIVATEL = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
     DELETE FROM UZIVATELE WHERE UZIVATELE.id_uzivatel = id_in;
 END;
@@ -395,7 +467,7 @@ CREATE OR REPLACE PROCEDURE delete_admin(id_in IN NUMBER)
     IS
 BEGIN
     DELETE FROM ZPRAVY WHERE zpravy.id_uzivatel_odesilatel = id_in OR id_uzivatel_prijemce = id_in;
-    DELETE FROM UZIVATEL_SKUPINA WHERE UZIVATEL_ID_UZIVATEL = id_in;
+    DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_ID_UZIVATEL = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
     DELETE FROM UZIVATELE WHERE UZIVATELE.id_uzivatel = id_in;
 END;
@@ -404,7 +476,7 @@ CREATE OR REPLACE PROCEDURE delete_group(id_in IN NUMBER)
     IS
 BEGIN
     DELETE FROM ZPRAVY WHERE zpravy.id_skupina_prijemce = id_in;
-    DELETE FROM UZIVATEL_SKUPINA WHERE skupina_id_skupina = id_in;
+    DELETE FROM UZIVATELE_SKUPINY WHERE skupiny_id_skupina = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_SKUPINA = id_in;
     DELETE FROM SKUPINY WHERE SKUPINY.id_skupina = id_in;
 END;
@@ -486,15 +558,15 @@ FROM UZIVATELE u
 
 CREATE OR REPLACE VIEW getGroups AS
 SELECT s.id_skupina,
-       s.nazev      "nazev_skupina",
-       s.popis      "popis_skupina"
+       s.nazev "nazev_skupina",
+       s.popis "popis_skupina"
 FROM SKUPINY S;
 
 CREATE OR REPLACE VIEW getUsersInGroups AS
 SELECT *
-FROM UZIVATEL_SKUPINA us
-         JOIN (SELECT * FROM GETGROUPS) g on us.skupina_id_skupina = g.id_skupina
-         JOIN (SELECT * FROM GETUSERS) u on us.uzivatel_id_uzivatel = u.id_uzivatel;
+FROM UZIVATELE_SKUPINY us
+         JOIN (SELECT * FROM GETGROUPS) g on us.skupiny_id_skupina = g.id_skupina
+         JOIN (SELECT * FROM GETUSERS) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
 
 CREATE OR REPLACE VIEW getRatings AS
 SELECT h.id_hodnoceni,
@@ -565,6 +637,7 @@ BEGIN
         SELECT increment_uzivatele.nextval
         INTO :NEW.id_uzivatel
         FROM dual;
+
     end if;
 END;
 /
@@ -664,7 +737,54 @@ BEGIN
     end if;
 END;
 /
-
+CREATE OR REPLACE TRIGGER konta_trigger
+    BEFORE INSERT OR UPDATE
+    ON KONTA
+    FOR EACH ROW
+BEGIN
+    if (inserting) then
+        SELECT increment_konta.nextval
+        INTO :NEW.id_konto
+        FROM dual;
+    end if;
+END;
+/
+CREATE OR REPLACE TRIGGER transakce_trigger
+    BEFORE INSERT OR UPDATE
+    ON TRANSAKCE
+    FOR EACH ROW
+BEGIN
+    if (inserting) then
+        SELECT increment_transakce.nextval
+        INTO :NEW.id_transakce
+        FROM dual;
+    end if;
+END;
+/
+CREATE OR REPLACE TRIGGER produkty_trigger
+    BEFORE INSERT OR UPDATE
+    ON PRODUKTY
+    FOR EACH ROW
+BEGIN
+    if (inserting) then
+        SELECT increment_produkty.nextval
+        INTO :NEW.id_produktu
+        FROM dual;
+    end if;
+END;
+/
+CREATE OR REPLACE TRIGGER jidelni_listky_trigger
+    BEFORE INSERT OR UPDATE
+    ON JIDELNI_LISTKY
+    FOR EACH ROW
+BEGIN
+    if (inserting) then
+        SELECT increment_jidelni_listky.nextval
+        INTO :NEW.id_listku
+        FROM dual;
+    end if;
+END;
+/
 /*=======Triggery=====*/
 /*=======Funkce=====*/
 CREATE OR REPLACE FUNCTION fnc_hash_user(username_in in varchar2, password_in in varchar2) return varchar2
