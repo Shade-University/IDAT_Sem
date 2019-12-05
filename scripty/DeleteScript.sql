@@ -63,6 +63,7 @@ drop function fnc_rating_average;
 drop function FNC_GET_TOP_RATED_GROUP;
 drop function fnc_hash_user;
 
+/* NEPOTØEBNÉ PRO DATAGRIP
 drop trigger hodnoceni_trigger;
 drop trigger uzivatele_trigger;
 drop trigger predmety_trigger;
@@ -73,4 +74,4 @@ drop trigger konta_trigger;
 drop trigger transakce_trigger;
 drop trigger produkty_trigger;
 drop trigger jidelni_listky_trigger;
-
+*/
