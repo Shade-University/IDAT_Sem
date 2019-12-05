@@ -202,13 +202,19 @@ ALTER TABLE ucitele
 
 create table soubory
 (
-    id_souboru      INTEGER NOT NULL
-        primary key,
-    typ_souboru     VARCHAR2(255),
-    "soubor"        BLOB    not null,
-    popis           VARCHAR2(255),
-    "nazev_souboru" VARCHAR2(255)
-);
+    id_souboru NUMBER not null
+        constraint soubory_pk
+            primary key,
+    nazev_souboru VARCHAR2(255) not null,
+    typ_souboru VARCHAR2(255) not null,
+    pripona VARCHAR2(255) not null,
+    data BLOB not null,
+    upraveno DATE not null,
+    nahrano DATE not null
+)
+/
+
+
 
 /*=============StrukturaDB============*/
 /*=============Sekvence============*/
