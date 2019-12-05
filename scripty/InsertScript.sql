@@ -400,23 +400,23 @@ end;
 /*========uzivatel_ucitel========*/
 begin
     insert_ucitel('Jakub', 'Žufánek', 'st11111@ucitel.upce.cz', '11111',
-                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI', 42);
+                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
 begin
     insert_ucitel('Monika', 'Borkovcová', 'st22222@ucitel.upce.cz', '22222',
-                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI', 31);
+                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
 begin
     insert_ucitel('Karel', 'Šimerda', 'st33333@ucitel.upce.cz', '33333',
-                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI', 37);
+                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
 begin
     insert_ucitel('Antonín', 'Kávièka', 'st44444@ucitel.upce.cz', '44444',
-                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI', 37);
+                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
 begin
     insert_ucitel('Alena', 'Pozdílková', 'st55555@ucitel.upce.cz', '55555',
-                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI', 13);
+                  TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
 
 /*=======uzivatel_do_skupin=============*/
