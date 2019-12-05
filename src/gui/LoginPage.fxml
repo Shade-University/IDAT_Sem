@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -12,17 +14,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginPageController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #202332;" styleClass="stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginPageController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="1.0" top="10.0" />
    </padding>
    <children>
-      <VBox alignment="CENTER" fillWidth="false" layoutX="87.0" layoutY="59.0" prefHeight="278.0" prefWidth="403.0" spacing="20.0" style="-fx-border-color: black; -fx-background-color: grey;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+      <VBox alignment="CENTER" fillWidth="false" layoutX="87.0" layoutY="59.0" prefHeight="278.0" prefWidth="403.0" spacing="20.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
          <children>
-            <Label text="Login to system" />
+            <Label text="Přihlášení do sociální sítě" textFill="#7c8184">
+               <font>
+                  <Font size="23.0" />
+               </font></Label>
             <TextField fx:id="txtFieldUserName" alignment="CENTER" prefHeight="25.0" prefWidth="260.0" promptText="Email" text="admin" />
             <PasswordField fx:id="txtFieldPassword" alignment="CENTER" prefHeight="25.0" prefWidth="260.0" promptText="Heslo" text="admin" />
-            <Button fx:id="btnLogin" defaultButton="true" mnemonicParsing="false" onAction="#btnLoginClicked" prefHeight="25.0" prefWidth="180.0" text="Login" />
+            <Button fx:id="btnLogin" defaultButton="true" mnemonicParsing="false" onAction="#btnLoginClicked" prefHeight="25.0" prefWidth="180.0" text="Login">
+               <font>
+                  <Font size="17.0" />
+               </font></Button>
             <Label fx:id="lblError" textFill="#e40b0b" />
          </children>
          <padding>

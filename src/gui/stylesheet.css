@@ -1,0 +1,23 @@
+.parent{
+    -fx-background-color: #fff;
+}
+.sidebar{
+    -fx-background-color: #333645;
+}
+.btns{
+    -fx-background-color: transparent;
+}
+.btns:hover{
+    -fx-background-color: #202332;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: #202332;
+}
+
+.label {
+    -fx-text-fill: #7c8184;
+}
+.nadpis {
+    -fx-text-fill: WHITE;
+}
