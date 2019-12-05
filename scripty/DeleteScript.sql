@@ -29,13 +29,13 @@ drop sequence INCREMENT_TRANSAKCE;
 drop sequence INCREMENT_PRODUKTY;
 drop sequence INCREMENT_JIDELNI_LISTKY;
 
-drop view getUsers;
-drop view getStudents;
-drop view getTeachers;
+drop view getUzivatele;
+drop view getStudenti;
+drop view getUcitele;
 drop view getGroups;
 drop view getUsersInGroups;
-drop view getRatings;
-drop view getFields;
+drop view getHodnoceni;
+drop view getObory;
 
 drop PROCEDURE delete_student;
 drop PROCEDURE delete_ucitel;
@@ -59,9 +59,9 @@ drop procedure insert_zprava;
 drop procedure insert_hodnoceni;
 drop procedure insert_konta;
 
-drop function fnc_rating_average;
-drop function FNC_GET_TOP_RATED_GROUP;
-drop function fnc_hash_user;
+drop function fnc_prumer_hodnoceni;
+drop function fnc_get_nejlepe_hodnocenou_skupinu;
+drop function fnc_zahashuj_uzivatele;
 
 /* NEPOTØEBNÉ PRO DATAGRIP
 drop trigger hodnoceni_trigger;

@@ -492,7 +492,7 @@ END;
 
 
 /*=======Pohledy=====*/
-CREATE OR REPLACE VIEW getFields AS
+CREATE OR REPLACE VIEW getObory AS
 SELECT o.id_obor    "id_obor",
        o.nazev      "nazev_obor",
        o.popis      "popis_obor",
@@ -503,7 +503,7 @@ from OBOR_PREDMET ob
          JOIN STUDIJNI_OBORY o ON o.id_obor = ob.studijni_obor_id_obor
          JOIN PREDMETY p on ob.predmet_id_predmet = p.id_predmet;
 
-CREATE OR REPLACE VIEW getUsers AS
+CREATE OR REPLACE VIEW getUzivatele AS
 SELECT u.id_uzivatel,
        u.jmeno,
        u.prijmeni,
@@ -521,7 +521,7 @@ FROM UZIVATELE u
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel
          LEFT JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor;
 
-CREATE OR REPLACE VIEW getStudents AS
+CREATE OR REPLACE VIEW getStudenti AS
 SELECT u.id_uzivatel "id_uzivatel",
        u.jmeno,
        u.prijmeni,
@@ -536,20 +536,16 @@ FROM UZIVATELE u
          JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor;
 
-CREATE OR REPLACE VIEW getTeachers AS
+CREATE OR REPLACE VIEW getUcitele AS
 SELECT u.id_uzivatel,
        u.jmeno,
        u.prijmeni,
        u.email,
        u.datum_vytvoreni,
        u.uzivatel_typ,
-       uc.katedra,
-       p.id_predmet "id_vyucujici_predmet",
-       p.nazev      "nazev_vyucujici_predmet",
-       p.popis      "popis_vyucujici_predmet"
+       uc.katedra
 FROM UZIVATELE u
-         JOIN UCITELE uc ON u.id_uzivatel = uc.id_uzivatel
-         JOIN PREDMETY p ON uc.id_predmet = p.id_predmet;
+         JOIN UCITELE uc ON u.id_uzivatel = uc.id_uzivatel;
 
 CREATE OR REPLACE VIEW getGroups AS
 SELECT s.id_skupina,
@@ -563,7 +559,7 @@ FROM UZIVATELE_SKUPINY us
          JOIN (SELECT * FROM GETGROUPS) g on us.skupiny_id_skupina = g.id_skupina
          JOIN (SELECT * FROM GETUSERS) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
 
-CREATE OR REPLACE VIEW getRatings AS
+CREATE OR REPLACE VIEW getHodnoceni AS
 SELECT h.id_hodnoceni,
        h.hodnota_hodnoceni,
        h.popis,
@@ -625,7 +621,7 @@ BEGIN
         raise_application_error(-20001, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
     end if;
 
-    :NEW.heslo := fnc_hash_user(:NEW.email, :NEW.heslo);
+    :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo);
 
     if (inserting) then
         :NEW.datum_vytvoreni := sysdate;
@@ -782,35 +778,35 @@ END;
 /
 /*=======Triggery=====*/
 /*=======Funkce=====*/
-CREATE OR REPLACE FUNCTION fnc_hash_user(username_in in varchar2, password_in in varchar2) return varchar2
+CREATE OR REPLACE FUNCTION fnc_zahashuj_uzivatele(uziv_jmeno_in in varchar2, heslo_in in varchar2) return varchar2
     IS
 BEGIN
-    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(username_in) || '/' || upper(password_in),
+    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(uziv_jmeno_in) || '/' || upper(heslo_in),
                                                      1000000000, power(2, 30)),
                          rpad('X', 29, 'X') || 'X'));
 END;
 /
-CREATE OR REPLACE FUNCTION fnc_rating_average(id integer)
+CREATE OR REPLACE FUNCTION fnc_prumer_hodnoceni(id integer)
     RETURN number
     IS
-    average number;
+    prumer number;
 BEGIN
-    SELECT AVG(hodnota_hodnoceni) into average FROM getRatings where id_skupina = id;
-    return average;
+    SELECT AVG(hodnota_hodnoceni) into prumer FROM getHodnoceni where id_skupina = id;
+    return prumer;
 END;
 /
-CREATE OR REPLACE FUNCTION fnc_get_top_rated_group
+CREATE OR REPLACE FUNCTION fnc_get_nejlepe_hodnocenou_skupinu
     RETURN integer
     IS
-    max_value  integer := 0;
+    max_hodnota  integer := 0;
     max_id     integer;
-    temp_value integer;
+    temp_hodnota integer;
 begin
     FOR id IN (SELECT id_skupina from skupiny)
         LOOP
-            temp_value := fnc_rating_average(id.id_skupina);
-            if (temp_value > max_value) then
-                max_value := temp_value; max_id := id.id_skupina;
+            temp_hodnota := fnc_prumer_hodnoceni(id.id_skupina);
+            if (temp_hodnota > max_hodnota) then
+                max_hodnota := temp_hodnota; max_id := id.id_skupina;
             end if;
         end loop;
     return max_id;
