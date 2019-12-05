@@ -342,15 +342,26 @@ Insert into PREDMETY (ID_PREDMET, NAZEV, POPIS)
 values ('168', 'Volejbal LS', 'VOL2');
 /* ==========Skupiny============ */
 INSERT INTO SKUPINY(NAZEV, POPIS)
-VALUES ('Skupina: Datové struktury', 'Skupina ákù pøedmìtu Dat. struktur');
+VALUES ('Skupina: První roèník', 'Skupina prvákù');
 INSERT INTO SKUPINY(NAZEV, POPIS)
-VALUES ('Skupina: Databáze 1', 'Skupina ákù pøedmìtu Databáze 1');
+VALUES ('Skupina: Druhı roèník', 'Skupina druháci');
 INSERT INTO SKUPINY(NAZEV, POPIS)
-VALUES ('Skupina: Teorie grafù', 'Skupina ákù pøedmìtu Teorie grafù');
+VALUES ('Skupina: Tøetí roèník', 'Skupina tøeáci');
 INSERT INTO SKUPINY(NAZEV, POPIS)
-VALUES ('Skupina: Programovací techniky', 'Skupina ákù pøedmìtu Prog. techniky');
+VALUES ('Skupina: Pátı roèník', 'Skupina páákù');
 INSERT INTO SKUPINY(NAZEV, POPIS)
-VALUES ('Skupina: Statistika', 'Skupina ákù pøedmìtu Statistika');
+VALUES ('Skupina: Šestı roèník', 'Skupina šesákù');
+/* ========Skupiny_predmet=============*/
+begin
+    insert_skupiny_predmety('1', '1');
+    insert_skupiny_predmety('1', '2');
+    insert_skupiny_predmety('1', '3');
+    insert_skupiny_predmety('1', '4');
+    insert_skupiny_predmety('1', '5');
+    insert_skupiny_predmety('1', '6');
+    insert_skupiny_predmety('1', '7');
+    insert_skupiny_predmety('1', '8');
+end;
 /* ========uzivatele_student=============*/
 /*EXECUTE insert_student('Tomáš', 'Vondra', 'st55448@student.upce.cz', 'lopata97', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1); */
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)

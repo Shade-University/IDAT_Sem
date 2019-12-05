@@ -136,9 +136,7 @@ create table SKUPINY_PREDMETY
             references SKUPINY,
     PREDMETY_ID_PREDMET int
         constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_fk
-            references PREDMETY,
-    constraint SKUPINA_PREDMETY_pk
-        primary key (SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
+            references PREDMETY
 );
 
 ALTER TABLE obor_predmet
@@ -365,6 +363,13 @@ BEGIN
     VALUES (nazev_in, popis_in);
 END;
 /
+CREATE OR REPLACE PROCEDURE insert_skupiny_predmety(id_skupina_in in INTEGER, id_predmet_in in INTEGER)
+    IS
+BEGIN
+    INSERT INTO SKUPINY_PREDMETY(SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
+    VALUES (id_skupina_in, id_predmet_in);
+END;
+/
 CREATE OR REPLACE PROCEDURE insert_konta(uzivatel_id_in in int, cislo_karty_in in VARCHAR2)
     IS
 BEGIN
@@ -547,17 +552,17 @@ SELECT u.id_uzivatel,
 FROM UZIVATELE u
          JOIN UCITELE uc ON u.id_uzivatel = uc.id_uzivatel;
 
-CREATE OR REPLACE VIEW getGroups AS
+CREATE OR REPLACE VIEW getSkupiny AS
 SELECT s.id_skupina,
        s.nazev "nazev_skupina",
        s.popis "popis_skupina"
 FROM SKUPINY S;
 
-CREATE OR REPLACE VIEW getUsersInGroups AS
+CREATE OR REPLACE VIEW getUzivateleVeSkupine AS
 SELECT *
 FROM UZIVATELE_SKUPINY us
-         JOIN (SELECT * FROM GETGROUPS) g on us.skupiny_id_skupina = g.id_skupina
-         JOIN (SELECT * FROM GETUSERS) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
+         JOIN (SELECT * FROM getSkupiny) g on us.skupiny_id_skupina = g.id_skupina
+         JOIN (SELECT * FROM getuzivatele) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
 
 CREATE OR REPLACE VIEW getHodnoceni AS
 SELECT h.id_hodnoceni,
@@ -566,8 +571,8 @@ SELECT h.id_hodnoceni,
        u.*,
        g.*
 FROM HODNOCENI h
-         JOIN (select * from getusers) u ON u.id_uzivatel = h.id_uzivatel
-         JOIN (select * from getgroups) g ON g.id_skupina = h.id_skupina;
+         JOIN (select * from getUzivatele) u ON u.id_uzivatel = h.id_uzivatel
+         JOIN (select * from getSkupiny) g ON g.id_skupina = h.id_skupina;
 
 /*CREATE OR REPLACE VIEW getGroups AS
 SELECT
