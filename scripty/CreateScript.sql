@@ -131,12 +131,14 @@ CREATE TABLE zpravy_backup
 
 create table SKUPINY_PREDMETY
 (
-    SKUPINY_ID_SKUPINA  int
-        constraint SKUPINY_PREDMETY_SKUPINY_ID_SKUPINA_fk
+    SKUPINY_ID_SKUPINA  NUMBER not null
+        constraint SKUPINY_PREDMETY_SKUPINY_ID_SKUPINA_FK
             references SKUPINY,
-    PREDMETY_ID_PREDMET int
-        constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_fk
-            references PREDMETY
+    PREDMETY_ID_PREDMET NUMBER not null
+        constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_FK
+            references PREDMETY,
+    constraint SKUPINY_PREDMETY_PK
+        primary key (SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
 );
 
 ALTER TABLE obor_predmet
