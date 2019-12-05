@@ -431,16 +431,15 @@ BEGIN
 END;
 /
 CREATE OR REPLACE PROCEDURE insert_ucitel(jmeno_in IN VARCHAR2, prijmeni_in IN VARCHAR2, email_in VARCHAR2,
-                                          heslo_in VARCHAR2, datum_vytvoreni_in DATE, katedra_in VARCHAR2,
-                                          id_predmet_in INTEGER)
+                                          heslo_in VARCHAR2, datum_vytvoreni_in DATE, katedra_in VARCHAR2)
     IS
     user_id INTEGER;
 BEGIN
     INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
     VALUES (jmeno_in, prijmeni_in, email_in, heslo_in, datum_vytvoreni_in, 'ucitel');
     SELECT max(id_uzivatel) into user_id from UZIVATELE;
-    INSERT INTO UCITELE(id_uzivatel, katedra, id_predmet)
-    VALUES (user_id, katedra_in, id_predmet_in);
+    INSERT INTO UCITELE(id_uzivatel, katedra)
+    VALUES (user_id, katedra_in);
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_ucitel(id_in IN NUMBER)
