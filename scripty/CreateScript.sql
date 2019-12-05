@@ -515,15 +515,11 @@ SELECT u.id_uzivatel,
        so.id_obor,
        so.nazev     "nazev_obor",
        so.popis     "popis_obor",
-       uc.katedra,
-       p.id_predmet "id_vyucujici_predmet",
-       p.nazev      "nazev_vyucujici_predmet",
-       p.popis      "popis_vyucujici_predmet"
+       uc.katedra
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel
-         LEFT JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor
-         LEFT JOIN PREDMETY p on uc.id_predmet = p.id_predmet;
+         LEFT JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor;
 
 CREATE OR REPLACE VIEW getStudents AS
 SELECT u.id_uzivatel "id_uzivatel",
