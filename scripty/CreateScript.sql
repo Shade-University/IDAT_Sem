@@ -12,7 +12,7 @@ CREATE TABLE hodnoceni
     id_skupina        INTEGER NOT NULL
 );
 ALTER TABLE hodnoceni
-    ADD CONSTRAINT hodnocení_pk PRIMARY KEY (id_hodnoceni);
+    ADD CONSTRAINT hodnoceni_pk PRIMARY KEY (id_hodnoceni);
 
 CREATE TABLE obor_predmet
 (
@@ -89,7 +89,7 @@ CREATE TABLE uzivatele_skupiny
 
 ALTER TABLE uzivatele_skupiny
     ADD CONSTRAINT uzivatele_skupiny_pk PRIMARY KEY (uzivatele_id_uzivatel,
-                                                    skupiny_id_skupina);
+                                                     skupiny_id_skupina);
 
 CREATE TABLE uzivatele
 (
@@ -99,7 +99,7 @@ CREATE TABLE uzivatele
     email           VARCHAR2(50) NOT NULL,
     heslo           VARCHAR2(50) NOT NULL,
     datum_vytvoreni DATE         NOT NULL,
-    uzivatel_typ   VARCHAR2(50)
+    uzivatel_typ    VARCHAR2(50)
 );
 
 ALTER TABLE uzivatele
@@ -307,8 +307,8 @@ CREATE SEQUENCE increment_jidelni_listky
 /*=============Sekvence============*/
 /*==================Procedury===============*/
 /*----Insert procedury----*/
-CREATE OR REPLACE PROCEDURE insert_hodnoceni(hodnoceni_in INTEGER, popis_in in VARCHAR2, id_uzivatel_in INTEGER,
-                                             id_skupina_in INTEGER)
+CREATE OR REPLACE PROCEDURE insert_hodnoceni(hodnoceni_in in INTEGER, popis_in in VARCHAR2, id_uzivatel_in in INTEGER,
+                                             id_skupina_in in INTEGER)
     IS
 BEGIN
     INSERT INTO HODNOCENI(hodnota_hodnoceni, popis, id_uzivatel, id_skupina)
@@ -358,7 +358,7 @@ BEGIN
     VALUES (id_uzivatel_in, id_skupina_in);
 END;
 /
-CREATE OR REPLACE PROCEDURE insert_skupina(nazev_in in VARCHAR2, popis_in in VARCHAR2, id_predmet_in INTEGER)
+CREATE OR REPLACE PROCEDURE insert_skupina(nazev_in in VARCHAR2, popis_in in VARCHAR2)
     IS
 BEGIN
     INSERT INTO SKUPINY(nazev, popis)
@@ -513,8 +513,8 @@ SELECT u.id_uzivatel,
        u.uzivatel_typ,
        s.rok_studia,
        so.id_obor,
-       so.nazev     "nazev_obor",
-       so.popis     "popis_obor",
+       so.nazev "nazev_obor",
+       so.popis "popis_obor",
        uc.katedra
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
@@ -799,7 +799,7 @@ CREATE OR REPLACE FUNCTION fnc_get_nejlepe_hodnocenou_skupinu
     RETURN integer
     IS
     max_hodnota  integer := 0;
-    max_id     integer;
+    max_id       integer;
     temp_hodnota integer;
 begin
     FOR id IN (SELECT id_skupina from skupiny)
