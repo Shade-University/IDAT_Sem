@@ -182,13 +182,9 @@ ALTER TABLE hodnoceni
     ADD CONSTRAINT uzivatel_hodnoceni FOREIGN KEY (id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
 
-ALTER TABLE uzivatele_skupiny
-    ADD CONSTRAINT uzivatel_skupina_skupina_fk FOREIGN KEY (skupiny_id_skupina)
-        REFERENCES skupiny (id_skupina);
-
-ALTER TABLE uzivatele_skupiny
-    ADD CONSTRAINT uzivatel_skupina_uzivatel_fk FOREIGN KEY (uzivatele_id_uzivatel)
-        REFERENCES uzivatele (id_uzivatel);
+alter table uzivatele_skupiny
+    add constraint UZIVATELE_SKUPINY_PK
+        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
 
 ALTER TABLE studenti
     ADD CONSTRAINT uzivatel_student FOREIGN KEY (id_uzivatel)
@@ -233,7 +229,8 @@ create table produkty
     popis        VARCHAR2(255) not null,
     skladem      NUMBER,
     typ          NUMBER        not null,
-    platnost_dny NUMBER
+    platnost_dny NUMBER,
+    cena         NUMBER
 )
 /
 
@@ -377,6 +374,14 @@ CREATE OR REPLACE PROCEDURE insert_konta(uzivatel_id_in in int, cislo_karty_in i
 BEGIN
     INSERT INTO konta(id_uzivatele, cislo_karty)
     VALUES (uzivatel_id_in, cislo_karty_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_produkty(nazev_in in VARCHAR2, popis_in in VARCHAR2, skladem_in in int,
+                                            typ_in in int, platnost_dny_in in int, cena_in in int)
+    IS
+BEGIN
+    INSERT INTO produkty(nazev, popis, skladem, typ, platnost_dny, cena)
+    VALUES (nazev_in, popis_in, skladem_in, typ_in, platnost_dny_in, cena_in);
 END;
 /
 /*=====Insert procedury=====*/
