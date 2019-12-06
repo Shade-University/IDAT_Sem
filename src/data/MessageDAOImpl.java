@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Skupina;
-import model.Uzivatel;
-import model.Zprava;
+
+import model.Group;
+import model.User;
+import model.Message;
 
 /**
  *
@@ -33,7 +34,7 @@ public class MessageDAOImpl implements MessageDAO {
 
 
     @Override
-    public void createMessage(Zprava message) {
+    public void createMessage(Message message) {
         try {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO ZPRAVY(nazev, telo, datum_vytvoreni, "
@@ -62,8 +63,8 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
-    public Collection<Zprava> getMessagesForChatBetween(Uzivatel uzivatel1, Uzivatel uzivatel2) {
-        Collection<Zprava> collection = new ArrayList<>();
+    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) {
+        Collection<Message> collection = new ArrayList<>();
 
         try {
             PreparedStatement stmt = conn.prepareStatement(
@@ -78,9 +79,9 @@ public class MessageDAOImpl implements MessageDAO {
             ResultSet rs = stmt.executeQuery();
             //Načte zprávy kde je příjemce buď uživatel1 nebo 2 nebo je odesílatel uživatel1 nebo 2
             while (rs.next()) {
-                Zprava zprava;
+                Message zprava;
                 if (rs.getInt("id_uzivatel_odesilatel") == uzivatel1.getId()) {
-                    zprava = new Zprava(
+                    zprava = new Message(
                             rs.getString("nazev"),
                             rs.getString("telo"),
                             uzivatel1,
@@ -89,7 +90,7 @@ public class MessageDAOImpl implements MessageDAO {
                             rs.getDate("datum_vytvoreni")
                     ); //pokud je uživatel1 odesilatel, vytvoř tuto zprávu
                 } else {
-                    zprava = new Zprava(
+                    zprava = new Message(
                             rs.getString("nazev"),
                             rs.getString("telo"),
                             uzivatel2,
@@ -110,8 +111,8 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
-    public Collection<Zprava> getMessagesForGroupChat(Skupina skupina) {
-        Collection<Zprava> collection = new ArrayList<>();
+    public Collection<Message> getMessagesForGroupChat(Group skupina) {
+        Collection<Message> collection = new ArrayList<>();
 
         try {
             PreparedStatement stmt = conn.prepareStatement(
@@ -127,7 +128,7 @@ public class MessageDAOImpl implements MessageDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
 
-                Zprava zprava = new Zprava(
+                Message zprava = new Message(
                         rs.getString("nazev"),
                         rs.getString("telo"),
                         userDAO.getUser(rs),
@@ -146,11 +147,11 @@ public class MessageDAOImpl implements MessageDAO {
         return null;
     }
 
-//    private Uzivatel getUser(ResultSet rs) throws SQLException {
-//        Uzivatel uzivatel;
-//        if (rs.getString("uzivatel_typ").equals("student")) {
+//    private User getUser(ResultSet rs) throws SQLException {
+//        User uzivatel;
+//        if (rs.getString("uzivatel_typ").equals("STUDENT")) {
 //            uzivatel = new Student(
-//                    new Obor(
+//                    new Field(
 //                            rs.getInt("id_obor"),
 //                            rs.getString("nazev_obor"),
 //                            rs.getString("popis_obor")
@@ -163,8 +164,8 @@ public class MessageDAOImpl implements MessageDAO {
 //                    rs.getDate("datum_vytvoreni")
 //            );
 //        } else {
-//            uzivatel = new Ucitel(
-//                    new Predmet(
+//            uzivatel = new Teacher(
+//                    new Subject(
 //                            rs.getInt("id_vyucujici_predmet"),
 //                            rs.getString("nazev_vyucujici_predmet"),
 //                            rs.getString("popis_vyucujici_predmet")

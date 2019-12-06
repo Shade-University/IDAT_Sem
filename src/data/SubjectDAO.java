@@ -2,8 +2,8 @@ package data;
 
 import java.util.Collection;
 import java.util.List;
-import model.Obor;
-import model.Predmet;
+import model.Field;
+import model.Subject;
 
 /**
  *
@@ -11,11 +11,11 @@ import model.Predmet;
  */
 public interface SubjectDAO {
     
-    public Collection<Predmet> getAllSubjects();
+    public Collection<Subject> getAllSubjects();
     
-    public Collection<Predmet> getSubjectsForField(Obor obor);
+    public Collection<Subject> getSubjectsForField(Field obor);
     
-    public void insertSubjectsToField(List<Predmet> predmety, Obor obor);
+    public void insertSubjectsToField(List<Subject> predmety, Field obor);
     
-    public void removeSubjectsFromField(List<Predmet> predmety, Obor obor);
+    public void removeSubjectsFromField(List<Subject> predmety, Field obor);
 }

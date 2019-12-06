@@ -1,9 +1,9 @@
 package data;
 
 import java.util.Collection;
-import model.Skupina;
-import model.Uzivatel;
-import model.Zprava;
+import model.Group;
+import model.User;
+import model.Message;
 
 /**
  *
@@ -11,9 +11,9 @@ import model.Zprava;
  */
 public interface MessageDAO {
     
-    public void createMessage(Zprava message);
+    public void createMessage(Message message);
     
-    public Collection<Zprava> getMessagesForChatBetween(Uzivatel uzivatel1, Uzivatel uzivatel2);
+    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2);
     
-    public Collection<Zprava> getMessagesForGroupChat(Skupina skupina);
+    public Collection<Message> getMessagesForGroupChat(Group skupina);
 }

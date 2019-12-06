@@ -5,19 +5,19 @@ package model;
  *
  * @author Tomáš Vondra
  */
-public class Hodnoceni {
+public class Rating {
 
     private final int id;
     private final int hodnota;
     private final String popis;
-    private final Uzivatel hodnoticiUzivatel;
-    private final Skupina hodnoticiSkupina;
+    private final User hodnoticiUzivatel;
+    private final Group hodnoticiSkupina;
     
-    public Hodnoceni(int hodnota_hodnoceni, String popis, Uzivatel hodnotici_Uzivatel, Skupina hodnocena_skupina) {
+    public Rating(int hodnota_hodnoceni, String popis, User hodnotici_Uzivatel, Group hodnocena_skupina) {
         this(-1, hodnota_hodnoceni, popis, hodnotici_Uzivatel, hodnocena_skupina);
     }
 
-    public Hodnoceni(int id, int hodnota_hodnoceni, String popis, Uzivatel hodnotici_Uzivatel, Skupina hodnocena_skupina) {
+    public Rating(int id, int hodnota_hodnoceni, String popis, User hodnotici_Uzivatel, Group hodnocena_skupina) {
         this.id = id;
         this.hodnota = hodnota_hodnoceni;
         this.popis = popis;
@@ -37,11 +37,11 @@ public class Hodnoceni {
         return popis;
     }
 
-    public Uzivatel getHodnoticiUzivatel() {
+    public User getHodnoticiUzivatel() {
         return hodnoticiUzivatel;
     }
 
-    public Skupina getHodnoticiSkupina() {
+    public Group getHodnoticiSkupina() {
         return hodnoticiSkupina;
     }
 

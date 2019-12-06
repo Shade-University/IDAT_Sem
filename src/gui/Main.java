@@ -2,6 +2,7 @@ package gui;
 
 import data.OracleConnection;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,8 +19,8 @@ public class Main extends Application {
 
     private static Stage primaryStage;
 
-    public static void switchScene(String fxmlLocation) throws IOException {
-        Parent parent = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+    public static void switchScene(URL fxmlLocation) throws IOException {
+        Parent parent = FXMLLoader.load(fxmlLocation);
         primaryStage.setScene(new Scene(parent));
     }
 

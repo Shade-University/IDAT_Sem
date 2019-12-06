@@ -15,14 +15,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView layoutX="91.0" layoutY="86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="Id" />
-                            <TableColumn prefWidth="75.0" text="Jméno" />
-                              <TableColumn prefWidth="75.0" text="Přijmení" />
-                              <TableColumn prefWidth="75.0" text="Email" />
-                              <TableColumn prefWidth="75.0" text="Role" />
-                          </columns>
+                        <TableView fx:id="tableViewUsers" layoutX="91.0" layoutY="86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         </TableView>
                      </children>
                   </AnchorPane>
@@ -32,13 +25,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView layoutX="91.0" layoutY="86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <columns>
-                              <TableColumn prefWidth="75.0" text="Id" />
-                              <TableColumn prefWidth="75.0" text="Název" />
-                              <TableColumn prefWidth="75.0" text="Popis" />
-                              <TableColumn prefWidth="75.0" text="Počet členů" />
-                           </columns>
+                        <TableView fx:id="tableViewGroups" layoutX="91.0" layoutY="86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         </TableView>
                      </children>
                   </AnchorPane>

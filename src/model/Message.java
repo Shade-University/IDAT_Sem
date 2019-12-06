@@ -10,26 +10,26 @@ import java.time.LocalDateTime;
  *
  * @author Tomáš Vondra
  */
-public class Zprava {
+public class Message {
 
     private final int id;
     private final String nazev;
     private final String obsah;
     private final Date datum_vytvoreni;
-    private final Uzivatel odesilatel;
+    private final User odesilatel;
     
-    private Uzivatel prijemce_uzivatel;
-    private Skupina prijemce_skupina;
+    private User prijemce_uzivatel;
+    private Group prijemce_skupina;
 
-    public Zprava(String nazev, String obsah, Uzivatel odesilatel, Uzivatel prijemce_uzivatel, Skupina prijemce_skupina){
+    public Message(String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina){
         this(-1, nazev, obsah, odesilatel, prijemce_uzivatel, prijemce_skupina,
                 OracleConnection.parseDate(LocalDateTime.now().toString(), "yyyy-MM-dd'T'HH:mm:ss"));
     }
-    public Zprava(String nazev, String obsah, Uzivatel odesilatel, Uzivatel prijemce_uzivatel, Skupina prijemce_skupina, Date datum_vytvoreni){
+    public Message(String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina, Date datum_vytvoreni){
         this(-1, nazev, obsah, odesilatel, prijemce_uzivatel, prijemce_skupina,
                 datum_vytvoreni);
     }
-    public Zprava(int id, String nazev, String obsah, Uzivatel odesilatel, Uzivatel prijemce_uzivatel, Skupina prijemce_skupina, Date datum_vytvoreni) {
+    public Message(int id, String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina, Date datum_vytvoreni) {
         this.id = id;
         this.nazev = nazev;
         this.obsah = obsah;
@@ -55,15 +55,15 @@ public class Zprava {
         return datum_vytvoreni;
     }
 
-    public Uzivatel getOdesilatel() {
+    public User getOdesilatel() {
         return odesilatel;
     }
 
-    public Uzivatel getPrijemce_uzivatel() {
+    public User getPrijemce_uzivatel() {
         return prijemce_uzivatel;
     }
 
-    public Skupina getPrijemce_skupina() {
+    public Group getPrijemce_skupina() {
         return prijemce_skupina;
     }
 

@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Predmet;
-import model.Skupina;
-import model.Uzivatel;
+
+import model.Group;
+import model.Subject;
+import model.User;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class GroupDAOImpl implements GroupDAO {
@@ -31,145 +31,112 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
-    public Collection<Skupina> getAllGroups() {
+    public Collection<Group> getAllGroups() throws SQLException {
+        Collection<Group> collection = new ArrayList<>();
 
-        Collection<Skupina> collection = new ArrayList<>();
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM GETGROUPS"); //GETGROUPS je pohled v databázi
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getSkupiny");
 
-            while (rs.next()) {
-                Skupina skupina = getGroup(rs);
-                collection.add(skupina);
-            } //Načte všechny existující skupin.
+        while (rs.next()) {
+            Group group = getGroup(rs);
+            collection.add(group);
+        } //Načte všechny existující skupin.
 
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(GroupDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
+        return collection;
     }
 
     @Override
-    public Collection<Skupina> getUserGroups(Uzivatel user) {
+    public Collection<Group> getUserGroups(User user) throws SQLException {
+        Collection<Group> collection = new ArrayList<>();
 
-        Collection<Skupina> collection = new ArrayList<>();
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM GETUSERSINGROUPS g WHERE g.id_uzivatel = " + user.getId());
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getSkupiny g WHERE g.id_uzivatel = " + user.getId());
 
-            while (rs.next()) {
-                Skupina skupina = getGroup(rs);
-                collection.add(skupina);
-            } //Vybere všechny skupiny daného uživatele
+        while (rs.next()) {
+            Group group = getGroup(rs);
+            collection.add(group);
+        } //Vybere všechny skupiny daného uživatele
 
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(GroupDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
-
+        return collection;
     }
 
     @Override
-    public void updateGroup(Skupina group) {
-        try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "UPDATE SKUPINY SET "
-                    + "nazev = ?, "
-                    + "popis = ?, "
-                    + "id_predmet = ? "
-                    + "WHERE id_skupina = ?"
-            );
-            pstm.setString(1, group.getNazev());
-            pstm.setString(2, group.getPopis());
-            pstm.setInt(3, group.getPredmet().getId());
-            pstm.setInt(4, group.getId());
+    public void updateGroup(Group group) throws SQLException {
+        /*PreparedStatement preparedStatement = conn.prepareStatement(
+                "UPDATE SKUPINY SET "
+                        + "nazev = ?, "
+                        + "popis = ?, "
+                        + "id_predmet = ? "
+                        + "WHERE id_skupina = ?"
+        );
+        preparedStatement.setString(1, group.getName());
+        preparedStatement.setString(2, group.getDescription());
+        preparedStatement.setInt(3, group.getSubject().getId());
+        preparedStatement.setInt(4, group.getId());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("Group updated");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("Group updated");*/
     }
 
     @Override
-    public Skupina getGroup(ResultSet rs) throws SQLException {
-        Skupina skupina = new Skupina(
+    public Group getGroup(ResultSet rs) throws SQLException {
+        Group group = new Group(
                 rs.getInt("id_skupina"),
                 rs.getString("nazev_skupina"),
                 rs.getString("popis_skupina"),
-                new Predmet(
-                        rs.getInt("id_skupina_predmet"),
-                        rs.getString("nazev_skupina_predmet"),
-                        rs.getString("popis_skupina_predmet")
-                )
+                new ArrayList<Subject>() //TODO SKUPINY
         );
-        return skupina;
+        return group;
     } //Metoda rozparsuje výsledek z getgroups a vytvoří skupinu
 
     @Override
-    public void insertUserToGroup(Uzivatel u, Skupina s) {
-        try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO UZIVATEL_SKUPINA(UZIVATEL_ID_UZIVATEL, SKUPINA_ID_SKUPINA)\n"
-                    + "VALUES(?, ?)"
-            );
-            pstm.setInt(1, u.getId());
-            pstm.setInt(2, s.getId());
+    public void insertUserToGroup(User u, Group s) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "INSERT INTO UZIVATELE_SKUPINY(UZIVATEL_ID_UZIVATEL, SKUPINA_ID_SKUPINA)\n"
+                        + "VALUES(?, ?)"
+        );
+        preparedStatement.setInt(1, u.getId());
+        preparedStatement.setInt(2, s.getId());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("User added to group");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("User added to group");
     }
 
     @Override
-    public void insertGroup(Skupina group) {
-        try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO SKUPINY(nazev, popis, id_predmet)"
-                    + "VALUES(?, ?, ?)"
-            );
-            pstm.setString(1, group.getNazev());
-            pstm.setString(2, group.getPopis());
-            pstm.setInt(3, group.getPredmet().getId());
+    public void insertGroup(Group group) throws SQLException {
+        /*PreparedStatement preparedStatement = conn.prepareStatement(
+                "INSERT INTO SKUPINY(nazev, popis, id_predmet)"
+                        + "VALUES(?, ?, ?)"
+        );
+        preparedStatement.setString(1, group.getName());
+        preparedStatement.setString(2, group.getDescription());
+        preparedStatement.setInt(3, group.getSubject().getId());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("Group created");
-            
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT MAX(id_skupina) \"id\" FROM SKUPINY");
-            if (rs.next()) {
-                group.setId(rs.getInt("id"));
-            } //Získání id z databáze
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("Group created");
+
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT MAX(id_skupina) \"id\" FROM SKUPINY");
+        if (rs.next()) {
+            group.setId(rs.getInt("id"));
+        } //Získání id z databáze */
     }
 
     @Override
-    public void removeGroup(Skupina group) {
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "call delete_group(?)"
-            );
-            pstm.setInt(1, group.getId());
+    public void removeGroup(Group group) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_group(?)"
+        );
+        callableStatement.setInt(1, group.getId());
 
-            pstm.execute();
-            conn.commit();
-            System.out.println("Group deleted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Group deleted");
     }
 
 }

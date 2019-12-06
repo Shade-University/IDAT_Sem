@@ -3,8 +3,8 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import model.Skupina;
-import model.Uzivatel;
+import model.Group;
+import model.User;
 
 /**
  *
@@ -12,18 +12,18 @@ import model.Uzivatel;
  */
 public interface UserDAO {
     
-    public Collection<Uzivatel> getAllUsers();
+    public Collection<User> getAllUsers() throws SQLException;
     
-    public Collection<Uzivatel> getAllUsersFromGroup(Skupina skupina);
+    public Collection<User> getAllUsersFromGroup(Group skupina) throws SQLException;
     
-    public Uzivatel getUserByLogin(String email, String heslo);
+    public User getUserByLogin(String email, String heslo) throws SQLException;
     
-    public Uzivatel getUser(ResultSet rs) throws SQLException;
+    public User getUser(ResultSet rs) throws SQLException;
     
-    public void updateUser(Uzivatel uzivatel)  throws SQLException;
+    public void updateUser(User uzivatel)  throws SQLException;
     
-    public void insertUser(Uzivatel uzivatel);
+    public void insertUser(User uzivatel) throws SQLException;
     
-    public void deleteUser(Uzivatel uzivatel);
+    public void deleteUser(User uzivatel) throws SQLException;
     
 }

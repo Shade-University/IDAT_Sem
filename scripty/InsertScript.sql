@@ -400,49 +400,49 @@ begin
     insert_skupiny_predmety('5', '40');
 end;
 /* ========uzivatele_student=============*/
-/*EXECUTE insert_student('Tomáš', 'Vondra', 'st55448@student.upce.cz', 'lopata97', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1); */
+/*EXECUTE insert_student('Tomáš', 'Vondra', 'st55448@STUDENT.upce.cz', 'lopata97', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1); */
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
-VALUES ('Tomáš', 'Vondra', 'st55448@student.upce.cz', 'lopata97',
-        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
+VALUES ('Tomáš', 'Vondra', 'st55448@STUDENT.upce.cz', 'lopata97',
+        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'ADMIN');
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
-VALUES ('admin', 'admin', 'admin', 'admin',
-        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
+VALUES ('ADMIN', 'ADMIN', 'ADMIN', 'ADMIN',
+        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'ADMIN');
 
 
 begin
-    insert_student('Karel', 'Volv', 'st11111@student.upce.cz', '11111',
+    insert_student('Karel', 'Volv', 'st11111@STUDENT.upce.cz', '11111',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1);
 end;
 begin
-    insert_student('Jan', 'Novotný', 'st22222@student.upce.cz', '22222',
+    insert_student('Jan', 'Novotný', 'st22222@STUDENT.upce.cz', '22222',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '1. roèník', 2);
 end;
 begin
-    insert_student('David', 'Rabas', 'st33333@student.upce.cz', '3333',
+    insert_student('David', 'Rabas', 'st33333@STUDENT.upce.cz', '3333',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '3. roèník', 1);
 end;
 begin
-    insert_student('Viktor', 'Malý', 'st44444@student.upce.cz', '44444',
+    insert_student('Viktor', 'Malý', 'st44444@STUDENT.upce.cz', '44444',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 2);
 end;
 begin
-    insert_student('Rami', 'Malek', 'st55555@student.upce.cz', 'mrrobot',
+    insert_student('Rami', 'Malek', 'st55555@STUDENT.upce.cz', 'mrrobot',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '3. roèník', 1);
 end;
 begin
-    insert_student('Kredenc', 'Prudenc', 'st66666@student.upce.cz', '66666',
+    insert_student('Kredenc', 'Prudenc', 'st66666@STUDENT.upce.cz', '66666',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '1. roèník', 2);
 end;
 begin
-    insert_student('Václav', 'Švanda', 'st77777@student.upce.cz', '77777',
+    insert_student('Václav', 'Švanda', 'st77777@STUDENT.upce.cz', '77777',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '1. roèník', 2);
 end;
 begin
-    insert_student('Josef', 'Zabilka', 'st88888@student.upce.cz', '88888',
+    insert_student('Josef', 'Zabilka', 'st88888@STUDENT.upce.cz', '88888',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '1. roèník', 1);
 end;
 begin
-    insert_student('Jakub', 'Sobotka', 'st99999@student.upce.cz', '99999',
+    insert_student('Jakub', 'Sobotka', 'st99999@STUDENT.upce.cz', '99999',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '3. roèník', 1);
 end;
 /*========uzivatel_ucitel========*/

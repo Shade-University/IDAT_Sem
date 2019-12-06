@@ -10,8 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Obor;
-import model.Predmet;
+
+import model.Field;
+import model.Subject;
 
 /**
  *
@@ -30,8 +31,8 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public Collection<Predmet> getAllSubjects() {
-        Collection<Predmet> collection = new ArrayList<>();
+    public Collection<Subject> getAllSubjects() {
+        Collection<Subject> collection = new ArrayList<>();
         try {
 
             Statement statement = conn.createStatement();
@@ -39,7 +40,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                     "SELECT * FROM PREDMETY");
 
             while (rs.next()) {
-                Predmet predmet = getPredmet(rs);
+                Subject predmet = getPredmet(rs);
                 collection.add(predmet);
             }
 
@@ -51,8 +52,8 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public Collection<Predmet> getSubjectsForField(Obor obor) {
-        Collection<Predmet> collection = new ArrayList<>();
+    public Collection<Subject> getSubjectsForField(Field obor) {
+        Collection<Subject> collection = new ArrayList<>();
         try {
             PreparedStatement pstm = conn.prepareStatement(
                     "SELECT * FROM OBOR_PREDMET op\n"
@@ -63,7 +64,7 @@ public class SubjectDAOImpl implements SubjectDAO {
 
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                Predmet p = getPredmet(rs);
+                Subject p = getPredmet(rs);
                 collection.add(p);
             }
             return collection;
@@ -73,8 +74,8 @@ public class SubjectDAOImpl implements SubjectDAO {
         return null;
     }
 
-    private Predmet getPredmet(ResultSet rs) throws SQLException {
-        Predmet predmet = new Predmet(
+    private Subject getPredmet(ResultSet rs) throws SQLException {
+        Subject predmet = new Subject(
                 rs.getInt("id_predmet"),
                 rs.getString("nazev"),
                 rs.getString("popis")
@@ -84,7 +85,7 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public void insertSubjectsToField(List<Predmet> predmety, Obor obor) {
+    public void insertSubjectsToField(List<Subject> predmety, Field obor) {
         try {
 
             for (int i = 0; i < predmety.size(); i++) {
@@ -106,7 +107,7 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
     
     @Override
-    public void removeSubjectsFromField(List<Predmet> predmety, Obor obor) {
+    public void removeSubjectsFromField(List<Subject> predmety, Field obor) {
         try {
 
             for (int i = 0; i < predmety.size(); i++) {

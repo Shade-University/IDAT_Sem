@@ -5,13 +5,13 @@ package model;
  *
  * @author Tomáš Vondra
  */
-public class Predmet {
+public class Subject {
 
     private final int id;
     private final String nazevString;
     private final String popis;
 
-    public Predmet(int id, String nazevString, String popis) {
+    public Subject(int id, String nazevString, String popis) {
         this.id = id;
         this.nazevString = nazevString;
         this.popis = popis;
@@ -46,7 +46,7 @@ public class Predmet {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Predmet other = (Predmet) obj;
+        final Subject other = (Subject) obj;
         if (this.id != other.id) {
             return false;
         }

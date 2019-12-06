@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Hodnoceni;
-import model.Skupina;
+import model.Rating;
+import model.Group;
 
 /**
  *
@@ -33,15 +33,15 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public Collection<Hodnoceni> getAllRatings() {
-        Collection<Hodnoceni> collection = new ArrayList<>();
+    public Collection<Rating> getAllRatings() {
+        Collection<Rating> collection = new ArrayList<>();
         try {
             Statement stmt = conn.createStatement();
 
             ResultSet rs = stmt.executeQuery(
                     "SELECT * FROM getRatings");
             while (rs.next()) {
-                Hodnoceni hodnoceni = getRating(rs);
+                Rating hodnoceni = getRating(rs);
                 collection.add(hodnoceni);
             }
             return collection;
@@ -53,7 +53,7 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public void createRating(Hodnoceni hodnoceni) {
+    public void createRating(Rating hodnoceni) {
         try {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)"
@@ -72,8 +72,8 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public Hodnoceni getRating(ResultSet rs) throws SQLException {
-        Hodnoceni hodnoceni = new Hodnoceni(
+    public Rating getRating(ResultSet rs) throws SQLException {
+        Rating hodnoceni = new Rating(
                 rs.getInt("id_hodnoceni"),
                 rs.getInt("hodnota_hodnoceni"),
                 rs.getString("popis"),
@@ -84,7 +84,7 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public double getAverageRating(Skupina skupina) {
+    public double getAverageRating(Group skupina) {
         try {
             Statement stmt = conn.createStatement();
 

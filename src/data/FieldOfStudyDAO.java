@@ -1,7 +1,7 @@
 package data;
 
 import java.util.Collection;
-import model.Obor;
+import model.Field;
 
 /**
  *
@@ -9,12 +9,12 @@ import model.Obor;
  */
 public interface FieldOfStudyDAO {
     
-    public Collection<Obor> getAllFields();
+    public Collection<Field> getAllFields();
     
-    public void deleteField(Obor obor);
+    public void deleteField(Field obor);
     
-    public void insertField(Obor obor);
+    public void insertField(Field obor);
     
-    public void updateField(Obor obor);
+    public void updateField(Field obor);
     
 }

@@ -1,4 +1,4 @@
-package controller;
+/*package controller;
 
 import data.FieldOfStudyDAO;
 import data.FieldOfStudyDAOImpl;
@@ -31,37 +31,37 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ListView;
-import model.Obor;
-import model.Skupina;
-import model.Uzivatel;
+import model.Field;
+import model.Group;
+import model.User;
 
 /**
  * FXML Controller class
  *
  * @author user
- */
+ */ /*
 public class AdministrationPageController implements Initializable {
 
     @FXML
     private Button btnHotovo;
     @FXML
-    private ListView<Uzivatel> listViewUsers;
+    private ListView<User> listViewUsers;
     @FXML
-    private ListView<Skupina> listViewGroups;
+    private ListView<Group> listViewGroups;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
     @FXML
-    private ListView<Obor> listViewFields;
+    private ListView<Field> listViewFields;
 
     /**
      * Initializes the controller class.
      *
      * @param url
      * @param rb
-     */
+     *//*
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
@@ -82,13 +82,13 @@ public class AdministrationPageController implements Initializable {
 
         } catch (IOException ex) {
 
-            Logger.getLogger(AdministrationPageController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdministrationPageController.class.getFirstName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @FXML
     private void onUpravitUzivateleMenuItemClicked(ActionEvent event) {
-        Uzivatel user = listViewUsers.getSelectionModel().getSelectedItem();
+        User user = listViewUsers.getSelectionModel().getSelectedItem();
         if (user != null) {
             EditUserDialog edit = new EditUserDialog(user);
             edit.showAndWait().ifPresent((u) -> {
@@ -109,7 +109,7 @@ public class AdministrationPageController implements Initializable {
 
     @FXML
     private void onSkupinyUpravitMenuItemClicked(ActionEvent event) {
-        Skupina group = listViewGroups.getSelectionModel().getSelectedItem();
+        Group group = listViewGroups.getSelectionModel().getSelectedItem();
         if (group != null) {
             EditGroupDialog edit = new EditGroupDialog(group);
             edit.showAndWait().ifPresent((u) -> {
@@ -117,15 +117,15 @@ public class AdministrationPageController implements Initializable {
                 updateGroupListView();
             });
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Skupina nebyla vybrána").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Group nebyla vybrána").showAndWait();
         }
     }
 
     @FXML
     private void onAddToGroupClicked(ActionEvent event) {
-        Uzivatel uzivatel = listViewUsers.getSelectionModel().getSelectedItem();
+        User uzivatel = listViewUsers.getSelectionModel().getSelectedItem();
         if (uzivatel != null && !listViewGroups.getItems().isEmpty()) {
-            ChoiceDialog<Skupina> chDialog = new ChoiceDialog<>(listViewGroups.getItems().get(0), listViewGroups.getItems());
+            ChoiceDialog<Group> chDialog = new ChoiceDialog<>(listViewGroups.getItems().get(0), listViewGroups.getItems());
             chDialog.setTitle("Vlož do skupiny");
             chDialog.setHeaderText("");
             chDialog.setContentText("Vyberte skupinu");
@@ -179,7 +179,7 @@ public class AdministrationPageController implements Initializable {
             updateGroupListView();
 
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Skupina nebyla vybrána").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Group nebyla vybrána").showAndWait();
         }
     }
 
@@ -213,7 +213,7 @@ public class AdministrationPageController implements Initializable {
             fieldDAO.deleteField(listViewFields.getSelectionModel().getSelectedItem());
             updateFieldListView();
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Obor nebyl vybrán").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
         }
     }
 
@@ -226,7 +226,7 @@ public class AdministrationPageController implements Initializable {
             });
 
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Obor nebyl vybrán").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
         }
     }
 
@@ -239,8 +239,8 @@ public class AdministrationPageController implements Initializable {
         if (!listViewFields.getSelectionModel().isEmpty()) {
             new AddRemoveSubjectsDialog(listViewFields.getSelectionModel().getSelectedItem()).showAndWait();
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Obor nebyl vybrán").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
         }
     }
 
-}
+} */

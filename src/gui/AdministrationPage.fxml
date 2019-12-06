@@ -90,9 +90,9 @@
                <contextMenu>
                   <ContextMenu>
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onFieldInsertClicked" text="Vytvořit obor" />
-                        <MenuItem mnemonicParsing="false" onAction="#onFieldRemoveClicked" text="Smazat obor" />
-                        <MenuItem mnemonicParsing="false" onAction="#onFieldEditClicked" text="Upravit obor" />
+                        <MenuItem mnemonicParsing="false" onAction="#onFieldInsertClicked" text="Vytvořit field" />
+                        <MenuItem mnemonicParsing="false" onAction="#onFieldRemoveClicked" text="Smazat field" />
+                        <MenuItem mnemonicParsing="false" onAction="#onFieldEditClicked" text="Upravit field" />
                         <MenuItem mnemonicParsing="false" onAction="#onFieldSubjectAddClicked" text="Přidej/odeber předměty v oboru" />
                      </items>
                   </ContextMenu>

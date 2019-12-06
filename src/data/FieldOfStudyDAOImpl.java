@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Obor;
+
+import model.Field;
 
 /**
  *
@@ -29,16 +30,16 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
     }
     
     @Override
-    public Collection<Obor> getAllFields(){
+    public Collection<Field> getAllFields(){
         
-        Collection<Obor> collection = new ArrayList<>();
+        Collection<Field> collection = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(
                     "SELECT * FROM STUDIJNI_OBORY");
 
             while (rs.next()) {
-                Obor obor = new Obor(
+                Field obor = new Field(
                         rs.getInt("id_obor"),
                         rs.getString("nazev"),
                         rs.getString("popis")
@@ -56,7 +57,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
     }
 
     @Override
-    public void deleteField(Obor obor) {
+    public void deleteField(Field obor) {
         try {
             CallableStatement pstm = conn.prepareCall(
                     "call delete_field(?)"
@@ -73,7 +74,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
     }
 
     @Override
-    public void insertField(Obor obor) {
+    public void insertField(Field obor) {
          try {
             PreparedStatement pstm = conn.prepareStatement(
                     "INSERT INTO STUDIJNI_OBORY(nazev, popis)"
@@ -98,7 +99,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
     }
 
     @Override
-    public void updateField(Obor obor) {
+    public void updateField(Field obor) {
        try {
             PreparedStatement pstm = conn.prepareStatement(
                     "UPDATE STUDIJNI_OBORY SET "

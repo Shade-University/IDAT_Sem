@@ -27,7 +27,7 @@
                </font></Label>
             <TextField fx:id="txtFieldUserName" alignment="CENTER" prefHeight="25.0" prefWidth="260.0" promptText="Email" text="admin" />
             <PasswordField fx:id="txtFieldPassword" alignment="CENTER" prefHeight="25.0" prefWidth="260.0" promptText="Heslo" text="admin" />
-            <Button fx:id="btnLogin" defaultButton="true" mnemonicParsing="false" onAction="#btnLoginClicked" prefHeight="25.0" prefWidth="180.0" text="Login">
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#btnLoginClicked" prefHeight="25.0" prefWidth="180.0" text="Login">
                <font>
                   <Font size="17.0" />
                </font></Button>

@@ -11,7 +11,7 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" styleClass="stylesheet.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrationPageController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrationPageController">
    <children>
    
        <GridPane alignment="center" hgap="10" layoutX="-6.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns:fx="http://javafx.com/fxml">
@@ -45,16 +45,18 @@
                   <Font size="20.0" />
                </font></Label>
             <Label text="Jméno" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <TextField prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <TextField fx:id="txtFieldFirstName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Přijmení" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <TextField prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <TextField fx:id="txtFieldLastName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Email" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <TextField GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <TextField fx:id="txtFieldEmail" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Heslo" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <PasswordField GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <PasswordField fx:id="txtFieldPassword" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Potvrzení hesla" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <PasswordField GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="232.0" text="Registrovat" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <PasswordField fx:id="txtFieldPasswordConfirm" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <Button mnemonicParsing="false" onAction="#btnRegisterClicked" prefHeight="32.0" prefWidth="232.0" text="Registrovat" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <ComboBox fx:id="comboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+             <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
          </children>
    
        </GridPane>

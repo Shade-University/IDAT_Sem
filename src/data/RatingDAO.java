@@ -3,8 +3,8 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import model.Hodnoceni;
-import model.Skupina;
+import model.Rating;
+import model.Group;
 
 /**
  *
@@ -12,11 +12,11 @@ import model.Skupina;
  */
 public interface RatingDAO {
 
-    public Collection<Hodnoceni> getAllRatings();
+    public Collection<Rating> getAllRatings();
 
-    public void createRating(Hodnoceni hodnoceni);
+    public void createRating(Rating hodnoceni);
 
-    public double getAverageRating(Skupina skupina);
+    public double getAverageRating(Group skupina);
 
-    public Hodnoceni getRating(ResultSet rs) throws SQLException;
+    public Rating getRating(ResultSet rs) throws SQLException;
 }

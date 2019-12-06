@@ -4,6 +4,7 @@ import data.UserDAOImpl;
 import gui.Main;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.Uzivatel;
+import model.User;
 import data.UserDAO;
 
 /**
@@ -41,9 +42,16 @@ public class LoginPageController implements Initializable {
 
     @FXML
     private void btnLoginClicked(ActionEvent event) {
-        Uzivatel uzivatel = usersDao.getUserByLogin(
-                txtFieldUserName.getText(),
-                txtFieldPassword.getText());
+        User uzivatel = null;
+
+        try {
+            uzivatel = usersDao.getUserByLogin(
+                    txtFieldUserName.getText(),
+                    txtFieldPassword.getText());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         if (uzivatel == null) {
             lblError.setText("Neplatný email nebo heslo");
             return;
@@ -52,8 +60,7 @@ public class LoginPageController implements Initializable {
         try {
             System.out.println("Uživatel přihlášen");
             MainDashboardPageController.setUzivatel(uzivatel); //Nechci vytvářet controller konstruktor, protože to dělá fxml, tudíž předávám přes statiku
-
-            Main.switchScene("/gui/MainDashboardPage.fxml");
+            Main.switchScene(getClass().getResource("/gui/MainDashboardPage.fxml"));
 
         } catch (IOException ex) {
             Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);

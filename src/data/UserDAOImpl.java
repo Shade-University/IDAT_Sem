@@ -6,12 +6,8 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.Obor;
-import model.Predmet;
-import model.Skupina;
-import model.Student;
-import model.Ucitel;
-import model.Uzivatel;
+import model.*;
+import model.Group;
 
 /**
  * @author Tomáš Vondra
@@ -29,94 +25,84 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Collection<Uzivatel> getAllUsers() {
+    public Collection<User> getAllUsers() throws SQLException {
 
-        Collection<Uzivatel> collection = new ArrayList<>();
-        try {
+        Collection<User> collection = new ArrayList<>();
 
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM GETUSERS"); //getusers je pohled
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getUzivatele");
 
-            while (rs.next()) {
-                Uzivatel uzivatel = getUser(rs);
-                collection.add(uzivatel);
-            }
-
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        while (rs.next()) {
+            User user = getUser(rs);
+            collection.add(user);
         }
+
+        return collection;
+    }
+
+    @Override
+    public User getUserByLogin(String email, String password) throws SQLException {
+
+        //Hash password
+        CallableStatement callableStatement = conn.prepareCall(
+                "{ ? = call fnc_zahashuj_uzivatele(?,?) }"
+        );
+        callableStatement.registerOutParameter(1, Types.VARCHAR);
+        callableStatement.setString(2, email);
+        callableStatement.setString(3, password);
+        callableStatement.execute();
+        String hashedPassword = callableStatement.getString(1);
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getUzivatele WHERE email=? AND heslo=?");
+        preparedStatement.setString(1, email);
+        preparedStatement.setString(2, hashedPassword);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        if (rs.next())
+            return getUser(rs);
+
         return null;
     }
 
     @Override
-    public Uzivatel getUserByLogin(String email, String password) {
+    public Collection<User> getAllUsersFromGroup(Group group) throws SQLException {
 
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "{ ? = call fnc_hash_user(?,?) }"
-            );
-            pstm.registerOutParameter(1, Types.VARCHAR);
-            pstm.setString(2, email);
-            pstm.setString(3, password);
+        Collection<User> collection = new ArrayList<>();
 
-            pstm.execute();
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getUzivateleVeSkupine g WHERE g.id_skupina = " + group.getId());
 
-            PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT * FROM GETUSERS WHERE email=? AND heslo=?");
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, pstm.getString(1));
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                Uzivatel uzivatel = getUser(rs);
-                return uzivatel;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        while (rs.next()) {
+            User user = getUser(rs);
+            collection.add(user);
         }
-        return null;
+
+        return collection;
     }
 
     @Override
-    public Collection<Uzivatel> getAllUsersFromGroup(Skupina skupina) {
-        Collection<Uzivatel> collection = new ArrayList<>();
-        try {
+    public User getUser(ResultSet rs) throws SQLException {
+        //TODO Admin vlastní tabulka a třída
+        User user = null;
+        USER_TYPE type = USER_TYPE.get(rs.getString("uzivatel_typ"));
 
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM GETUSERSINGROUPS g WHERE g.id_skupina = " + skupina.getId());
-            while (rs.next()) {
-                Uzivatel uzivatel = getUser(rs); //getusersingroups pohled má stejný výpis uživatele jako getallusers, takže lze rozparsovat
-                collection.add(uzivatel);
-            }
-
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Override
-    public Uzivatel getUser(ResultSet rs) throws SQLException {
-        Uzivatel uzivatel;
-        switch (rs.getString("uzivatel_typ")) {
-            //TODO Admin vlastní tabulka a třída
-            case "admin":
-                uzivatel = new Uzivatel(
+        switch (type) {
+            case ADMIN:
+                user = new User(
                         rs.getInt("id_uzivatel"),
                         rs.getString("jmeno"),
                         rs.getString("prijmeni"),
                         rs.getString("email"),
                         rs.getDate("datum_vytvoreni"),
-                        "admin"
+                        type
                 );
                 break;
-            case "student":
-                uzivatel = new Student(
-                        new Obor(
+            case STUDENT:
+                user = new Student(
+                        new Field(
                                 rs.getInt("id_obor"),
                                 rs.getString("nazev_obor"),
                                 rs.getString("popis_obor")
@@ -129,13 +115,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getDate("datum_vytvoreni")
                 );
                 break;
-            default:
-                uzivatel = new Ucitel(
-                        new Predmet(
-                                rs.getInt("id_vyucujici_predmet"),
-                                rs.getString("nazev_vyucujici_predmet"),
-                                rs.getString("popis_vyucujici_predmet")
-                        ),
+            case TEACHER:
+                user = new Teacher( new ArrayList<>(),
                         rs.getString("katedra"),
                         rs.getInt("id_uzivatel"),
                         rs.getString("jmeno"),
@@ -144,170 +125,143 @@ public class UserDAOImpl implements UserDAO {
                         rs.getDate("datum_vytvoreni")
                 );
                 break;
+            default:
+                break;
         }
-        return uzivatel;
+        return user;
     } //Metoda rozparsuje a vytvoří uživatele
 
     @Override
-    public void updateUser(Uzivatel uzivatel) throws SQLException{
-        PreparedStatement pstm = conn.prepareStatement(
+    public void updateUser(User user) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
                 "UPDATE Uzivatele SET "
                         + "jmeno = ?, "
                         + "prijmeni = ?, "
                         + "email = ? "
                         + "WHERE id_uzivatel = ?"
         );
-        pstm.setString(1, uzivatel.getJmeno());
-        pstm.setString(2, uzivatel.getPrijmeni());
-        pstm.setString(3, uzivatel.getEmail());
-        pstm.setInt(4, uzivatel.getId());
+        preparedStatement.setString(1, user.getFirstName());
+        preparedStatement.setString(2, user.getLastName());
+        preparedStatement.setString(3, user.getEmail());
+        preparedStatement.setInt(4, user.getId());
 
-        pstm.executeUpdate();
+        preparedStatement.executeUpdate();
         conn.commit();
         System.out.println("User updated");
     }
 
     @Override
-    public void insertUser(Uzivatel uzivatel) {
+    public void insertUser(User user) throws SQLException {
 
-        if (uzivatel instanceof Ucitel) {
-            insertUcitel((Ucitel) uzivatel);
-        } else if (uzivatel instanceof Student) {
-            insertStudent((Student) uzivatel);
+        if (user instanceof Teacher) {
+            //insertUcitel((Teacher) user);
+        } else if (user instanceof Student) {
+            insertStudent((Student) user);
         } else {
-            insertAdmin(uzivatel);
+            insertAdmin(user);
         }
 
-        try {
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT MAX(id_uzivatel) \"id\" FROM UZIVATELE");
-            if (rs.next()) {
-                uzivatel.setId(rs.getInt("id"));
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private void insertUcitel(Ucitel ucitel) {
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "CALL insert_ucitel"
-                            + "(?, ?, ?, ?, ?, ?, ?)"
-            );
-            pstm.setString(1, ucitel.getJmeno());
-            pstm.setString(2, ucitel.getPrijmeni());
-            pstm.setString(3, ucitel.getEmail());
-            pstm.setString(4, ucitel.getHeslo());
-            pstm.setDate(5, ucitel.getDatum_vytvoreni());
-            pstm.setString(6, ucitel.getKatedra());
-            pstm.setInt(7, ucitel.getVyucujici_Predmet().getId());
-
-            pstm.execute();
-            conn.commit();
-            System.out.println("Teacher inserted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT MAX(id_uzivatel) \"id\" FROM UZIVATELE");
+        if (rs.next()) {
+            user.setId(rs.getInt("id"));
         }
     }
 
-    private void insertStudent(Student student) {
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "CALL insert_student"
-                            + "(?, ?, ?, ?, ?, ?, ?)"
-            );
-            pstm.setString(1, student.getJmeno());
-            pstm.setString(2, student.getPrijmeni());
-            pstm.setString(3, student.getEmail());
-            pstm.setString(4, student.getHeslo());
-            pstm.setDate(5, student.getDatum_vytvoreni());
-            pstm.setString(6, student.getRokStudia());
-            pstm.setInt(7, student.getObor().getId());
+   /* private void insertUcitel(Teacher TEACHER) throws SQLException {
+        CallableStatement preparedStatement = conn.prepareCall(
+                "CALL insert_ucitel"
+                        + "(?, ?, ?, ?, ?, ?, ?)"
+        );
+        preparedStatement.setString(1, TEACHER.getFirstName());
+        preparedStatement.setString(2, TEACHER.getLastName());
+        preparedStatement.setString(3, TEACHER.getEmail());
+        preparedStatement.setString(4, TEACHER.getPassword());
+        preparedStatement.setDate(5, TEACHER.getDateCreated());
+        preparedStatement.setString(6, TEACHER.getInstitute());
+        preparedStatement.setInt(7, TEACHER.getVyucujici_Predmet().getId());
 
-            pstm.execute();
-            conn.commit();
-            System.out.println("Student inserted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.execute();
+        conn.commit();
+        System.out.println("Teacher inserted");
+    } */
+
+    private void insertStudent(Student student) throws SQLException {
+        CallableStatement preparedStatement = conn.prepareCall(
+                "CALL insert_student"
+                        + "(?, ?, ?, ?, ?, ?, ?)"
+        );
+        preparedStatement.setString(1, student.getFirstName());
+        preparedStatement.setString(2, student.getLastName());
+        preparedStatement.setString(3, student.getEmail());
+        preparedStatement.setString(4, student.getPassword());
+        preparedStatement.setDate(5, student.getDateCreated());
+        preparedStatement.setString(6, student.getStudyYear());
+        preparedStatement.setInt(7, student.getField().getId());
+
+        preparedStatement.execute();
+        conn.commit();
+        System.out.println("Student inserted");
     }
 
     @Override
-    public void deleteUser(Uzivatel uzivatel) {
+    public void deleteUser(User user) throws SQLException {
 
-        if (uzivatel instanceof Ucitel) {
-            deleteUcitel((Ucitel) uzivatel);
-        } else if (uzivatel instanceof Student) {
-            deleteStudent((Student) uzivatel);
+        if (user instanceof Teacher) {
+            deleteUcitel((Teacher) user);
+        } else if (user instanceof Student) {
+            deleteStudent((Student) user);
         } else {
-            try {
-                CallableStatement pstm = conn.prepareCall(
-                        "CALL delete_admin(?)"
-                );
-                pstm.setInt(1, uzivatel.getId());
-
-                pstm.execute();
-                conn.commit();
-                System.out.println("Admin deleted");
-            } catch (SQLException ex) {
-                Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    } //TODO Občas používám pstm, občas stm
-
-    private void deleteStudent(Student student) {
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "CALL delete_student(?)"
+            CallableStatement preparedStatement = conn.prepareCall(
+                    "CALL delete_admin(?)"
             );
-            pstm.setInt(1, student.getId());
+            preparedStatement.setInt(1, user.getId());
 
-            pstm.execute();
+            preparedStatement.execute();
             conn.commit();
-            System.out.println("Student deleted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Admin deleted");
         }
+
+    } //TODO Občas používám preparedStatement, občas stm
+
+    private void deleteStudent(Student student) throws SQLException {
+        CallableStatement preparedStatement = conn.prepareCall(
+                "CALL delete_student(?)"
+        );
+        preparedStatement.setInt(1, student.getId());
+
+        preparedStatement.execute();
+        conn.commit();
+        System.out.println("Student deleted");
     }
 
-    private void deleteUcitel(Ucitel ucitel) {
-        try {
-            CallableStatement pstm = conn.prepareCall(
-                    "CALL delete_ucitel(?)"
-            );
-            pstm.setInt(1, ucitel.getId());
+    private void deleteUcitel(Teacher teacher) throws SQLException {
+        CallableStatement preparedStatement = conn.prepareCall(
+                "CALL delete_ucitel(?)"
+        );
+        preparedStatement.setInt(1, teacher.getId());
 
-            pstm.execute();
-            conn.commit();
-            System.out.println("Ucitel deleted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.execute();
+        conn.commit();
+        System.out.println("Teacher deleted");
     }
 
-    private void insertAdmin(Uzivatel admin) {
-        try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ) "
-                            + "VALUES (?, ?, ?, ?, ?, ?)"
-            );
-            pstm.setString(1, admin.getJmeno());
-            pstm.setString(2, admin.getPrijmeni());
-            pstm.setString(3, admin.getEmail());
-            pstm.setString(4, admin.getHeslo());
-            pstm.setDate(5, admin.getDatum_vytvoreni());
-            pstm.setString(6, admin.getUzivatelskyTyp());
+    private void insertAdmin(User admin) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        preparedStatement.setString(1, admin.getFirstName());
+        preparedStatement.setString(2, admin.getLastName());
+        preparedStatement.setString(3, admin.getEmail());
+        preparedStatement.setString(4, admin.getPassword());
+        preparedStatement.setDate(5, admin.getDateCreated());
+        preparedStatement.setString(6, admin.getUserType().getType());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("Admin inserted");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("Admin inserted");
+
     }
 
 }

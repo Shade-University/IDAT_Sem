@@ -3,8 +3,9 @@ package data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import model.Skupina;
-import model.Uzivatel;
+
+import model.Group;
+import model.User;
 
 /**
  *
@@ -12,17 +13,17 @@ import model.Uzivatel;
  */
 public interface GroupDAO {
     
-    public Collection<Skupina> getAllGroups();
+    public Collection<Group> getAllGroups() throws SQLException;
     
-    public Collection<Skupina> getUserGroups(Uzivatel user);
+    public Collection<Group> getUserGroups(User user) throws SQLException;
     
-    public Skupina getGroup(ResultSet rs) throws SQLException;
+    public Group getGroup(ResultSet rs) throws SQLException;
     
-    public void updateGroup(Skupina group);
+    public void updateGroup(Group group) throws SQLException;
     
-    public void insertUserToGroup(Uzivatel u, Skupina s);
+    public void insertUserToGroup(User u, Group s) throws SQLException;
     
-    public void insertGroup(Skupina group);
+    public void insertGroup(Group group) throws SQLException;
     
-    public void removeGroup(Skupina group);
+    public void removeGroup(Group group) throws SQLException;
 }

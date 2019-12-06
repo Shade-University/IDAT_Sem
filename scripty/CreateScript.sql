@@ -437,7 +437,7 @@ CREATE OR REPLACE PROCEDURE insert_student(jmeno_in IN VARCHAR2, prijmeni_in IN 
     user_id INTEGER;
 BEGIN
     INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
-    VALUES (jmeno_in, prijmeni_in, email_in, heslo_in, datum_vytvoreni_in, 'student');
+    VALUES (jmeno_in, prijmeni_in, email_in, heslo_in, datum_vytvoreni_in, 'STUDENT');
     SELECT MAX(id_uzivatel) into user_id from UZIVATELE;
     INSERT INTO STUDENTI(id_uzivatel, rok_studia, id_obor)
     VALUES (user_id, rok_studia_in, id_obor_in);

@@ -5,17 +5,17 @@ package model;
  *
  * @author Tomáš Vondra
  */
-public class Obor {
+public class Field {
 
     private int id;
     private String nazev;
     private String popis;
     
-    public Obor(String nazev, String popis){
+    public Field(String nazev, String popis){
         this(-1, nazev, popis);
     }
 
-    public Obor(int id, String nazev, String popis) {
+    public Field(int id, String nazev, String popis) {
         this.id = id;
         this.nazev = nazev;
         this.popis = popis;
@@ -49,7 +49,7 @@ public class Obor {
 
     @Override
     public String toString() {
-        //return getNazev();
+        //return getName();
         return getId() + " " + getNazev();
     }
     
