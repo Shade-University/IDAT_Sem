@@ -59,6 +59,7 @@ drop procedure insert_zprava;
 drop procedure insert_hodnoceni;
 drop procedure insert_konta;
 drop procedure insert_skupiny_predmety;
+drop procedure insert_produkty;
 
 drop function fnc_prumer_hodnoceni;
 drop function fnc_get_nejlepe_hodnocenou_skupinu;

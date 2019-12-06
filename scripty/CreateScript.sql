@@ -87,10 +87,6 @@ CREATE TABLE uzivatele_skupiny
     skupiny_id_skupina    INTEGER NOT NULL
 );
 
-ALTER TABLE uzivatele_skupiny
-    ADD CONSTRAINT uzivatele_skupiny_pk PRIMARY KEY (uzivatele_id_uzivatel,
-                                                     skupiny_id_skupina);
-
 CREATE TABLE uzivatele
 (
     id_uzivatel     INTEGER      NOT NULL,
@@ -99,7 +95,8 @@ CREATE TABLE uzivatele
     email           VARCHAR2(50) NOT NULL,
     heslo           VARCHAR2(50) NOT NULL,
     datum_vytvoreni DATE         NOT NULL,
-    uzivatel_typ    VARCHAR2(50)
+    uzivatel_typ    VARCHAR2(50),
+    id_obrazek      INTEGER
 );
 
 ALTER TABLE uzivatele
@@ -182,10 +179,6 @@ ALTER TABLE hodnoceni
     ADD CONSTRAINT uzivatel_hodnoceni FOREIGN KEY (id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
 
-alter table uzivatele_skupiny
-    add constraint UZIVATELE_SKUPINY_PK
-        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
-
 ALTER TABLE studenti
     ADD CONSTRAINT uzivatel_student FOREIGN KEY (id_uzivatel)
         REFERENCES uzivatele (id_uzivatel);
@@ -205,7 +198,16 @@ create table soubory
     data          BLOB          not null,
     upraveno      DATE          not null,
     nahrano       DATE          not null
-)
+);
+
+alter table uzivatele_skupiny
+    add constraint UZIVATELE_SKUPINY_PK
+        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA);
+
+alter table UZIVATELE
+    add constraint UZIVATELE_SOUBORY_ID_SOUBORU_fk
+        foreign key (ID_OBRAZEK) references SOUBORY
+            on delete cascade;
 /
 /*ISKAM*/
 create table konta
