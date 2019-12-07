@@ -42,24 +42,25 @@ public class LoginPageController implements Initializable {
 
     @FXML
     private void btnLoginClicked(ActionEvent event) {
-        User uzivatel = null;
+        User user = null;
 
         try {
-            uzivatel = usersDao.getUserByLogin(
+            user = usersDao.getUserByLogin(
                     txtFieldUserName.getText(),
                     txtFieldPassword.getText());
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if (uzivatel == null) {
+        if (user == null) {
             lblError.setText("Neplatný email nebo heslo");
             return;
         }
 
         try {
             System.out.println("Uživatel přihlášen");
-            MainDashboardPageController.setUzivatel(uzivatel); //Nechci vytvářet controller konstruktor, protože to dělá fxml, tudíž předávám přes statiku
+            user.setPassword(txtFieldPassword.getText());
+            MainDashboardPageController.setLoggedUser(user); //Nechci vytvářet controller konstruktor, protože to dělá fxml, tudíž předávám přes statiku
             Main.switchScene(getClass().getResource("/gui/MainDashboardPage.fxml"));
 
         } catch (IOException ex) {

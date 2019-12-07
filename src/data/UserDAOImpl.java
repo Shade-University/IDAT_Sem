@@ -1,13 +1,18 @@
 package data;
 
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.scene.image.Image;
 import model.*;
 import model.Group;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Tomáš Vondra
@@ -97,7 +102,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("prijmeni"),
                         rs.getString("email"),
                         rs.getDate("datum_vytvoreni"),
-                        type
+                        type,
+                        readImage(rs.getBlob("avatar"))
                 );
                 break;
             case STUDENT:
@@ -112,7 +118,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("jmeno"),
                         rs.getString("prijmeni"),
                         rs.getString("email"),
-                        rs.getDate("datum_vytvoreni")
+                        rs.getDate("datum_vytvoreni"),
+                        readImage(rs.getBlob("avatar"))
                 );
                 break;
             case TEACHER:
@@ -122,7 +129,8 @@ public class UserDAOImpl implements UserDAO {
                         rs.getString("jmeno"),
                         rs.getString("prijmeni"),
                         rs.getString("email"),
-                        rs.getDate("datum_vytvoreni")
+                        rs.getDate("datum_vytvoreni"),
+                        readImage(rs.getBlob("avatar"))
                 );
                 break;
             default:
@@ -130,6 +138,21 @@ public class UserDAOImpl implements UserDAO {
         }
         return user;
     } //Metoda rozparsuje a vytvoří uživatele
+
+    private BufferedImage readImage(Blob img) throws SQLException {
+        if(img == null)
+            return null;
+
+        int blobLength = (int) img.length();
+        byte[] blobAsBytes = img.getBytes(1, blobLength);
+
+        try {
+            return ImageIO.read(new ByteArrayInputStream(blobAsBytes));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public void updateUser(User user) throws SQLException {
@@ -223,6 +246,28 @@ public class UserDAOImpl implements UserDAO {
         }
 
     } //TODO Občas používám preparedStatement, občas stm
+
+    @Override
+    public void updateAvatar(File image, User user) throws SQLException {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "UPDATE Uzivatele SET "
+                        + "avatar = ? "
+                        + "WHERE id_uzivatel = ?"
+        );
+        preparedStatement.setBlob(1, in);
+        preparedStatement.setInt(2, user.getId());
+
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("Avatar updated");
+    }
 
     private void deleteStudent(Student student) throws SQLException {
         CallableStatement preparedStatement = conn.prepareCall(

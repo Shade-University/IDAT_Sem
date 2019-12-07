@@ -27,9 +27,9 @@
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="300.0" spacing="10.0" styleClass="sidebar">
+            <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="317.0" spacing="10.0" styleClass="sidebar">
                <children>
-                  <Label prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" styleClass="nadpis" text="Sociální síť StuxNET">
+                  <Label minHeight="75.0" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" styleClass="nadpis" text="Sociální síť StuxNET">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -37,12 +37,12 @@
                         <Font name="Ebrima" size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="imgView" fitHeight="267.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="/gui/images/vondra.jpg" />
-                     </image>
+                  <ImageView onMouseClicked="#onImageClicked" fx:id="imgView" fitHeight="267.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
-                  <Label fx:id="lblJmeno" text="Tomáš Vondra" textFill="#7c8184">
+                  <Label fx:id="lblNickName" text="Tomáš Vondra" textFill="#7c8184">
                      <font>
                         <Font name="Calibri Light" size="29.0" />
                      </font>
@@ -57,33 +57,54 @@
                         <Font name="Calibri Light" size="18.0" />
                      </font>
                   </Label>
-                  <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onRegistrationClicked" prefHeight="60.0" prefWidth="300.0" styleClass="btns">
+                  <Pane prefHeight="253.0" prefWidth="328.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label onMouseClicked="#onClickUpravitProfil" text="Upravit profil" textFill="#7c8184">
-                           <font>
-                              <Font name="Calibri Light" size="25.0" />
-                           </font>
-                           <HBox.margin>
+                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickEditProfile" prefHeight="60.0" prefWidth="174.0" style="-fx-border-color: black;" styleClass="btns">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="137.0" text="Upravit profil" textFill="#7c8184">
+                                 <font>
+                                    <Font name="Calibri Light" size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <padding>
                               <Insets left="10.0" />
-                           </HBox.margin>
-                        </Label>
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickLogOut" prefHeight="60.0" prefWidth="140.0" style="-fx-border-color: black;" styleClass="btns">
+                           <children>
+                              <Label text="Odhlásit se" textFill="#7c8184">
+                                 <font>
+                                    <Font name="Calibri Light" size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </HBox>
-                  <Pane prefHeight="24.0" prefWidth="300.0" />
                </children>
             </VBox>
          </left>
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane prefHeight="77.0" prefWidth="200.0" style="-fx-background-color: #00A2D3;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Pane layoutX="-6.0" maxWidth="1.7976931348623157E308" prefHeight="75.0" style="-fx-background-color: #00A2D3;" AnchorPane.leftAnchor="-6.0" AnchorPane.rightAnchor="-0.0" AnchorPane.topAnchor="0.0" />
                   <StackPane fx:id="mainStackPane" layoutY="75.0" prefHeight="725.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
                      <children>
                         <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">

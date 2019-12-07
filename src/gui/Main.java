@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private static Stage primaryStage;
+    public static Stage primaryStage;
 
     public static void switchScene(URL fxmlLocation) throws IOException {
         Parent parent = FXMLLoader.load(fxmlLocation);

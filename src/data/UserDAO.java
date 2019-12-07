@@ -1,8 +1,11 @@
 package data;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+
+import javafx.scene.image.Image;
 import model.Group;
 import model.User;
 
@@ -25,5 +28,6 @@ public interface UserDAO {
     public void insertUser(User uzivatel) throws SQLException;
     
     public void deleteUser(User uzivatel) throws SQLException;
-    
+
+    public void updateAvatar(File image, User user) throws SQLException;
 }

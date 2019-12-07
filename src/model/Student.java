@@ -1,6 +1,7 @@
 
 package model;
 
+import java.awt.image.BufferedImage;
 import java.sql.Date;
 
 /**
@@ -20,14 +21,14 @@ public class Student extends User {
         return field;
     }
     
-    public Student(Field field, String studyYear, String firstName, String lastName, String email, String password){
-        super(firstName, lastName, email, USER_TYPE.STUDENT, password);
+    public Student(Field field, String studyYear, String firstName, String lastName, String email, String password, BufferedImage userAvatar){
+        super(firstName, lastName, email, USER_TYPE.STUDENT, password, userAvatar);
         this.field = field;
         this.studyYear = studyYear;
     } //Konstruktor pro vytváření
 
-    public Student(Field field, String studyYear, int id, String firstName, String lastName, String email, Date dateCreated) {
-        super(id, firstName, lastName, email, dateCreated, USER_TYPE.STUDENT);
+    public Student(Field field, String studyYear, int id, String firstName, String lastName, String email, Date dateCreated, BufferedImage userAvatar) {
+        super(id, firstName, lastName, email, dateCreated, USER_TYPE.STUDENT, userAvatar);
         this.field = field;
         this.studyYear = studyYear;
     } //Konstruktor pro načítání

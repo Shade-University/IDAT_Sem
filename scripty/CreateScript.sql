@@ -96,7 +96,7 @@ CREATE TABLE uzivatele
     heslo           VARCHAR2(50) NOT NULL,
     datum_vytvoreni DATE         NOT NULL,
     uzivatel_typ    VARCHAR2(50),
-    id_obrazek      INTEGER
+    avatar          BLOB
 );
 
 ALTER TABLE uzivatele
@@ -525,6 +525,7 @@ SELECT u.id_uzivatel,
        u.email,
        u.datum_vytvoreni,
        u.uzivatel_typ,
+       u.avatar,
        s.rok_studia,
        so.id_obor,
        so.nazev "nazev_obor",
@@ -542,6 +543,7 @@ SELECT u.id_uzivatel "id_uzivatel",
        u.email,
        u.datum_vytvoreni,
        u.uzivatel_typ,
+       u.avatar,
        s.rok_studia,
        so.id_obor,
        so.nazev,
@@ -557,6 +559,7 @@ SELECT u.id_uzivatel,
        u.email,
        u.datum_vytvoreni,
        u.uzivatel_typ,
+       u.avatar,
        uc.katedra
 FROM UZIVATELE u
          JOIN UCITELE uc ON u.id_uzivatel = uc.id_uzivatel;
@@ -635,9 +638,9 @@ BEGIN
         raise_application_error(-20001, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
     end if;
 
-    :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo);
 
     if (inserting) then
+        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
         :NEW.datum_vytvoreni := sysdate;
         SELECT increment_uzivatele.nextval
         INTO :NEW.id_uzivatel

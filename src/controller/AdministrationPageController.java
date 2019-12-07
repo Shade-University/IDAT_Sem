@@ -92,8 +92,8 @@ public class AdministrationPageController implements Initializable {
         if (user != null) {
             EditUserDialog edit = new EditUserDialog(user);
             edit.showAndWait().ifPresent((u) -> {
-                if (user.equals(MainDashboardPageController.getUzivatel())) {
-                    MainDashboardPageController.setUzivatel(u);
+                if (user.equals(MainDashboardPageController.getLoggedUser())) {
+                    MainDashboardPageController.setLoggedUser(u);
                 }
                 try {
                     userDAO.updateUser(u);
@@ -151,7 +151,7 @@ public class AdministrationPageController implements Initializable {
     @FXML
     private void onRemoveUserClicked(ActionEvent event) {
         if (!listViewUsers.getSelectionModel().isEmpty()) {
-            if (listViewUsers.getSelectionModel().getSelectedItem().equals(MainDashboardPageController.getUzivatel())) {
+            if (listViewUsers.getSelectionModel().getSelectedItem().equals(MainDashboardPageController.getLoggedUser())) {
                 new Alert(Alert.AlertType.INFORMATION, "Nelze odstranit sebe").showAndWait();
                 return;
             }

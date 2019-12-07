@@ -12,7 +12,7 @@
 }
 
 .tab-pane *.tab-header-background {
-    -fx-background-color: #202332;
+    -fx-background-color: #333645;
 }
 
 .label {

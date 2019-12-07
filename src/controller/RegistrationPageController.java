@@ -43,7 +43,8 @@ public class RegistrationPageController implements Initializable {
                 txtFieldLastName.getText(),
                 txtFieldEmail.getText(),
                 comboBox.getValue(),
-                txtFieldPassword.getText()
+                txtFieldPassword.getText(),
+                null
         );
 
         try {

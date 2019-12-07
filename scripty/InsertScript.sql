@@ -403,10 +403,10 @@ end;
 /*EXECUTE insert_student('Tomáš', 'Vondra', 'st55448@STUDENT.upce.cz', 'lopata97', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1); */
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
 VALUES ('Tomáš', 'Vondra', 'st55448@STUDENT.upce.cz', 'lopata97',
-        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'ADMIN');
+        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
-VALUES ('ADMIN', 'ADMIN', 'ADMIN', 'ADMIN',
-        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'ADMIN');
+VALUES ('admin', 'admin', 'admin', 'admin',
+        TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
 
 
 begin
