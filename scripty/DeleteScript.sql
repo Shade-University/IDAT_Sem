@@ -1,3 +1,14 @@
+drop trigger hodnoceni_trigger;
+drop trigger uzivatele_trigger;
+drop trigger predmety_trigger;
+drop trigger skupiny_trigger;
+drop trigger obory_trigger;
+drop trigger zpravy_trigger;
+drop trigger konta_trigger;
+drop trigger transakce_trigger;
+drop trigger produkty_trigger;
+drop trigger jidelni_listky_trigger;
+
 drop table UZIVATELE_SKUPINY cascade constraints;
 drop table ZPRAVY cascade constraints;
 drop table JIDELNI_LISTKY cascade constraints;
@@ -36,6 +47,8 @@ drop view getSkupiny;
 drop view getUzivateleVeSkupine;
 drop view getHodnoceni;
 drop view getObory;
+drop view getVyucovanePredmety;
+drop view getPredmetyVeSkupine;
 
 drop PROCEDURE delete_student;
 drop PROCEDURE delete_ucitel;
@@ -64,16 +77,4 @@ drop procedure insert_produkty;
 drop function fnc_prumer_hodnoceni;
 drop function fnc_get_nejlepe_hodnocenou_skupinu;
 drop function fnc_zahashuj_uzivatele;
-
-/* NEPOTØEBNÉ PRO DATAGRIP
-drop trigger hodnoceni_trigger;
-drop trigger uzivatele_trigger;
-drop trigger predmety_trigger;
-drop trigger skupiny_trigger;
-drop trigger obory_trigger;
-drop trigger zpravy_trigger;
-drop trigger konta_trigger;
-drop trigger transakce_trigger;
-drop trigger produkty_trigger;
-drop trigger jidelni_listky_trigger;
-*/
+drop function FNC_POCET_UZIVATELU_VE_SKUPINE;

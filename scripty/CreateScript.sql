@@ -591,6 +591,15 @@ from UCITELE uc
          join UCITELE_PREDMETY U on uc.ID_UZIVATEL = U.UCITELE_ID_UCITEL
          join PREDMETY P on U.PREDMET_ID_PREDMET = P.ID_PREDMET;
 
+CREATE OR REPLACE VIEW getPredmetyVeSkupine AS
+SELECT s.id_skupina,
+       p.ID_PREDMET,
+       p.NAZEV,
+       p.POPIS
+from SKUPINY s
+         join SKUPINY_PREDMETY sp on s.id_skupina = sp.SKUPINY_ID_SKUPINA
+         join PREDMETY P on sp.PREDMETY_ID_PREDMET = P.ID_PREDMET;
+
 /*CREATE OR REPLACE VIEW getGroups AS
 SELECT
 u.id_uzivatel, u.jmeno, u.prijmeni, u.email, u.datum_vytvoreni, u.uzivatel_typ,
@@ -610,6 +619,15 @@ LEFT JOIN PREDMETY p ON uc.id_predmet = p.id_predmet
 JOIN PREDMETY pr ON s.id_predmet = pr.id_predmet; */
 
 /*=======Pohledy=====*/
+/*=======Funkce====*/
+CREATE OR REPLACE FUNCTION fnc_zahashuj_uzivatele(uziv_jmeno_in in varchar2, heslo_in in varchar2) return varchar2
+    IS
+BEGIN
+    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(uziv_jmeno_in) || '/' || upper(heslo_in),
+                                                     1000000000, power(2, 30)),
+                         rpad('X', 29, 'X') || 'X'));
+END;
+/
 /*=======Triggery=====*/
 
 CREATE OR REPLACE TRIGGER hodnoceni_trigger
@@ -800,14 +818,6 @@ END;
 /
 /*=======Triggery=====*/
 /*=======Funkce=====*/
-CREATE OR REPLACE FUNCTION fnc_zahashuj_uzivatele(uziv_jmeno_in in varchar2, heslo_in in varchar2) return varchar2
-    IS
-BEGIN
-    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(uziv_jmeno_in) || '/' || upper(heslo_in),
-                                                     1000000000, power(2, 30)),
-                         rpad('X', 29, 'X') || 'X'));
-END;
-/
 CREATE OR REPLACE FUNCTION fnc_prumer_hodnoceni(id integer)
     RETURN number
     IS
