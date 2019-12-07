@@ -4,22 +4,32 @@ import data.GroupDAO;
 import data.GroupDAOImpl;
 import data.UserDAO;
 import data.UserDAOImpl;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
 import model.Group;
-import model.USER_TYPE;
 import model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class GuestViewController implements Initializable {
 
+    public TabPane tabPane;
+    public TextField txtFieldSearch;
     private UserDAO userDAO = new UserDAOImpl();
     private GroupDAO groupDAO = new GroupDAOImpl();
 
@@ -32,18 +42,36 @@ public class GuestViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeTxtField();
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+                (ov) ->  Platform.runLater(() -> txtFieldSearch.requestFocus())
+        );
         prepareTableViewUsers();
         prepareTableViewGroups();
 
-        try {
-            userData = FXCollections.observableArrayList(userDAO.getAllUsers());
-            groupData = FXCollections.observableArrayList(groupDAO.getAllGroups());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // runnable for that thread
+        new Thread(() -> {
+            try {
+                userData = FXCollections.observableArrayList(userDAO.getAllUsers());
+                groupData = FXCollections.observableArrayList(groupDAO.getAllGroups());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                tableViewUsers.setItems(userData);
+                tableViewGroups.setItems(groupData);
+            });
+        }).start();
+    }
 
-        tableViewUsers.setItems(userData);
-        tableViewGroups.setItems(groupData);
+    private void initializeTxtField() {
+        txtFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (tabPane.getSelectionModel().getSelectedIndex() == 0)
+                searchUsers(newValue);
+            else
+                searchGroups(newValue);
+        });
+        //txtFieldSearch.requestFocus();
     }
 
     private void prepareTableViewUsers() {
@@ -88,4 +116,23 @@ public class GuestViewController implements Initializable {
         tableViewGroups.getColumns().add(countPeopleColumn);
     }
 
+    private void searchGroups(String value) {
+        List<Group> foundGroups = groupData.stream()
+                .filter(item -> item.getName().contains(value))
+                .collect(Collectors.toList());
+        if (foundGroups.isEmpty())
+            tableViewGroups.setItems(groupData);
+        else
+            tableViewGroups.setItems(FXCollections.observableArrayList(foundGroups));
+    }
+
+    private void searchUsers(String value) {
+        List<User> foundUsers = userData.stream()
+                .filter(item -> item.getFirstName().contains(value))
+                .collect(Collectors.toList());
+        if (foundUsers.isEmpty())
+            tableViewUsers.setItems(userData);
+        else
+            tableViewUsers.setItems(FXCollections.observableArrayList(foundUsers));
+    }
 }

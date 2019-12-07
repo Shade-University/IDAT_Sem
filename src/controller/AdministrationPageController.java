@@ -1,4 +1,4 @@
-/*package controller;
+package controller;
 
 import data.FieldOfStudyDAO;
 import data.FieldOfStudyDAOImpl;
@@ -8,13 +8,6 @@ import data.SubjectDAO;
 import data.SubjectDAOImpl;
 import data.UserDAO;
 import data.UserDAOImpl;
-import gui.AddRemoveSubjectsDialog;
-import gui.EditFieldDialog;
-import gui.EditGroupDialog;
-import gui.EditUserDialog;
-import gui.InsertFieldDialog;
-import gui.InsertGroupDialog;
-import gui.InsertUserDialog;
 import gui.Main;
 import java.io.IOException;
 import java.net.URL;
@@ -34,12 +27,11 @@ import javafx.scene.control.ListView;
 import model.Field;
 import model.Group;
 import model.User;
-
 /**
  * FXML Controller class
  *
  * @author user
- */ /*
+ */
 public class AdministrationPageController implements Initializable {
 
     @FXML
@@ -61,13 +53,15 @@ public class AdministrationPageController implements Initializable {
      *
      * @param url
      * @param rb
-     *//*
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-        listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-        listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+        //listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
+        //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+        //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
     }
+}
+    /*
 
     @FXML
     private void btnDoneClicked(ActionEvent event) {

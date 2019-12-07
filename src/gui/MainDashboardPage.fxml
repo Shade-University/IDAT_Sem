@@ -29,7 +29,7 @@
          <left>
             <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="317.0" spacing="10.0" styleClass="sidebar">
                <children>
-                  <Label minHeight="75.0" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" styleClass="nadpis" text="Sociální síť StuxNET">
+                  <Label minHeight="75.0" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" styleClass="title" text="Sociální síť StuxNET">
                      <padding>
                         <Insets left="10.0" />
                      </padding>
@@ -37,7 +37,7 @@
                         <Font name="Ebrima" size="18.0" />
                      </font>
                   </Label>
-                  <ImageView onMouseClicked="#onImageClicked" fx:id="imgView" fitHeight="267.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgView" fitHeight="267.0" fitWidth="185.0" onMouseClicked="#onImageClicked" pickOnBounds="true" preserveRatio="true">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -58,6 +58,24 @@
                      </font>
                   </Label>
                   <Pane prefHeight="253.0" prefWidth="328.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="252.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                     <children>
+                        <Label onMouseClicked="#onAdministrationClicked" text="Administrace" textFill="#7c8184">
+                           <font>
+                              <Font name="Calibri Light" size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickEditProfile" prefHeight="60.0" prefWidth="174.0" style="-fx-border-color: black;" styleClass="btns">
@@ -107,13 +125,13 @@
                   <Pane layoutX="-6.0" maxWidth="1.7976931348623157E308" prefHeight="75.0" style="-fx-background-color: #00A2D3;" AnchorPane.leftAnchor="-6.0" AnchorPane.rightAnchor="-0.0" AnchorPane.topAnchor="0.0" />
                   <StackPane fx:id="mainStackPane" layoutY="75.0" prefHeight="725.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
                      <children>
-                        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS">
                           <tabs>
-                            <Tab text="Nástěnka">
+                            <Tab closable="false" text="Nástěnka">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <ListView fx:id="listViewUzivatele" layoutX="605.0" layoutY="248.0" prefHeight="589.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <ListView fx:id="listViewUsers" layoutX="605.0" layoutY="248.0" prefHeight="589.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                               </content>

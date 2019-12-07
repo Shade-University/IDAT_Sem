@@ -19,7 +19,7 @@
          <left>
              <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="300.0" styleClass="sidebar">
                 <children>
-                <Label styleClass="nadpis" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" text="Sociální síť StuxNET">
+                <Label styleClass="title" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #00A2D3;" text="Sociální síť StuxNET">
                     <padding>
                         <Insets left="10.0" />
                     </padding>

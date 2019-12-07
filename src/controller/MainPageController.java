@@ -31,7 +31,7 @@ public class MainPageController implements Initializable {
     }
 
     public void onHomeClicked(MouseEvent mouseEvent) {
-        switchMainPaneScene("/gui/GuestView.fxml");
+        switchMainPaneScene("/gui/GuestViewPage.fxml");
     }
 
     public void onGithubClicked(MouseEvent mouseEvent) {
