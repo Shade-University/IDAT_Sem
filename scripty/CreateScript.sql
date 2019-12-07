@@ -133,9 +133,8 @@ create table SKUPINY_PREDMETY
             references SKUPINY,
     PREDMETY_ID_PREDMET NUMBER not null
         constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_FK
-            references PREDMETY,
-    constraint SKUPINY_PREDMETY_PK
-        primary key (SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
+            references PREDMETY
+
 );
 
 ALTER TABLE obor_predmet
@@ -823,6 +822,15 @@ begin
         end loop;
     return max_id;
 end;
+/
+CREATE OR REPLACE FUNCTION fnc_pocet_uzivatelu_ve_skupine(id_in integer)
+    RETURN number
+    IS
+    pocet number;
+BEGIN
+    select count(*) into pocet from UZIVATELE_SKUPINY where SKUPINY_ID_SKUPINA = id_in;
+    return pocet;
+END;
 /*=======Funkce=====*/
 
 
