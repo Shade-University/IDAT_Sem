@@ -76,9 +76,7 @@ create table UCITELE_PREDMETY
             references UCITELE,
     PREDMET_ID_PREDMET int
         constraint UCITELE_PREDMETY_PREDMETY_ID_PREDMET_fk
-            references PREDMETY,
-    constraint UCITELE_PREDMET_pk
-        primary key (UCITELE_ID_UCITEL, PREDMET_ID_PREDMET)
+            references PREDMETY
 );
 
 CREATE TABLE uzivatele_skupiny
@@ -579,6 +577,19 @@ SELECT h.id_hodnoceni,
 FROM HODNOCENI h
          JOIN (select * from getUzivatele) u ON u.id_uzivatel = h.id_uzivatel
          JOIN (select * from getSkupiny) g ON g.id_skupina = h.id_skupina;
+
+
+/*Pøedpøipravený select pro volání:
+  select ID_PREDMET, NAZEV, POPIS from getVyucovanePredmety where ID_UZIVATEL = (ID UZIVATELE/UCITELE)
+ */
+CREATE OR REPLACE VIEW getVyucovanePredmety AS
+SELECT uc.ID_UZIVATEL,
+       p.ID_PREDMET,
+       p.NAZEV,
+       p.POPIS
+from UCITELE uc
+         join UCITELE_PREDMETY U on uc.ID_UZIVATEL = U.UCITELE_ID_UCITEL
+         join PREDMETY P on U.PREDMET_ID_PREDMET = P.ID_PREDMET;
 
 /*CREATE OR REPLACE VIEW getGroups AS
 SELECT
