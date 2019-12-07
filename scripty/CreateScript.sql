@@ -204,11 +204,6 @@ alter table uzivatele_skupiny
     add constraint UZIVATELE_SKUPINY_PK
         unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA);
 
-alter table UZIVATELE
-    add constraint UZIVATELE_SOUBORY_ID_SOUBORU_fk
-        foreign key (ID_OBRAZEK) references SOUBORY
-            on delete cascade;
-/
 /*ISKAM*/
 create table konta
 (
