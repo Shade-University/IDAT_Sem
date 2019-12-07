@@ -315,12 +315,18 @@ BEGIN
     VALUES (nazev_in, telo_in, datum_vytvoreni_in, id_odesilatel_in, id_prijemce_in, id_skupina_in);
 END;
 /
-/*DELETE procedure incomplete*/
 CREATE OR REPLACE PROCEDURE insert_predmet(nazev_in in VARCHAR2, popis_in in VARCHAR2)
     IS
 BEGIN
     INSERT INTO PREDMETY(nazev, popis)
     VALUES (nazev_in, popis_in);
+END;
+/
+CREATE OR REPLACE PROCEDURE insert_predmet_ucitel(id_ucitel_in INTEGER, id_predmet_in INTEGER)
+    IS
+BEGIN
+    INSERT INTO UCITELE_PREDMETY(UCITELE_ID_UCITEL, PREDMET_ID_PREDMET)
+    VALUES (id_ucitel_in, id_predmet_in);
 END;
 /
 CREATE OR REPLACE PROCEDURE insert_studijni_obor(nazev_in in VARCHAR2, popis_in in VARCHAR2)
@@ -495,8 +501,16 @@ BEGIN
 END;
 /
 /*=====Procedury=====*/
-
-
+/*=====Funkce=====*/
+CREATE OR REPLACE FUNCTION fnc_pocet_uzivatelu_ve_skupine(id_in integer)
+    RETURN number
+    IS
+    pocet number;
+BEGIN
+    select count(*) into pocet from UZIVATELE_SKUPINY where SKUPINY_ID_SKUPINA = id_in;
+    return pocet;
+END;
+/
 /*=======Pohledy=====*/
 CREATE OR REPLACE VIEW getObory AS
 SELECT o.id_obor    "id_obor",
@@ -606,6 +620,14 @@ SELECT id_skupina,
        popis,
        fnc_pocet_uzivatelu_ve_skupine(id_skupina) as pocet
 from SKUPINY;
+
+CREATE OR REPLACE VIEW getZpravyHierarchicky AS
+SELECT nazev,
+       telo,
+       level as Uroven
+FROM ZPRAVY
+CONNECT BY ID_RODIC = PRIOR ID_ZPRAVA
+START WITH ID_RODIC IS NULL;
 
 /*CREATE OR REPLACE VIEW getGroups AS
 SELECT
@@ -850,15 +872,7 @@ begin
         end loop;
     return max_id;
 end;
-/
-CREATE OR REPLACE FUNCTION fnc_pocet_uzivatelu_ve_skupine(id_in integer)
-    RETURN number
-    IS
-    pocet number;
-BEGIN
-    select count(*) into pocet from UZIVATELE_SKUPINY where SKUPINY_ID_SKUPINA = id_in;
-    return pocet;
-END;
+
 /*=======Funkce=====*/
 
 

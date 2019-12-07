@@ -406,10 +406,12 @@ INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_t
 VALUES ('admin', 'admin', 'admin', 'admin',
         TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
 begin
-    insert_student('student', 'student', 'student', 'student', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1);
+    insert_student('student', 'student', 'student', 'student', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'),
+                   '2. roèník', 1);
 end;
 begin
-    INSERT_UCITEL('ucitel', 'ucitel', 'ucitel', 'ucitel', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
+    INSERT_UCITEL('ucitel', 'ucitel', 'ucitel', 'ucitel', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'),
+                  'FEI');
 end;
 
 begin
@@ -620,6 +622,25 @@ insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CEN
 values (16, 'Quesadilla s hovìzím masem', 'Hlavní jídlo', 8, 1, 1, null);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
 values (17, 'Burgr s hovìzím masem, cuketou s èedarem', 'Hlavní jídlo', 9, 1, 1, null);
+
+
+/*UCITEL_PREDMETY*/
+begin
+    insert_predmet_ucitel(14, 7);
+    INSERT_PREDMET_UCITEL(14, 8);
+    INSERT_PREDMET_UCITEL(14, 9);
+    INSERT_PREDMET_UCITEL(14, 10);
+    INSERT_PREDMET_UCITEL(14, 11);
+    INSERT_PREDMET_UCITEL(14, 12);
+    INSERT_PREDMET_UCITEL(14, 13);
+    INSERT_PREDMET_UCITEL(14, 14);
+    INSERT_PREDMET_UCITEL(15, 15);
+    INSERT_PREDMET_UCITEL(15, 16);
+    INSERT_PREDMET_UCITEL(15, 17);
+    INSERT_PREDMET_UCITEL(15, 18);
+    INSERT_PREDMET_UCITEL(15, 19);
+    INSERT_PREDMET_UCITEL(15, 20);
+end;
 
 
 
