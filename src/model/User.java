@@ -76,7 +76,7 @@ public class User {
     }
 
     public BufferedImage getUserAvatar() { return userAvatar;}
-    public void setUserAvatar() { this.userAvatar = userAvatar;}
+    public void setUserAvatar(BufferedImage userAvatar) { this.userAvatar = userAvatar;}
 
     public Date getDateCreated() {
         return dateCreated;
