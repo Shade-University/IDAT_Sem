@@ -631,11 +631,11 @@ CREATE OR REPLACE TRIGGER uzivatele_trigger
     FOR EACH ROW
 BEGIN
     if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
-        raise_application_error(-20001, 'Jméno musí být v rozsahu 3 až 30 znakù');
+        raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znakù');
     elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
-        raise_application_error(-20001, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
+        raise_application_error(-20003, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
     elsif (LENGTH(:NEW.heslo) < 2) then
-        raise_application_error(-20001, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
+        raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
     end if;
 
 
@@ -658,7 +658,7 @@ CREATE OR REPLACE TRIGGER predmety_trigger
 BEGIN
 
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
-        raise_application_error(-20001, 'Název musí být v rozsahu 3 až 50 znakù');
+        raise_application_error(-20005, 'Název musí být v rozsahu 3 až 50 znakù');
     end if;
 
     if (inserting) then
@@ -676,7 +676,7 @@ CREATE OR REPLACE TRIGGER skupiny_trigger
     FOR EACH ROW
 BEGIN
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
-        raise_application_error(-20001, 'Název musí být v rozsahu 3 až 30 znakù');
+        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znakù');
     end if;
 
     if (inserting) then
@@ -694,7 +694,7 @@ CREATE OR REPLACE TRIGGER obory_trigger
     FOR EACH ROW
 BEGIN
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
-        raise_application_error(-20001, 'Název musí být v rozsahu 3 až 30 znakù');
+        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znakù');
     end if;
 
     if (inserting) then
@@ -718,9 +718,9 @@ BEGIN
                 :old.id_uzivatel_prijemce, :old.id_skupina_prijemce);
     else
         if (LENGTH(:NEW.nazev) <= 0 or LENGTH(:NEW.nazev) > 30) then
-            raise_application_error(-20001, 'Název zprávy nesmí být prázdný nebo vìtší jak 30 znakù');
+            raise_application_error(-20006, 'Název zprávy nesmí být prázdný nebo vìtší jak 30 znakù');
         elsif (LENGTH(:NEW.telo) <= 0 or LENGTH(:NEW.telo) > 250) then
-            raise_application_error(-20001, 'Tìlo zprávy nesmí být prázdné nebo vìtší jak 150 znakù');
+            raise_application_error(-20007, 'Tìlo zprávy nesmí být prázdné nebo vìtší jak 150 znakù');
         end if;
 
         if (inserting) then
