@@ -600,6 +600,13 @@ from SKUPINY s
          join SKUPINY_PREDMETY sp on s.id_skupina = sp.SKUPINY_ID_SKUPINA
          join PREDMETY P on sp.PREDMETY_ID_PREDMET = P.ID_PREDMET;
 
+CREATE OR REPLACE VIEW getPoctyVeSkupinach AS
+SELECT id_skupina,
+       nazev,
+       popis,
+       fnc_pocet_uzivatelu_ve_skupine(id_skupina) as pocet
+from SKUPINY;
+
 /*CREATE OR REPLACE VIEW getGroups AS
 SELECT
 u.id_uzivatel, u.jmeno, u.prijmeni, u.email, u.datum_vytvoreni, u.uzivatel_typ,
