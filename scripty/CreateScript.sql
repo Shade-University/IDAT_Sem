@@ -616,9 +616,9 @@ from SKUPINY s
 
 CREATE OR REPLACE VIEW getPoctyVeSkupinach AS
 SELECT id_skupina,
-       nazev,
-       popis,
-       fnc_pocet_uzivatelu_ve_skupine(id_skupina) as pocet
+       nazev "nazev_skupina",
+       popis "popis_skupina",
+       fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
 from SKUPINY;
 
 CREATE OR REPLACE VIEW getZpravyHierarchicky AS

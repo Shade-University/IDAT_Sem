@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jdk.nashorn.internal.runtime.Debug;
 import model.Group;
 import model.Subject;
 import model.User;
@@ -42,6 +43,21 @@ public class GroupDAOImpl implements GroupDAO {
             Group group = getGroup(rs);
             collection.add(group);
         } //Načte všechny existující skupin.
+        return collection;
+    }
+
+    @Override
+    public Collection<Group> getAllGroupWithUserQuantity() throws SQLException {
+        Collection<Group> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getPoctyVeSkupinach");
+
+        while (rs.next()) {
+            Group group = getGroupWithQuantity(rs);
+            collection.add(group);
+        } //Načte všechny existující skupiny s počty členů.
 
         return collection;
     }
@@ -91,6 +107,18 @@ public class GroupDAOImpl implements GroupDAO {
         );
         return group;
     } //Metoda rozparsuje výsledek z getgroups a vytvoří skupinu
+
+    @Override
+    public Group getGroupWithQuantity(ResultSet rs) throws SQLException {
+        Group group = new Group(
+                rs.getInt("id_skupina"),
+                rs.getString("nazev_skupina"),
+                rs.getString("popis_skupina"),
+                rs.getInt("pocet_skupina"),
+                new ArrayList<Subject>() //TODO SKUPINY
+        );
+        return group;
+    } //Metoda rozparsuje výsledek z getGroupWithUserQuantity
 
     @Override
     public void insertUserToGroup(User u, Group s) throws SQLException {

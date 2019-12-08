@@ -44,7 +44,7 @@ public class GuestViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeTxtField();
         tabPane.getSelectionModel().selectedItemProperty().addListener(
-                (ov) ->  Platform.runLater(() -> txtFieldSearch.requestFocus())
+                (ov) -> Platform.runLater(() -> txtFieldSearch.requestFocus())
         );
         prepareTableViewUsers();
         prepareTableViewGroups();
@@ -53,7 +53,7 @@ public class GuestViewController implements Initializable {
         new Thread(() -> {
             try {
                 userData = FXCollections.observableArrayList(userDAO.getAllUsers());
-                groupData = FXCollections.observableArrayList(groupDAO.getAllGroups());
+                groupData = FXCollections.observableArrayList(groupDAO.getAllGroupWithUserQuantity());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -107,8 +107,8 @@ public class GuestViewController implements Initializable {
         TableColumn<Group, String> descriptionColumn = new TableColumn<>("Popis");
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        TableColumn<Group, String> countPeopleColumn = new TableColumn<>("Počet lidí ve skupině");
-        countPeopleColumn.setCellValueFactory(new PropertyValueFactory<>("xx"));
+        TableColumn<Group, Integer> countPeopleColumn = new TableColumn<>("Počet lidí ve skupině");
+        countPeopleColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         tableViewGroups.getColumns().add(idColumn);
         tableViewGroups.getColumns().add(nameColumn);

@@ -4,7 +4,6 @@ package model;
 import java.util.List;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class Group {
@@ -12,24 +11,33 @@ public class Group {
     private int id;
     private String name;
     private String description;
+    private int quantity;
     private List<Subject> subjects;
 
-    public Group(String name, String description, List<Subject> subjects){
+    public Group(String name, String description, List<Subject> subjects) {
         this(-1, name, description, subjects);
     }
+
     public Group(int id, String name, String description, List<Subject> subjects) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.subjects = subjects;
+    }
 
+    public Group(int id, String name, String description, int quantity, List<Subject> subjects) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.subjects = subjects;
     }
 
     public int getId() {
         return id;
     }
-    
-    public void setId(int id){
+
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -39,6 +47,10 @@ public class Group {
 
     public String getDescription() {
         return description;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
     }
 
     public List<Subject> getSubject() {
@@ -61,6 +73,6 @@ public class Group {
     public void setSubject(List<Subject> subjects) {
         this.subjects = subjects;
     }
-    
+
 
 }
