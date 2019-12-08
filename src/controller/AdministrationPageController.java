@@ -24,16 +24,182 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.Field;
 import model.Group;
 import model.User;
 /**
  * FXML Controller class
  *
- * @author user
  */
 public class AdministrationPageController implements Initializable {
 
+    @FXML
+    private ComboBox<?> comboBoxFile;
+
+    @FXML
+    private ComboBox<?> comboBoxAddRatingToUniversal;
+
+    @FXML
+    private TextField txtFieldSubjectName;
+
+    @FXML
+    private Button btnAddUserToGroup;
+
+    @FXML
+    private ComboBox<?> comboBoxRecipientType;
+
+    @FXML
+    private TableView<?> tableViewUsers;
+
+    @FXML
+    private TextArea textAreaSubjectDescription;
+
+    @FXML
+    private ComboBox<?> comboBoxMessageParent;
+
+    @FXML
+    private ComboBox<?> comboBoxRating;
+
+    @FXML
+    private TextField txtFieldMessageName;
+
+    @FXML
+    private Label lblError1;
+
+    @FXML
+    private Button btnAddSubjectToUniversal;
+
+    @FXML
+    private TextField txtFieldGroupName;
+
+    @FXML
+    private TableView<?> tableFileView;
+
+    @FXML
+    private Label lblError;
+
+    @FXML
+    private TableView<?> tableGroupsView;
+
+    @FXML
+    private TextArea textAreaFieldOfStudyDescription;
+
+    @FXML
+    private DatePicker dateFileEditedDate;
+
+    @FXML
+    private TextField txtFieldLastName;
+
+    @FXML
+    private TableView<?> tableSubjectsView;
+
+    @FXML
+    private TextField txtFieldFileName;
+
+    @FXML
+    private TextField txtFieldFieldOfStudyName;
+
+    @FXML
+    private Label lblError11121;
+
+    @FXML
+    private Label lblError11;
+
+    @FXML
+    private ComboBox<?> comboBoxAddUserToGroup;
+
+    @FXML
+    private Label labelUniversal1;
+
+    @FXML
+    private ListView<?> listViewSubjectUniversal;
+
+    @FXML
+    private Button btnAddRatingToUniversal;
+
+    @FXML
+    private ComboBox<?> comboBoxRatingUniversal;
+
+    @FXML
+    private TableView<?> tableFieldOfStudyView;
+
+    @FXML
+    private Label labelUniversal;
+
+    @FXML
+    private ComboBox<?> comboBoxRecipientUniversal;
+
+    @FXML
+    private TextArea textAreaMessageBody;
+
+    @FXML
+    private TextArea textAreaGroupDescription;
+
+    @FXML
+    private ComboBox<?> comboBoxSender;
+
+    @FXML
+    private PasswordField txtFieldPasswordConfirm;
+
+    @FXML
+    private Label lblError1112;
+
+    @FXML
+    private Label lblError1111;
+
+    @FXML
+    private TableView<?> tableMessagesView;
+
+    @FXML
+    private TextField txtFieldEmail;
+
+    @FXML
+    private ListView<?> listViewRatingUniversal;
+
+    @FXML
+    private TextField txtFieldFirstName;
+
+    @FXML
+    private Label lblError111;
+
+    @FXML
+    private PasswordField txtFieldPassword;
+
+    @FXML
+    private ComboBox<?> comboBox;
+
+    @FXML
+    private ListView<?> listViewUsersInGroup;
+
+    @FXML
+    private TableView<?> tableRatingView;
+
+    @FXML
+    private DatePicker dateFileUploadedDate;
+
+    @FXML
+    private ComboBox<?> comboBoxAddSubjectToUniversal;
+
+    @FXML
+    private ComboBox<?> comboBoxSubjectsUniversal;
+
+    @FXML
+    private TextField txtFieldUniversal;
+
+    @FXML
+    private TextField txtFieldFileSuffix;
+
+    @FXML
+    private DatePicker dateMessagePicker;
+    
+    
     @FXML
     private Button btnHotovo;
     @FXML
@@ -59,6 +225,67 @@ public class AdministrationPageController implements Initializable {
         //listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
         //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
         //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+    }
+
+
+    public void btnUserSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnUserDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnGroupSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnGroupDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnGroupUserAddClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnFieldOfStudySaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnFieldOfStudyDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnSubjectSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnSubjectDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnbtnAddSubjectToUniversalClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnRatingSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnAddRatingToUniversalClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnMessageSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnMessageDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnMessageParentNullClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnMessageFileNullClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnFileSaveClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnFileDeleteClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnAddFileClicked(ActionEvent actionEvent) {
+    }
+
+    public void btnFileAddClicked(ActionEvent actionEvent) {
     }
 }
     /*

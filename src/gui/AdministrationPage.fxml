@@ -16,26 +16,442 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="583.0" prefWidth="1117.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab text="Uživatelé">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-          <Tab text="Skupiny">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-            <Tab text="Předměty">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <tabs>
+                <Tab text="Uživatelé">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <HBox layoutX="245.0" layoutY="165.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TableView fx:id="tableViewUsers" prefHeight="554.0" prefWidth="333.0" />
+                                    <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="744.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label contentDisplay="CENTER" text="Uživatel" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Jméno" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <TextField fx:id="txtFieldFirstName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Label text="Přijmení" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <TextField fx:id="txtFieldLastName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Label text="Email" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <TextField fx:id="txtFieldEmail" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Label text="Heslo" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <PasswordField fx:id="txtFieldPassword" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Label text="Potvrzení hesla" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <PasswordField fx:id="txtFieldPasswordConfirm" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Button mnemonicParsing="false" onAction="#btnUserSaveClicked" prefHeight="32.0" prefWidth="232.0" text="Uložit" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                                          <ComboBox fx:id="comboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                          <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                                          <Label fx:id="labelUniversal" text="Universal" GridPane.rowIndex="5" />
+                                          <TextField fx:id="txtFieldUniversal" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                          <Label fx:id="labelUniversal1" text="Typ uživatele" GridPane.rowIndex="7" />
+                                          <Button mnemonicParsing="false" onAction="#btnUserDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                                       </children>
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                          <ColumnConstraints />
+                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                       </columnConstraints>
+                                       <padding>
+                                          <Insets bottom="25" left="25" right="25" top="25" />
+                                       </padding>
+                                       <rowConstraints>
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Skupiny">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableGroupsView" minWidth="250.0" prefHeight="350.0" prefWidth="218.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Skupiny" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="txtFieldGroupName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Popis" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Členové skupiny" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnGroupSaveClicked" prefHeight="25.0" prefWidth="278.0" text="Uložit skupinu" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                                    <Label fx:id="lblError1" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                                    <Label text="Uživatel" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                    <Button mnemonicParsing="false" onAction="#btnGroupDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat skupinu" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                                    <TextArea fx:id="textAreaGroupDescription" prefHeight="69.0" prefWidth="574.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                                    <ListView fx:id="listViewUsersInGroup" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
+                                    <ComboBox fx:id="comboBoxAddUserToGroup" prefHeight="25.0" prefWidth="279.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <Button fx:id="btnAddUserToGroup" mnemonicParsing="false" onAction="#btnGroupUserAddClicked" prefHeight="25.0" prefWidth="280.0" text="Přidat uživatele" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                    <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="19.0" prefWidth="278.0" text="(V případě volby již přidaného uživatele dojde k jeho odebrání.)" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                </Tab>
+                  <Tab text="Studijní obory">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableFieldOfStudyView" minWidth="250.0" prefHeight="554.0" prefWidth="283.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Studijní obory" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="txtFieldFieldOfStudyName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Popis" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnFieldOfStudySaveClicked" prefHeight="32.0" prefWidth="334.0" text="Uložit obor" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Label fx:id="lblError11" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Button mnemonicParsing="false" onAction="#btnFieldOfStudyDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat obor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                    <TextArea fx:id="textAreaFieldOfStudyDescription" prefHeight="30.0" prefWidth="261.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Předměty">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableSubjectsView" minWidth="250.0" prefHeight="554.0" prefWidth="283.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Předměty" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="txtFieldSubjectName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Popis" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Přidat do:" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnSubjectSaveClicked" prefHeight="32.0" prefWidth="235.0" text="Uložit předmět" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                                    <Label fx:id="lblError111" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                                    <Label text="Objekt:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                    <Button mnemonicParsing="false" onAction="#btnSubjectDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat předmět" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                                    <TextArea fx:id="textAreaSubjectDescription" prefHeight="38.0" prefWidth="527.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                                    <ListView fx:id="listViewSubjectUniversal" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.rowSpan="3" />
+                                    <ComboBox fx:id="comboBoxAddSubjectToUniversal" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                    <Button fx:id="btnAddSubjectToUniversal" mnemonicParsing="false" onAction="#btnbtnAddSubjectToUniversalClicked" prefHeight="25.0" prefWidth="235.0" text="add Universal" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="17.0" prefWidth="237.0" text="(V případě volby již přidaného objektu dojde k jeho odebrání.)" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <ComboBox fx:id="comboBoxSubjectsUniversal" prefHeight="25.0" prefWidth="237.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Hodnocení">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableRatingView" minWidth="250.0" prefHeight="554.0" prefWidth="283.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Hodnocení" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Známka" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Hodnocení:" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnRatingSaveClicked" prefHeight="32.0" prefWidth="235.0" text="Uložit hodnocení" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <Label fx:id="lblError1111" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <Label text="Objekt:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                    <Button mnemonicParsing="false" onAction="#btnSubjectDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat hodnocení" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                    <ListView fx:id="listViewRatingUniversal" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="3" />
+                                    <ComboBox fx:id="comboBoxAddRatingToUniversal" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                                    <Button fx:id="btnAddRatingToUniversal" mnemonicParsing="false" onAction="#btnAddRatingToUniversalClicked" prefHeight="25.0" prefWidth="235.0" text="add Universal" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="17.0" prefWidth="234.0" text="(V případě volby již přidaného objektu dojde k jeho odebrání.)" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                    <ComboBox fx:id="comboBoxRating" prefHeight="25.0" prefWidth="231.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="comboBoxRatingUniversal" prefHeight="25.0" prefWidth="231.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Zprávy">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableMessagesView" minWidth="250.0" prefHeight="554.0" prefWidth="283.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Zprávy" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="txtFieldMessageName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Tělo zprávy" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnMessageSaveClicked" prefHeight="25.0" prefWidth="237.0" text="Uložit zprávu" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+                                    <Label fx:id="lblError1112" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+                                    <Button mnemonicParsing="false" onAction="#btnMessageDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat zprávu" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                                    <TextArea fx:id="textAreaMessageBody" prefHeight="30.0" prefWidth="261.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+                                    <DatePicker fx:id="dateMessagePicker" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <Label text="Odesílatel" GridPane.rowIndex="5" />
+                                    <ComboBox fx:id="comboBoxSender" prefHeight="25.0" prefWidth="233.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <Label text="Příjemce" GridPane.rowIndex="6" />
+                                    <ComboBox fx:id="comboBoxRecipientType" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                    <ComboBox fx:id="comboBoxRecipientUniversal" prefHeight="25.0" prefWidth="236.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Label text="Nadřazená zpráva" GridPane.rowIndex="8" />
+                                    <ComboBox fx:id="comboBoxMessageParent" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                                    <ComboBox fx:id="comboBoxFile" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                                    <Label text="Připojený soubor" GridPane.rowIndex="9" />
+                                    <Button mnemonicParsing="false" onAction="#btnMessageParentNullClicked" text="Vynulovat" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                                    <Button mnemonicParsing="false" onAction="#btnMessageFileNullClicked" text="Vynulovat" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab text="Soubory">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tableFileView" minWidth="250.0" prefHeight="350.0" prefWidth="258.0" />
+                              <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label contentDisplay="CENTER" text="Soubory" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <TextField fx:id="txtFieldFileName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Přípona souboru" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                    <Button mnemonicParsing="false" onAction="#btnFileSaveClicked" prefHeight="32.0" prefWidth="248.0" text="Uložit soubor" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Label fx:id="" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Button mnemonicParsing="false" onAction="#btnFileDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat soubor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                    <DatePicker fx:id="dateFileUploadedDate" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <TextField fx:id="txtFieldFileSuffix" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <Label text="Nahrát soubor" GridPane.rowIndex="3" />
+                                    <Button mnemonicParsing="false" onAction="#btnAddFileClicked" prefHeight="25.0" prefWidth="235.0" text="Otevřít soubor z počítače" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <Label text="Datum úpravy" GridPane.rowIndex="5" />
+                                    <DatePicker fx:id="dateFileEditedDate" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <Button mnemonicParsing="false" onAction="#btnFileAddClicked" prefHeight="25.0" prefWidth="505.0" text="Přidat nový soubor" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                    <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="25" left="25" right="25" top="25" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </content>
+                  </Tab>
+                  <Tab text="ISKAM">
+                     <content>
+                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Transakce">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              </content>
+                            </Tab>
+                              <Tab text="Produkty">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                              <Tab text="Jídelní lístek">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
    </center>
 </BorderPane>

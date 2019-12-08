@@ -37,7 +37,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Login to network");
+        primaryStage.setTitle("Sociální síť");
         primaryStage.setScene(scene);
         primaryStage.show();
 
