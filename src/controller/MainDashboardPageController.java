@@ -83,7 +83,7 @@ public class MainDashboardPageController implements Initializable {
 
 
 
-    public void onClickEditProfile(MouseEvent mouseEvent) {
+    public void onClickEditProfile(MouseEvent mouseEvent) throws IOException {
         selectTab(editProfileTab);
     }
 
@@ -127,6 +127,7 @@ public class MainDashboardPageController implements Initializable {
         administrationTab.setClosable(true);
 
         try {
+            EditProfileController.setEditedUser(loggedUser);
             editProfileTab.setContent(FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml")));
             administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
         } catch (IOException e) {

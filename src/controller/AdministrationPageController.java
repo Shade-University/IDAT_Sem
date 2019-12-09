@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import data.FieldOfStudyDAO;
 import data.FieldOfStudyDAOImpl;
 import data.GroupDAO;
@@ -15,22 +16,20 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import model.Field;
 import model.Group;
 import model.User;
@@ -40,6 +39,7 @@ import model.User;
  */
 public class AdministrationPageController implements Initializable {
 
+    public StackPane stackPaneEditUser;
     @FXML
     private ComboBox<?> comboBoxFile;
 
@@ -222,9 +222,26 @@ public class AdministrationPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-        //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-        //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+        try {
+            listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
+            listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    EditProfileController.setEditedUser(newValue);
+                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml"));
+
+                    stackPaneEditUser.getChildren().clear();
+                    stackPaneEditUser.getChildren().add(parent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+            //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+        } catch (
+                SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
+<BorderPane prefHeight="598.0" prefWidth="981.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
@@ -26,62 +26,8 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox layoutX="245.0" layoutY="165.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <TableView fx:id="tableViewUsers" prefHeight="554.0" prefWidth="333.0" />
-                                    <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="744.0" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
-                                       <children>
-                                          <Label contentDisplay="CENTER" text="Uživatel" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
-                                             <font>
-                                                <Font size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="Jméno" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <TextField fx:id="txtFieldFirstName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Label text="Přijmení" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <TextField fx:id="txtFieldLastName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Label text="Email" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <TextField fx:id="txtFieldEmail" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Label text="Heslo" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <PasswordField fx:id="txtFieldPassword" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Label text="Potvrzení hesla" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <PasswordField fx:id="txtFieldPasswordConfirm" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Button mnemonicParsing="false" onAction="#btnUserSaveClicked" prefHeight="32.0" prefWidth="232.0" text="Uložit" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-                                          <ComboBox fx:id="comboBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                          <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-                                          <Label fx:id="labelUniversal" text="Universal" GridPane.rowIndex="5" />
-                                          <TextField fx:id="txtFieldUniversal" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                          <Label fx:id="labelUniversal1" text="Typ uživatele" GridPane.rowIndex="7" />
-                                          <Button mnemonicParsing="false" onAction="#btnUserDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                                       </children>
-                                       <columnConstraints>
-                                          <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
-                                          <ColumnConstraints />
-                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
-                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
-                                          <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
-                                       </columnConstraints>
-                                       <padding>
-                                          <Insets bottom="25" left="25" right="25" top="25" />
-                                       </padding>
-                                       <rowConstraints>
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                          <RowConstraints />
-                                       </rowConstraints>
-                                    </GridPane>
-                                 </children>
-                              </HBox>
+                              <ListView fx:id="listViewUsers" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="781.0" AnchorPane.topAnchor="0.0" />
+                              <StackPane fx:id="stackPaneEditUser" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                   </content>

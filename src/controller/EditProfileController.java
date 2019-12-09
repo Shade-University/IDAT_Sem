@@ -61,7 +61,7 @@ public class EditProfileController implements Initializable {
     private final UserDAO userDAO = new UserDAOImpl();
     public Label lblError;
 
-    private User editedUser;
+    private static User editedUser;
 
     private ComboBox<Field> fieldComboBox = new ComboBox<>();
     private ComboBox<YEAR_STUDY> yearStudyComboBox = new ComboBox<>();
@@ -70,10 +70,12 @@ public class EditProfileController implements Initializable {
     private ComboBox<INSTITUTE> instituteComboBox = new ComboBox<>();
     private ListView<Subject> subjectListView = new ListView<>();
 
+    public static void setEditedUser(User user) {editedUser = user;}
+    public static User getEditedUser() {return editedUser;}
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        editedUser = MainDashboardPageController.getLoggedUser();
         initData();
 
         if(editedUser instanceof Student) {
@@ -85,10 +87,12 @@ public class EditProfileController implements Initializable {
     }
 
     private void initData() {
-        txtFieldFirstName.setText(editedUser.getFirstName());
-        txtFieldLastName.setText(editedUser.getLastName());
-        txtFieldEmail.setText(editedUser.getEmail());
-        txtFieldPassword.setText(editedUser.getPassword());
+        if(editedUser != null ) {
+            txtFieldFirstName.setText(editedUser.getFirstName());
+            txtFieldLastName.setText(editedUser.getLastName());
+            txtFieldEmail.setText(editedUser.getEmail());
+            txtFieldPassword.setText(editedUser.getPassword());
+        }
     }
 
     private void initTeacher() {
