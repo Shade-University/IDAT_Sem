@@ -68,9 +68,10 @@ public class EditGroupPageController implements Initializable {
 
     /**
      * Logika sloužící pro ověření, zda-li je uživatel členem skupiny.
+     *
      * @return True -> je členem.
      */
-    private boolean isMemberOf(){
+    private boolean isMemberOf() {
         return usersInGroup.contains(comboBoxAddUserToGroup.getValue());
     }
 
@@ -83,6 +84,7 @@ public class EditGroupPageController implements Initializable {
     void e40b0b(ActionEvent event) {
 
     }
+
     //TODO Dodělat REMOVE a UPDATE
     @FXML
     void btnGroupDeleteClicked(ActionEvent event) throws SQLException {

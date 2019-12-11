@@ -10,6 +10,7 @@ import data.SubjectDAOImpl;
 import data.UserDAO;
 import data.UserDAOImpl;
 import gui.Main;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -33,9 +34,9 @@ import javafx.scene.layout.StackPane;
 import model.Field;
 import model.Group;
 import model.User;
+
 /**
  * FXML Controller class
- *
  */
 public class AdministrationPageController implements Initializable {
 

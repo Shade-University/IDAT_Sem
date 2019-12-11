@@ -123,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
                 );
                 break;
             case TEACHER:
-                user = new Teacher( new ArrayList<>(),
+                user = new Teacher(new ArrayList<>(),
                         rs.getString("katedra"),
                         rs.getInt("id_uzivatel"),
                         rs.getString("jmeno"),
@@ -140,7 +140,7 @@ public class UserDAOImpl implements UserDAO {
     } //Metoda rozparsuje a vytvoří uživatele
 
     private BufferedImage readImage(Blob img) throws SQLException {
-        if(img == null)
+        if (img == null)
             return null;
 
         int blobLength = (int) img.length();

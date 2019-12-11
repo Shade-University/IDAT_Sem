@@ -419,7 +419,9 @@ END;
 CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(user_id_in IN NUMBER, group_id_in IN NUMBER)
     IS
 BEGIN
-    DELETE FROM UZIVATELE_SKUPINY us WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in and us.SKUPINY_ID_SKUPINA = group_id_in;
+    DELETE
+    FROM UZIVATELE_SKUPINY us
+    WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in and us.SKUPINY_ID_SKUPINA = group_id_in;
 END;
 /
 /*=====Delete procedury=====*/
