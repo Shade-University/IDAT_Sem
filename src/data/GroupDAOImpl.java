@@ -123,7 +123,7 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public void insertUserToGroup(User u, Group s) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "INSERT INTO UZIVATELE_SKUPINY(UZIVATEL_ID_UZIVATEL, SKUPINA_ID_SKUPINA)\n"
+                "INSERT INTO UZIVATELE_SKUPINY(UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)\n"
                         + "VALUES(?, ?)"
         );
         preparedStatement.setInt(1, u.getId());
@@ -132,6 +132,18 @@ public class GroupDAOImpl implements GroupDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         System.out.println("User added to group");
+    }
+
+    @Override
+    public void removeUserFromGroup(User u, Group s) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_uzivatel_skupina(?,?)"
+        );
+        callableStatement.setInt(1, u.getId());
+        callableStatement.setInt(2, s.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("User removed from group");
     }
 
     @Override

@@ -23,6 +23,8 @@ public interface GroupDAO {
 
     public void insertUserToGroup(User u, Group s) throws SQLException;
 
+    public void removeUserFromGroup(User u, Group s) throws SQLException;
+
     public void insertGroup(Group group) throws SQLException;
 
     public void removeGroup(Group group) throws SQLException;

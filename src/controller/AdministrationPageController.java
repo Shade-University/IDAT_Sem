@@ -69,9 +69,7 @@ public class AdministrationPageController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
-            /* SKUPINY */
-            AnchorPane parent2 = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
-            stackPaneEditGroup.getChildren().add(parent2);
+
             /* OBORY */
             AnchorPane fieldOfStudyPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
             stackPaneEditFieldsOfStudy.getChildren().add(fieldOfStudyPane);
@@ -88,6 +86,8 @@ public class AdministrationPageController implements Initializable {
             AnchorPane filePane = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
             stackPaneEditFile.getChildren().add(filePane);
 
+
+            /*============USERS============*/
             listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
             listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
@@ -96,6 +96,20 @@ public class AdministrationPageController implements Initializable {
 
                     stackPaneEditUser.getChildren().clear();
                     stackPaneEditUser.getChildren().add(parent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            /*============GROUPS============*/
+
+            listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+            listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    EditGroupPageController.setEditedGroup(newValue);
+                    AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
+
+                    stackPaneEditGroup.getChildren().clear();
+                    stackPaneEditGroup.getChildren().add(groupPane);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

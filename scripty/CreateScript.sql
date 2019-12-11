@@ -416,14 +416,10 @@ BEGIN
     DELETE FROM ZPRAVY WHERE ZPRAVY.ID_ZPRAVA = id_in;
 END;
 /
-CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(id_in IN NUMBER, element_type_in IN NUMBER)
+CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(user_id_in IN NUMBER, group_id_in IN NUMBER)
     IS
 BEGIN
-    IF element_type_in = 0 THEN
-        DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_SKUPINY.UZIVATELE_ID_UZIVATEL = id_in;
-    ELSE
-        DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_SKUPINY.SKUPINY_ID_SKUPINA = id_in;
-    END IF;
+    DELETE FROM UZIVATELE_SKUPINY us WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in and us.SKUPINY_ID_SKUPINA = group_id_in;
 END;
 /
 /*=====Delete procedury=====*/
@@ -483,7 +479,7 @@ BEGIN
     DELETE FROM UZIVATELE WHERE UZIVATELE.id_uzivatel = id_in;
 END;
 /
-CREATE OR REPLACE PROCEDURE delete_group(id_in IN NUMBER)
+CREATE OR REPLACE PROCEDURE delete_skupina(id_in IN NUMBER)
     IS
 BEGIN
     DELETE FROM ZPRAVY WHERE zpravy.id_skupina_prijemce = id_in;
@@ -576,11 +572,31 @@ SELECT s.id_skupina,
        s.popis "popis_skupina"
 FROM SKUPINY S;
 
-CREATE OR REPLACE VIEW getUzivateleVeSkupine AS
+CREATE OR REPLACE VIEW getUzivateleVeSkupineOld AS
 SELECT *
 FROM UZIVATELE_SKUPINY us
          JOIN (SELECT * FROM getSkupiny) g on us.skupiny_id_skupina = g.id_skupina
          JOIN (SELECT * FROM getuzivatele) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
+
+CREATE OR REPLACE VIEW getUzivateleVeSkupine AS
+SELECT u.id_uzivatel,
+       u.jmeno,
+       u.prijmeni,
+       u.heslo,
+       u.email,
+       u.datum_vytvoreni,
+       u.uzivatel_typ,
+       u.avatar,
+       u.rok_studia,
+       u.id_obor,
+       so.nazev "nazev_obor",
+       so.popis "popis_obor",
+       u.katedra,
+       s.id_skupina
+FROM getUzivatele u
+         left join UZIVATELE_SKUPINY us on u.ID_UZIVATEL = us.UZIVATELE_ID_UZIVATEL
+         LEFT JOIN STUDIJNI_OBORY so ON u.id_obor = so.id_obor
+         join SKUPINY s on us.SKUPINY_ID_SKUPINA = s.ID_SKUPINA;
 
 CREATE OR REPLACE VIEW getHodnoceni AS
 SELECT h.id_hodnoceni,
@@ -616,8 +632,8 @@ from SKUPINY s
 
 CREATE OR REPLACE VIEW getPoctyVeSkupinach AS
 SELECT id_skupina,
-       nazev "nazev_skupina",
-       popis "popis_skupina",
+       nazev                                         "nazev_skupina",
+       popis                                         "popis_skupina",
        fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
 from SKUPINY;
 
