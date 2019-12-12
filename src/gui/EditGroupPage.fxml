@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditGroupPageController">
     <children>
-        <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <GridPane fx:id="grid" alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Label contentDisplay="CENTER" text="Skupiny" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                     <font>
@@ -20,16 +20,16 @@
                 <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                 <TextField fx:id="txtFieldGroupName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                 <Label text="Popis" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                <Label text="Členové skupiny" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                <Button mnemonicParsing="false" onAction="#btnGroupSaveClicked" prefHeight="25.0" prefWidth="278.0" text="Uložit skupinu" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-                <Label fx:id="lblError1" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-                <Label text="Uživatel" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                <Button mnemonicParsing="false" onAction="#btnGroupDeleteClicked" prefHeight="27.0" prefWidth="232.0" text="Smazat skupinu" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                <Label fx:id="labelCs" text="Členové skupiny" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnGroupSaveClicked" prefHeight="25.0" prefWidth="278.0" text="Uložit skupinu" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                <Label fx:id="lblError1" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                <Label fx:id="labelUs" text="Uživatel" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnGroupDeleteClicked" prefHeight="27.0" prefWidth="232.0" text="Smazat skupinu" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                 <TextArea fx:id="textAreaGroupDescription" prefHeight="69.0" prefWidth="574.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-                <ListView fx:id="listViewUsersInGroup" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
-                <ComboBox fx:id="comboBoxAddUserToGroup" onAction="#selectionCBChangedAddUserToGroup" prefHeight="25.0" prefWidth="279.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                <Button fx:id="btnAddUserToGroup" mnemonicParsing="false" onAction="#btnGroupUserAddClicked" prefHeight="25.0" prefWidth="280.0" text="Přidat uživatele" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                <Label alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="19.0" prefWidth="278.0" text="(V případě volby již přidaného uživatele dojde k jeho odebrání.)" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                <ListView fx:id="listViewUsersInGroup" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.rowSpan="3" />
+                <ComboBox fx:id="comboBoxAddUserToGroup" onAction="#selectionCBChangedAddUserToGroup" prefHeight="25.0" prefWidth="279.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                <Button fx:id="btnAddUserToGroup" mnemonicParsing="false" onAction="#btnGroupUserAddClicked" prefHeight="25.0" prefWidth="280.0" text="Přidat uživatele" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <Button fx:id="btnInsert" mnemonicParsing="false" onAction="#btnGroupInsertClicked" prefHeight="25.0" prefWidth="278.0" text="Přidat skupinu" GridPane.columnIndex="4" GridPane.rowIndex="4" />
             </children>
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -46,6 +46,7 @@
                 <RowConstraints />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
                 <RowConstraints />

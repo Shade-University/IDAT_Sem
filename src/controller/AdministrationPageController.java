@@ -129,6 +129,19 @@ public class AdministrationPageController implements Initializable {
         listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
     }
 
+
+    public void onClickAddGroup(MouseEvent mouseEvent) {
+        try {
+            EditGroupPageController.setParams(null,this);
+            AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
+
+            stackPaneEditGroup.getChildren().clear();
+            stackPaneEditGroup.getChildren().add(groupPane);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
     public void onClickAddUser(MouseEvent mouseEvent) {
         AnchorPane parent = null;
         try {

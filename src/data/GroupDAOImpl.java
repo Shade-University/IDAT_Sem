@@ -80,21 +80,15 @@ public class GroupDAOImpl implements GroupDAO {
 
     @Override
     public void updateGroup(Group group) throws SQLException {
-        /*PreparedStatement preparedStatement = conn.prepareStatement(
-                "UPDATE SKUPINY SET "
-                        + "nazev = ?, "
-                        + "popis = ?, "
-                        + "id_predmet = ? "
-                        + "WHERE id_skupina = ?"
+        CallableStatement callableStatement = conn.prepareCall(
+                "call update_skupina(?,?,?)"
         );
-        preparedStatement.setString(1, group.getName());
-        preparedStatement.setString(2, group.getDescription());
-        preparedStatement.setInt(3, group.getSubject().getId());
-        preparedStatement.setInt(4, group.getId());
-
-        preparedStatement.executeUpdate();
+        callableStatement.setInt(1, group.getId());
+        callableStatement.setString(2, group.getName());
+        callableStatement.setString(3, group.getDescription());
+        callableStatement.execute();
         conn.commit();
-        System.out.println("Group updated");*/
+        System.out.println("Group updated!");
     }
 
     @Override
@@ -148,23 +142,14 @@ public class GroupDAOImpl implements GroupDAO {
 
     @Override
     public void insertGroup(Group group) throws SQLException {
-        /*PreparedStatement preparedStatement = conn.prepareStatement(
-                "INSERT INTO SKUPINY(nazev, popis, id_predmet)"
-                        + "VALUES(?, ?, ?)"
+        CallableStatement callableStatement = conn.prepareCall(
+                "call insert_skupina(?,?)"
         );
-        preparedStatement.setString(1, group.getName());
-        preparedStatement.setString(2, group.getDescription());
-        preparedStatement.setInt(3, group.getSubject().getId());
-
-        preparedStatement.executeUpdate();
+        callableStatement.setString(1, group.getName());
+        callableStatement.setString(2, group.getDescription());
+        callableStatement.execute();
         conn.commit();
-        System.out.println("Group created");
-
-        Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery("SELECT MAX(id_skupina) \"id\" FROM SKUPINY");
-        if (rs.next()) {
-            group.setId(rs.getInt("id"));
-        } //Získání id z databáze */
+        System.out.println("Group added.");
     }
 
     @Override

@@ -388,7 +388,13 @@ BEGIN
     VALUES (nazev_in, popis_in, skladem_in, typ_in, platnost_dny_in, cena_in);
 END;
 /
-/*=====Insert procedury=====*/
+/*=====Update procedury=====*/
+CREATE OR REPLACE PROCEDURE update_skupina(id integer,nazev_in in VARCHAR2, popis_in in VARCHAR2)
+    IS
+BEGIN
+    UPDATE SKUPINY s SET s.nazev = nazev_in, s.popis = popis_in WHERE s.id_skupina = id;
+END;
+/
 /*=====Delete procedury=====*/
 CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_in IN NUMBER, element_type_in IN NUMBER)
     IS
@@ -425,7 +431,8 @@ CREATE OR REPLACE PROCEDURE delete_uzivatel_skupina(user_id_in IN NUMBER, group_
 BEGIN
     DELETE
     FROM UZIVATELE_SKUPINY us
-    WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in and us.SKUPINY_ID_SKUPINA = group_id_in;
+    WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in
+      and us.SKUPINY_ID_SKUPINA = group_id_in;
 END;
 /
 /*=====Delete procedury=====*/
@@ -645,24 +652,6 @@ SELECT nazev,
 FROM ZPRAVY
 CONNECT BY ID_RODIC = PRIOR ID_ZPRAVA
 START WITH ID_RODIC IS NULL;
-
-/*CREATE OR REPLACE VIEW getGroups AS
-SELECT
-u.id_uzivatel, u.jmeno, u.prijmeni, u.email, u.datum_vytvoreni, u.uzivatel_typ,
-st.rok_studia,
-so.id_obor, so.nazev "Nazev_obor", so.popis "Popis_obor",
-uc.katedra,
-p.id_predmet , p.nazev "nazev_predmet", p.popis "popis_predmet",
-s.id_skupina, s.nazev "Nazev_skupina", s.popis "Popis_skupina",
-pr.id_predmet "id_predmet_skupiny", pr.nazev "nazev_predmetu_skupina", pr.popis "popis_predmetu_skupiny"
-FROM UZIVATEL_SKUPINA us
-JOIN UZIVATELE u ON us.uzivatel_id_uzivatel = u.id_uzivatel
-JOIN SKUPINY s ON us.skupina_id_skupina = s.id_skupina
-LEFT JOIN STUDENTI st ON u.id_uzivatel = st.id_uzivatel
-LEFT JOIN UCITELE uc ON u.id_uzivatel = uc.id_uzivatel
-LEFT JOIN STUDIJNI_OBORY so ON st.id_obor = so.id_obor
-LEFT JOIN PREDMETY p ON uc.id_predmet = p.id_predmet
-JOIN PREDMETY pr ON s.id_predmet = pr.id_predmet; */
 
 /*=======Pohledy=====*/
 /*=======Funkce====*/
