@@ -34,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import model.Field;
 import model.Group;
+import model.Subject;
 import model.User;
 
 /**
@@ -55,6 +56,8 @@ public class AdministrationPageController implements Initializable {
     private ListView<Group> listViewGroups;
     @FXML
     private ListView<Field> listViewFieldsOfStudy;
+    @FXML
+    private ListView<Subject> listViewSubjects;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
@@ -72,9 +75,6 @@ public class AdministrationPageController implements Initializable {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
 
-            /* Předměty */
-            AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
-            stackPaneEditSubject.getChildren().add(subjectPane);
             /* Hodnocení */
             AnchorPane ratingPane = FXMLLoader.load(getClass().getResource("/gui/EditRatingPage.fxml"));
             stackPaneEditRating.getChildren().add(ratingPane);
@@ -104,7 +104,7 @@ public class AdministrationPageController implements Initializable {
             refreshGroups();
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditGroupPageController.setParams(newValue,this);
+                    EditGroupPageController.setParams(newValue, this);
                     AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
 
                     stackPaneEditGroup.getChildren().clear();
@@ -118,7 +118,7 @@ public class AdministrationPageController implements Initializable {
             refreshFieldOfStudy();
             listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditFieldOfStudyPageController.setParams(newValue,this);
+                    EditFieldOfStudyPageController.setParams(newValue, this);
                     AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
 
                     stackPaneEditFieldsOfStudy.getChildren().clear();
@@ -155,7 +155,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddGroup(MouseEvent mouseEvent) {
         try {
-            EditGroupPageController.setParams(null,this);
+            EditGroupPageController.setParams(null, this);
             AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
 
             stackPaneEditGroup.getChildren().clear();
@@ -171,7 +171,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
         try {
-            EditFieldOfStudyPageController.setParams(null,this);
+            EditFieldOfStudyPageController.setParams(null, this);
             AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
             stackPaneEditFieldsOfStudy.getChildren().clear();
             stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
@@ -180,7 +180,20 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
+    public void refreshSubject() throws SQLException {
+        listViewSubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjects()));
+    }
 
+    public void onClickAddSubject(MouseEvent mouseEvent) {
+        try {
+            EditSubjectPageController.setParams(null, this);
+            AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
+            stackPaneEditSubject.getChildren().clear();
+            stackPaneEditSubject.getChildren().add(subjectPane);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
 
 
 }
