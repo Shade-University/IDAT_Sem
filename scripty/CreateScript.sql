@@ -129,12 +129,9 @@ create table SKUPINY_PREDMETY
 
 );
 
-ALTER TABLE obor_predmet
-    ADD CONSTRAINT obor_predmet_pk PRIMARY KEY (studijni_obor_id_obor,
-                                                predmet_id_predmet);
-alter table obor_predmet
-    add constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_fk
-        foreign key (STUDIJNI_OBOR_ID_OBOR) references PREDMETY;
+alter table OBOR_PREDMET
+    add constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_FK
+        foreign key (PREDMET_ID_PREDMET) references PREDMETY;
 
 alter table obor_predmet
     add constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_fk
@@ -402,21 +399,17 @@ BEGIN
 END;
 /
 /*=====Delete procedury=====*/
-CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_in IN NUMBER, element_type_in IN NUMBER)
+CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_obor_in integer, id_predmet_in integer)
     IS
 BEGIN
-    IF element_type_in = 0 THEN
-        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_in;
-    ELSE
-        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.STUDIJNI_OBOR_ID_OBOR = id_in;
-    END IF;
+        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_predmet_in AND OBOR_PREDMET.studijni_obor_id_obor = id_obor_in;
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_predmet(id_in IN NUMBER)
     IS
 BEGIN
-    DELETE FROM SKUPINY_PREDMETY WHERE  PREDMETY_ID_PREDMET = id_in;
-    DELETE FROM UCITELE_PREDMETY WHERE  PREDMET_ID_PREDMET = id_in;
+    DELETE FROM SKUPINY_PREDMETY WHERE PREDMETY_ID_PREDMET = id_in;
+    DELETE FROM UCITELE_PREDMETY WHERE PREDMET_ID_PREDMET = id_in;
     DELETE FROM obor_predmet WHERE PREDMET_ID_PREDMET = id_in;
     DELETE FROM PREDMETY WHERE PREDMETY.ID_PREDMET = id_in;
 END;
@@ -440,6 +433,12 @@ BEGIN
     FROM UZIVATELE_SKUPINY us
     WHERE us.UZIVATELE_ID_UZIVATEL = user_id_in
       and us.SKUPINY_ID_SKUPINA = group_id_in;
+END;
+/
+CREATE OR REPLACE PROCEDURE delete_ucitele_predmety(id_predmet_in integer, id_ucitel_in integer)
+    IS
+BEGIN
+    DELETE FROM UCITELE_PREDMETY WHERE PREDMET_ID_PREDMET = id_predmet_in AND UCITELE_ID_UCITEL = id_ucitel_in;
 END;
 /
 /*=====Delete procedury=====*/
@@ -497,6 +496,12 @@ BEGIN
     DELETE FROM UZIVATELE_SKUPINY WHERE UZIVATELE_ID_UZIVATEL = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
     DELETE FROM UZIVATELE WHERE UZIVATELE.id_uzivatel = id_in;
+END;
+/
+CREATE OR REPLACE PROCEDURE delete_skupiny_predmety(id_predmet_in integer, id_skupina_in integer)
+    IS
+BEGIN
+    DELETE FROM SKUPINY_PREDMETY WHERE PREDMETY_ID_PREDMET = id_predmet_in AND SKUPINY_ID_SKUPINA = id_skupina_in;
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_skupina(id_in IN NUMBER)
@@ -844,7 +849,7 @@ CREATE OR REPLACE TRIGGER soubory_trigger
     ON SOUBORY
     FOR EACH ROW
 BEGIN
-    if(updating) then
+    if (updating) then
         :new.upraveno := sysdate;
     end if;
 

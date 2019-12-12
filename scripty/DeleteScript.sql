@@ -61,6 +61,8 @@ drop PROCEDURE insert_student;
 drop PROCEDURE insert_ucitel;
 drop PROCEDURE delete_field;
 
+drop procedure delete_skupiny_predmety;
+drop procedure delete_ucitele_predmety;
 drop procedure delete_predmet;
 drop procedure update_predmet;
 drop procedure delete_uzivatel_skupina;

@@ -7,12 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import model.Field;
-import model.Group;
-import model.Subject;
-import model.User;
+import model.*;
 import gui.*;
 
+import javax.jws.soap.SOAPBinding;
 import javax.lang.model.type.ErrorType;
 import java.net.URL;
 import java.sql.SQLException;
@@ -49,7 +47,6 @@ public class EditSubjectPageController implements Initializable {
         public String toString() {
             return type;
         }
-
     }
 
     @FXML
@@ -70,6 +67,19 @@ public class EditSubjectPageController implements Initializable {
     @FXML
     private ListView<Object> listViewSubjectUniversal;
 
+    @FXML
+    private Label labelAddTo;
+
+    @FXML
+    private Button btnInsert;
+
+    @FXML
+    private Button btnSave;
+
+    @FXML
+    private Button btnDelete;
+
+
 
     /**
      * Nastavení vstupních parametrů
@@ -82,9 +92,15 @@ public class EditSubjectPageController implements Initializable {
         parent = aP;
     }
 
+    /**
+     * Inicializace stránky a naplnění daty.
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (editedSubject != null) {
+            transformToCreatePage(false);
             txtFieldSubjectName.setText(editedSubject.getName());
             textAreaSubjectDescription.setText(editedSubject.getDescription());
             comboBoxSubjectsUniversal.setItems(FXCollections.observableArrayList(tableType.values()));
@@ -95,7 +111,7 @@ public class EditSubjectPageController implements Initializable {
                 e.printStackTrace();
             }
         } else {
-            transformToCreatePage();
+            transformToCreatePage(true);
         }
     }
 
@@ -122,19 +138,41 @@ public class EditSubjectPageController implements Initializable {
                 comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
                 break;
         }
-        cbUniversalChanged(null);
         comboBoxAddSubjectToUniversal.getSelectionModel().select(0);
+        cbUniversalChanged(null);
+
     }
 
-    private void transformToCreatePage() {
+
+    /**
+     * Skrývání a zobrazování prvků formuláře dle Create/UD
+     * @param bool
+     */
+    private void transformToCreatePage(boolean bool) {
+        labelAddTo.setVisible(!bool);
+        comboBoxSubjectsUniversal.setVisible(!bool);
+        btnInsert.setVisible(bool);
+        listViewSubjectUniversal.setVisible(!bool);
+        comboBoxAddSubjectToUniversal.setVisible(!bool);
+        btnAddSubjectToUniversal.setVisible(!bool);
+        btnDelete.setVisible(!bool);
+        btnSave.setVisible(!bool);
     }
 
+    /**
+     * Odebrání součásného formůláře z rodiče a reload.
+     * @throws SQLException
+     */
     private void reloadData() throws SQLException {
         editedSubject = null;
         parent.refreshSubject();
         parent.stackPaneEditSubject.getChildren().clear();
     }
 
+    /**
+     * Zjištění, jestli je daný objekt členem kolekce
+     * @return True/false
+     */
     private boolean isMemberOf() {
         switch (comboBoxSubjectsUniversal.getValue()) {
             case TEACHER:
@@ -145,15 +183,25 @@ public class EditSubjectPageController implements Initializable {
             case GROUP:
                 return groupsInSubject.contains(comboBoxAddSubjectToUniversal.getValue());
             default:
-                throw new NullPointerException();
+                return true;
         }
     }
 
+    /**
+     * Změna typu
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     void cbSubjectTypeChanged(ActionEvent event) throws SQLException {
         loadDataToUniversal();
     }
 
+
+    /**
+     * Stisknutí tlačítka uložit a následný update předmětu.
+     * @param event
+     */
     @FXML
     void btnSubjectSaveClicked(ActionEvent event) {
         try {
@@ -167,7 +215,10 @@ public class EditSubjectPageController implements Initializable {
         }
     }
 
-
+    /**
+     * Smazání předmětu
+     * @param event
+     */
     @FXML
     void btnSubjectDeleteClicked(ActionEvent event) {
         try {
@@ -179,20 +230,48 @@ public class EditSubjectPageController implements Initializable {
         }
     }
 
-
-    //TODO dodělat
+    /**
+     * Přidání/odebrání objektu do určité kolekce
+     * Teacher/FieldOfStudy/Group
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     void btnAddSubjectToUniversalClicked(ActionEvent event) throws SQLException {
-        if(isMemberOf()){
-
-        }else{
-            switch (comboBoxSubjectsUniversal.getValue()) {
-                case TEACHER:
-                case FIELD:
-                case GROUP:
-
+        try {
+            if (isMemberOf()) {
+                switch (comboBoxSubjectsUniversal.getValue()) {
+                    case TEACHER:
+                        subjectDAO.removeTeacherFromSubject(editedSubject, (User) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    case FIELD:
+                        subjectDAO.removeSubjectsFromField(editedSubject, (Field) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    case GROUP:
+                        subjectDAO.removeSubjectFromGroup(editedSubject, (Group) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    default:
+                        AlertDialog.show("Odebrání se nezdařilo!", Alert.AlertType.ERROR);
+                }
+            } else {
+                switch (comboBoxSubjectsUniversal.getValue()) {
+                    case TEACHER:
+                        subjectDAO.insertTeacherToSubject(editedSubject, (User) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    case FIELD:
+                        subjectDAO.insertSubjectsToField(editedSubject, (Field) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    case GROUP:
+                        subjectDAO.insertSubjectToGroup(editedSubject, (Group) comboBoxAddSubjectToUniversal.getValue());
+                        break;
+                    default:
+                        AlertDialog.show("Přidání se nezdařilo!", Alert.AlertType.ERROR);
+                }
             }
+        } catch (Exception e) {
+            System.out.println(e);
         }
+        loadDataToUniversal();
     }
 
     /**
@@ -207,6 +286,24 @@ public class EditSubjectPageController implements Initializable {
         } else {
             btnAddSubjectToUniversal.setText("Přidat");
         }
+    }
+
+    /**
+     * Vložení nového předmětu
+     * @param event
+     * @throws SQLException
+     */
+    @FXML
+    private void btnInsertClicked(ActionEvent event) throws SQLException {
+        try {
+            Subject sb = new Subject(0, txtFieldSubjectName.getText(), textAreaSubjectDescription.getText());
+            subjectDAO.insertSubject(sb);
+            AlertDialog.show("Skupina byla úspěšně vytvořena.", Alert.AlertType.INFORMATION);
+            reloadData();
+        } catch (SQLException e){
+            AlertDialog.show("e", Alert.AlertType.ERROR);
+        }
+
     }
 
 }

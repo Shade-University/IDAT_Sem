@@ -1,10 +1,5 @@
 
 package model;
-
-/**
- *
- * @author Tomáš Vondra
- */
 public class Field {
 
     private int id;
@@ -32,8 +27,6 @@ public class Field {
     public void setPopis(String popis) {
         this.popis = popis;
     }
-    
-    
 
     public int getId() {
         return id;
@@ -48,9 +41,27 @@ public class Field {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Field other = (Field) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         //return getName();
-        return getId() + " " + getNazev();
+        return getId() + " " + getNazev() + " " + getPopis();
     }
     
 }

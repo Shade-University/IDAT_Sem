@@ -31,30 +31,24 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
     }
 
     @Override
-    public Collection<Field> getAllFields() {
+    public Collection<Field> getAllFields() throws SQLException{
 
         Collection<Field> collection = new ArrayList<>();
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM STUDIJNI_OBORY");
 
-            while (rs.next()) {
-                Field obor = new Field(
-                        rs.getInt("id_obor"),
-                        rs.getString("nazev"),
-                        rs.getString("popis")
-                );
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM STUDIJNI_OBORY");
 
-                collection.add(obor);
-            } //Načte všechny obory
-
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(GroupDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        while (rs.next()) {
+            Field obor = new Field(
+                    rs.getInt("id_obor"),
+                    rs.getString("nazev"),
+                    rs.getString("popis")
+            );
+            collection.add(obor);
         }
-
-        return null;
+        conn.commit();
+        return collection;
     }
 
     @Override
@@ -69,11 +63,11 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             Field obor = new Field(
                     rs.getInt("id_obor"),
                     rs.getString("nazev"),
-                    rs.getString("popis")
+                    rs.getString("POPIS")
             );
             collection.add(obor);
         }
-
+        conn.commit();
         return collection;
     }
 

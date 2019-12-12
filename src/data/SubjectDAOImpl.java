@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import model.Field;
-import model.Subject;
+import model.*;
 
 /**
  *
@@ -81,6 +80,18 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
+    public void insertSubject(Subject subject) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call insert_predmet(?,?)"
+        );
+        callableStatement.setString(1, subject.getName());
+        callableStatement.setString(2, subject.getDescription());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject created.");
+    }
+
+    @Override
     public void insertSubjectsToField(List<Subject> predmety, Field obor) {
         try {
 
@@ -100,6 +111,42 @@ public class SubjectDAOImpl implements SubjectDAO {
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void insertSubjectsToField(Subject subject, Field fieldOfStudy) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call insert_obor_predmet(?,?)"
+        );
+        callableStatement.setInt(1, fieldOfStudy.getId());
+        callableStatement.setInt(2, subject.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject added to Field");
+    }
+
+    @Override
+    public void insertTeacherToSubject(Subject subject, User teacher) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call insert_predmet_ucitel(?,?)"
+        );
+        callableStatement.setInt(1, teacher.getId());
+        callableStatement.setInt(2, subject.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Teacher added to subject");
+    }
+
+    @Override
+    public void insertSubjectToGroup(Subject subject, Group group) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call   insert_skupiny_predmety(?,?)"
+        );
+        callableStatement.setInt(1, group.getId());
+        callableStatement.setInt(2, subject.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject added to group.");
     }
 
     @Override
@@ -137,6 +184,42 @@ public class SubjectDAOImpl implements SubjectDAO {
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void removeSubjectsFromField(Subject subject, Field fieldOfStudy) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_obor_predmet(?,?)"
+        );
+        callableStatement.setInt(1, subject.getId());
+        callableStatement.setInt(2, fieldOfStudy.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject removed from field of study.");
+    }
+
+    @Override
+    public void removeTeacherFromSubject(Subject subject, User teacher) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_ucitele_predmety(?,?)"
+        );
+        callableStatement.setInt(1, subject.getId());
+        callableStatement.setInt(2, teacher.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject removed from field of study.");
+    }
+
+    @Override
+    public void removeSubjectFromGroup(Subject subject, Group group) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_skupiny_predmety(?,?)"
+        );
+        callableStatement.setInt(1, subject.getId());
+        callableStatement.setInt(2, group.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject removed from field of study.");
     }
 
     @Override

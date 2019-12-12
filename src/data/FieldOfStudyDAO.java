@@ -11,7 +11,7 @@ import model.Subject;
  */
 public interface FieldOfStudyDAO {
     
-    public Collection<Field> getAllFields();
+    public Collection<Field> getAllFields() throws SQLException;
 
     public Collection<Field> getFieldsBySubjects(Subject subject) throws SQLException;
 

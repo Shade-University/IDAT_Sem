@@ -46,7 +46,11 @@ public class EditProfileController implements Initializable {
         initData();
 
         if(editedUser instanceof Student) {
-            initStudent();
+            try {
+                initStudent();
+            } catch (SQLException e){
+                System.out.println(e);
+            }
         }
         else if(editedUser instanceof Teacher) {
             initTeacher();
@@ -76,7 +80,7 @@ public class EditProfileController implements Initializable {
         gridPane.add(subjectListView,5, 0, 1,7);
     }
 
-    private void initStudent() {
+    private void initStudent() throws SQLException {
         ObservableList<Field> allFields = FXCollections.observableArrayList(fieldOfStudyDAO.getAllFields());
         fieldComboBox.setItems(allFields);
         fieldComboBox.getSelectionModel().select(0);
