@@ -113,6 +113,7 @@ public class EditUserController implements Initializable {
                     break;
                 default:
             }
+            lblError.setText("Profil se podařilo aktualizovat");
         } catch (SQLException e) {
             //new Alert(Alert.AlertType.ERROR,"Profil se nepovedlo aktualizovat\n" + e.getMessage(), ButtonType.OK);
             lblError.setText("Profil se nepovedlo aktualizovat.\n" + e.getMessage());
@@ -141,7 +142,7 @@ public class EditUserController implements Initializable {
         subjectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         gridPane.add(instituteComboBox, 2, 6);
-        gridPane.add(subjectListView, 5, 0, 1, 7);
+        gridPane.add(subjectListView, 5, 0, 1, 8);
     }
 
     private void initStudent() {
