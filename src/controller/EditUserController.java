@@ -77,7 +77,7 @@ public class EditUserController implements Initializable {
                     txtFieldLastName.getText(),
                     txtFieldEmail.getText(),
                     txtFieldPassword.getText(),
-                    editedUser.getUserAvatar()
+                    editedUser != null ? editedUser.getUserAvatar() : null
             );
         } else if (editedUser instanceof Teacher) {
             updateUser = new Teacher(
@@ -87,7 +87,7 @@ public class EditUserController implements Initializable {
                     txtFieldLastName.getText(),
                     txtFieldEmail.getText(),
                     txtFieldPassword.getText(),
-                    editedUser.getUserAvatar()
+                    editedUser != null ? editedUser.getUserAvatar() : null
             );
         } else {
             updateUser = new User(
@@ -96,10 +96,9 @@ public class EditUserController implements Initializable {
                     txtFieldEmail.getText(),
                     USER_TYPE.ADMIN,
                     txtFieldPassword.getText(),
-                    editedUser.getUserAvatar()
+                    editedUser != null ? editedUser.getUserAvatar() : null
             );
         }
-        updateUser.setId(editedUser.getId());
 
         try {
             switch (actionTypeComboBox.getValue()) {
@@ -114,7 +113,6 @@ public class EditUserController implements Initializable {
                     break;
                 default:
             }
-            MainDashboardPageController.setLoggedUser(updateUser);
         } catch (SQLException e) {
             //new Alert(Alert.AlertType.ERROR,"Profil se nepovedlo aktualizovat\n" + e.getMessage(), ButtonType.OK);
             lblError.setText("Profil se nepovedlo aktualizovat.\n" + e.getMessage());
