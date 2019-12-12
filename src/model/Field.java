@@ -1,12 +1,13 @@
 
 package model;
+
 public class Field {
 
     private int id;
     private String nazev;
     private String popis;
-    
-    public Field(String nazev, String popis){
+
+    public Field(String nazev, String popis) {
         this(-1, nazev, popis);
     }
 
@@ -61,7 +62,7 @@ public class Field {
     @Override
     public String toString() {
         //return getName();
-        return getId() + " " + getNazev() + " " + getPopis();
+        return getId() + " " + getNazev();
     }
-    
+
 }
