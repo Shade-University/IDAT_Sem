@@ -68,7 +68,7 @@ public class GroupDAOImpl implements GroupDAO {
 
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
-                "SELECT * FROM getSkupiny g WHERE g.id_uzivatel = " + user.getId());
+                "SELECT * FROM getSkupinyUzivatele WHERE UZIVATELE_ID_UZIVATEL = " + user.getId());
 
         while (rs.next()) {
             Group group = getGroup(rs);

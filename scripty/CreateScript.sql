@@ -91,16 +91,6 @@ CREATE TABLE uzivatele
     avatar          BLOB
 );
 
-create table uzivatele_skupiny
-(
-    UZIVATELE_ID_UZIVATEL NUMBER not null
-        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
-    SKUPINY_ID_SKUPINA    NUMBER not null
-        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
-            references SKUPINY
-);
-
 ALTER TABLE uzivatele
     ADD CONSTRAINT uzivatel_pk PRIMARY KEY (id_uzivatel);
 
@@ -199,6 +189,16 @@ create table soubory
     data          BLOB          not null,
     upraveno      DATE          not null,
     nahrano       DATE          not null
+);
+
+create table uzivatele_skupiny
+(
+    UZIVATELE_ID_UZIVATEL NUMBER not null
+        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    SKUPINY_ID_SKUPINA    NUMBER not null
+        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
+            references SKUPINY
 );
 
 alter table uzivatele_skupiny
@@ -389,7 +389,7 @@ BEGIN
 END;
 /
 /*=====Update procedury=====*/
-CREATE OR REPLACE PROCEDURE update_skupina(id integer,nazev_in in VARCHAR2, popis_in in VARCHAR2)
+CREATE OR REPLACE PROCEDURE update_skupina(id integer, nazev_in in VARCHAR2, popis_in in VARCHAR2)
     IS
 BEGIN
     UPDATE SKUPINY s SET s.nazev = nazev_in, s.popis = popis_in WHERE s.id_skupina = id;
@@ -644,6 +644,10 @@ SELECT id_skupina,
        popis                                         "popis_skupina",
        fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
 from SKUPINY;
+
+CREATE OR REPLACE VIEW getSkupinyUzivatele AS
+    SELECT UZIVATELE_ID_UZIVATEL,id_skupina, nazev "nazev_skupina", popis "popis_skupina" FROM UZIVATELE_SKUPINY
+         JOIN SKUPINY S on UZIVATELE_SKUPINY.SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
 
 CREATE OR REPLACE VIEW getZpravyHierarchicky AS
 SELECT nazev,

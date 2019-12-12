@@ -107,7 +107,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "[" + getUserType() + "]" + " " + getFirstName() + " " + getLastName();
+        return "[" + getUserType() + "]" + "\t" + getFirstName() + " " + getLastName();
     }
 
 

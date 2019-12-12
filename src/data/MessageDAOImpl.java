@@ -103,11 +103,10 @@ public class MessageDAOImpl implements MessageDAO {
         Collection<Message> collection = new ArrayList<>();
 
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT z.id_zprava, z.nazev, z.telo, z.datum_vytvoreni \"zprava_datum_vytvoreni\" ,u.* \n"
-                    + "FROM ZPRAVY z\n"
-                    + "JOIN (SELECT * FROM GETUSERS) u ON  u.id_uzivatel = z.id_uzivatel_odesilatel\n"
-                    + "WHERE ID_SKUPINA_PRIJEMCE = ? "
-                    + "ORDER BY z.datum_vytvoreni"
+                    "SELECT * FROM ZPRAVY z\n" +
+                            "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
+                            "where ID_SKUPINA_PRIJEMCE = ?\n" +
+                            "order by z.DATUM_VYTVORENI"
             );
 
             stmt.setInt(1, skupina.getId());
@@ -116,12 +115,13 @@ public class MessageDAOImpl implements MessageDAO {
             while (rs.next()) {
 
                 Message zprava = new Message(
+                        rs.getInt("id_zprava"),
                         rs.getString("nazev"),
                         rs.getString("telo"),
                         userDAO.getUser(rs),
                         null,
                         skupina,
-                        rs.getDate("zprava_datum_vytvoreni")
+                        rs.getDate("datum_vytvoreni")
                 );
                 collection.add(zprava);
             }

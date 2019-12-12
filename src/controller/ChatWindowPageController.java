@@ -76,13 +76,24 @@ public class ChatWindowPageController implements Initializable {
     }
 
     public void btnSendClicked(MouseEvent mouseEvent) {
-        Message message = new Message(
-                "Uživatelská zpráva",
-                txtFieldNewMessage.getText(),
-                MainDashboardPageController.getLoggedUser(),
-                listViewUsers.getItems().get(0),
-                null
-        );
+        Message message = null;
+        if(chattedGroup == null) {
+             message = new Message(
+                    "Uživatelská zpráva",
+                    txtFieldNewMessage.getText(),
+                    MainDashboardPageController.getLoggedUser(),
+                    listViewUsers.getItems().get(0),
+                    null
+            );
+        } else {
+            message = new Message(
+                    "Skupinová zpráva",
+                    txtFieldNewMessage.getText(),
+                    MainDashboardPageController.getLoggedUser(),
+                    null,
+                    chattedGroup
+            );
+        }
 
         try {
             messageDAO.createMessage(message);

@@ -20,12 +20,12 @@
             <HBox prefHeight="65.0" prefWidth="767.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="txtFieldNewMessage" prefHeight="87.0" prefWidth="577.0" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" onMouseClicked="#btnSendClicked" prefHeight="64.0" prefWidth="197.0" text="Odeslat" />
+                  <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#btnSendClicked" prefHeight="64.0" prefWidth="200.0" text="Odeslat" />
                </children>
             </HBox>
          </bottom>
          <right>
-            <ListView fx:id="listViewUsers" prefHeight="493.0" prefWidth="192.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="listViewUsers" prefHeight="479.0" prefWidth="195.0" BorderPane.alignment="CENTER" />
          </right>
       </BorderPane>
    </children>

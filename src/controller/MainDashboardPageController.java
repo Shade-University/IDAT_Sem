@@ -28,10 +28,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
-import model.Student;
-import model.Teacher;
-import model.USER_TYPE;
-import model.User;
+import model.*;
 import data.UserDAO;
 import data.GroupDAO;
 import data.RatingDAO;
@@ -57,9 +54,12 @@ public class MainDashboardPageController implements Initializable {
     public Label lblNickName;
     public ImageView imgView;
     public TabPane tabPane;
+    public ListView<Group> listViewGroups;
+    public ListView listViewIskam;
 
     private FileChooser fileChooser = new FileChooser();
     private ObservableList<User> userData;
+    private ObservableList<Group> groupData;
     private Tab editProfileTab = new Tab();
     private Tab administrationTab = new Tab();
 
@@ -81,7 +81,11 @@ public class MainDashboardPageController implements Initializable {
 
         listViewUsers.setItems(userData);
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-           openChatWith(FXCollections.observableArrayList(newValue));
+           openChatWith(newValue);
+        });
+        listViewGroups.setItems(groupData);
+        listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            openChatWith(newValue);
         });
 
 
@@ -160,6 +164,7 @@ public class MainDashboardPageController implements Initializable {
     private void loadUserData() {
         try {
             userData = FXCollections.observableArrayList(userDAO.getAllUsers());
+            groupData = FXCollections.observableArrayList(groupDAO.getUserGroups(loggedUser));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -171,9 +176,9 @@ public class MainDashboardPageController implements Initializable {
         );
     }
 
-    private void openChatWith(ObservableList<User> list) {
+    private void openChatWith(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
-        Tab chatTab = new Tab("Chat");
+        Tab chatTab = new Tab("Chat: " + user.getFirstName());
         try {
             chatTab.setContent(loader.load());
         } catch (IOException e) {
@@ -181,7 +186,22 @@ public class MainDashboardPageController implements Initializable {
         }
 
         ChatWindowPageController chatWindowPageController = loader.getController();
-        chatWindowPageController.setChatUsers(list);
+        chatWindowPageController.setChatUsers(Arrays.asList(user));
+
+        selectTab(chatTab);
+    }
+
+    private void openChatWith(Group group) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
+        Tab chatTab = new Tab("Chat: " + group.getName());
+        try {
+            chatTab.setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ChatWindowPageController chatWindowPageController = loader.getController();
+        chatWindowPageController.setChatGroup(group);
 
         selectTab(chatTab);
     }
