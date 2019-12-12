@@ -104,25 +104,28 @@ public class AdministrationPageController implements Initializable {
             refreshGroups();
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditGroupPageController.setParams(newValue, this);
-                    AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
-
-                    stackPaneEditGroup.getChildren().clear();
-                    stackPaneEditGroup.getChildren().add(groupPane);
+                   loadGroupPane(newValue);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
 
+
             /*============FieldsOfStudy============*/
             refreshFieldOfStudy();
             listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditFieldOfStudyPageController.setParams(newValue, this);
-                    AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
+                    loadFieldOfStudyPane(newValue);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
-                    stackPaneEditFieldsOfStudy.getChildren().clear();
-                    stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
+            /*============Subjects============*/
+            refreshSubject();
+            listViewSubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                  loadSubject(newValue);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -155,11 +158,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddGroup(MouseEvent mouseEvent) {
         try {
-            EditGroupPageController.setParams(null, this);
-            AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
-
-            stackPaneEditGroup.getChildren().clear();
-            stackPaneEditGroup.getChildren().add(groupPane);
+           loadGroupPane(null);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -171,10 +170,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
         try {
-            EditFieldOfStudyPageController.setParams(null, this);
-            AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
-            stackPaneEditFieldsOfStudy.getChildren().clear();
-            stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
+           loadFieldOfStudyPane(null);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -186,13 +182,38 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddSubject(MouseEvent mouseEvent) {
         try {
-            EditSubjectPageController.setParams(null, this);
-            AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
-            stackPaneEditSubject.getChildren().clear();
-            stackPaneEditSubject.getChildren().add(subjectPane);
+            loadSubject(null);
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+
+    /*=====PaneLoader=====*/
+
+
+    //Group
+    private void loadGroupPane(Group gp) throws IOException {
+        EditGroupPageController.setParams(gp, this);
+        AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
+        stackPaneEditGroup.getChildren().clear();
+        stackPaneEditGroup.getChildren().add(groupPane);
+    }
+
+    //FieldOfStudy
+    private void loadFieldOfStudyPane(Field fd) throws IOException {
+        EditFieldOfStudyPageController.setParams(fd, this);
+        AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
+        stackPaneEditFieldsOfStudy.getChildren().clear();
+        stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
+    }
+
+    //Subject
+    private void loadSubject(Subject sb) throws IOException {
+        EditSubjectPageController.setParams(sb, this);
+        AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
+        stackPaneEditSubject.getChildren().clear();
+        stackPaneEditSubject.getChildren().add(subjectPane);
     }
 
 
