@@ -39,7 +39,7 @@ public class RatingDAOImpl implements RatingDAO {
             Statement stmt = conn.createStatement();
 
             ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM getRatings");
+                    "SELECT * FROM GETHODNOCENI");
             while (rs.next()) {
                 Rating hodnoceni = getRating(rs);
                 collection.add(hodnoceni);

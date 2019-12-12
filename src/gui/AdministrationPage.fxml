@@ -159,8 +159,30 @@
                      <content>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="listViewRating" minHeight="-Infinity" minWidth="150.0" prefHeight="569.0" prefWidth="150.0" />
-                              <StackPane fx:id="stackPaneEditRating" style="-fx-background-color: black;" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="CENTER" minWidth="200" prefHeight="569.0" prefWidth="200.0" style="-fx-background-color: #333645;">
+                                 <children>
+                                    <ListView fx:id="listViewRatings" minHeight="-Infinity" minWidth="150.0" prefHeight="509.0" prefWidth="163.0" VBox.vgrow="ALWAYS" />
+                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAddRating" prefHeight="60.0" prefWidth="140.0" style="-fx-border-color: black;" styleClass="btns" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Vytvořit hodnocení" textFill="#7c8184">
+                                             <font>
+                                                <Font name="Calibri Light" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <StackPane fx:id="stackPaneEditRating" style="-fx-background-color: #333645;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </content>
@@ -169,8 +191,30 @@
                      <content>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="listViewMessage" minHeight="-Infinity" minWidth="150.0" prefHeight="569.0" prefWidth="150.0" />
-                              <StackPane fx:id="stackPaneEditMessage" style="-fx-background-color: black;" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="CENTER" minWidth="200" prefHeight="569.0" prefWidth="200.0" style="-fx-background-color: #333645;">
+                                 <children>
+                                    <ListView fx:id="listViewMessages" minHeight="-Infinity" minWidth="150.0" prefHeight="509.0" prefWidth="163.0" VBox.vgrow="ALWAYS" />
+                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAddMessage" prefHeight="60.0" prefWidth="140.0" style="-fx-border-color: black;" styleClass="btns" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Vytvořit zprávu" textFill="#7c8184">
+                                             <font>
+                                                <Font name="Calibri Light" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <StackPane fx:id="stackPaneEditMessage" style="-fx-background-color: #333645;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </content>
@@ -202,7 +246,7 @@
                                        </HBox>
                                    </children>
                                </VBox>
-                              <StackPane fx:id="stackPaneEditFile" style="-fx-background-color: black;" HBox.hgrow="ALWAYS" />
+                              <StackPane fx:id="stackPaneEditFile" style="-fx-background-color: #333645;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </content>

@@ -8,11 +8,26 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import model.Message;
+import model.Rating;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class EditMessagePageController implements Initializable {
+
+    private static AdministrationPageController parent;
+    private static Message editedMessage;
+    /**
+     * Nastavení vstupních parametrů
+     *
+     * @param message - editovaná skupina
+     * @param aP      - Předek ve kterém je zobrazený formulář
+     */
+    public static void setParams(Message message, AdministrationPageController aP) {
+        editedMessage = message;
+        parent = aP;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

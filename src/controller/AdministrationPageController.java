@@ -52,12 +52,18 @@ public class AdministrationPageController implements Initializable {
     private ListView<Field> listViewFieldsOfStudy;
     @FXML
     private ListView<Subject> listViewSubjects;
+    @FXML
+    private ListView<Rating> listViewRatings;
+    @FXML
+    private ListView<Message> listViewMessages;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
     private final FileDAO fileDAO = new FileDAOImpl();
+    private final RatingDAO ratingDAO = new RatingDAOImpl();
+    private final MessageDAO messageDAO = new MessageDAOImpl();
 
     /**
      * Initializes the controller class.
@@ -70,10 +76,7 @@ public class AdministrationPageController implements Initializable {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
 
-            /* Hodnocení */
-            AnchorPane ratingPane = FXMLLoader.load(getClass().getResource("/gui/EditRatingPage.fxml"));
-            stackPaneEditRating.getChildren().add(ratingPane);
-            /* Hodnocení */
+            /* Message */
             AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
             stackPaneEditMessage.getChildren().add(messagePane);
             /* Soubory */
@@ -133,6 +136,26 @@ public class AdministrationPageController implements Initializable {
                     e.printStackTrace();
                 }
             });
+
+            /*============Rating============*/
+            refreshRating();
+            listViewRatings.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    loadRating(newValue);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            /*============Message============*/
+            refreshMessage();
+            /*listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    loadMessage(newValue);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });*/
 
             /*============Files============*/
             listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
@@ -203,6 +226,32 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
+    public void refreshRating() throws SQLException {
+        listViewRatings.getItems().clear();
+        listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
+    }
+
+    public void onClickAddRating(MouseEvent mouseEvent) {
+        try {
+            loadRating(null);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void refreshMessage() throws SQLException {
+        listViewMessages.getItems().clear();
+       // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+    }
+
+    public void onClickAddMessage(MouseEvent mouseEvent) {
+        try {
+            loadMessage(null);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
     /*=====PaneLoader=====*/
     //Group
     private void loadGroupPane(Group gp) throws IOException {
@@ -226,6 +275,22 @@ public class AdministrationPageController implements Initializable {
         AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
         stackPaneEditSubject.getChildren().clear();
         stackPaneEditSubject.getChildren().add(subjectPane);
+    }
+
+    //Rating
+    private void loadRating(Rating rt) throws IOException {
+        EditRatingPageController.setParams(rt, this);
+        AnchorPane ratingPane = FXMLLoader.load(getClass().getResource("/gui/EditRatingPage.fxml"));
+        stackPaneEditRating.getChildren().clear();
+        stackPaneEditRating.getChildren().add(ratingPane);
+    }
+
+    //Message
+    private void loadMessage(Message msg) throws IOException {
+        EditMessagePageController.setParams(msg, this);
+        AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
+        stackPaneEditMessage.getChildren().clear();
+        stackPaneEditMessage.getChildren().add(messagePane);
     }
 
     public void onClickAddFile(MouseEvent mouseEvent) {

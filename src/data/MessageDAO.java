@@ -13,7 +13,9 @@ import model.Message;
 public interface MessageDAO {
     
     public void createMessage(Message message) throws SQLException;
-    
+
+    public Collection<Message> getAllMessages() throws SQLException;
+
     public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) throws SQLException;
     
     public Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException;
