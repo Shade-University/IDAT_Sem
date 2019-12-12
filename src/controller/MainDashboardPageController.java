@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
@@ -62,6 +61,7 @@ public class MainDashboardPageController implements Initializable {
     private ObservableList<Group> groupData;
     private Tab editProfileTab = new Tab();
     private Tab administrationTab = new Tab();
+    private Tab importTab = new Tab();
 
 
     public static void setLoggedUser(User user) {
@@ -137,10 +137,14 @@ public class MainDashboardPageController implements Initializable {
         administrationTab.setText("Administrace");
         administrationTab.setClosable(true);
 
+        importTab.setText("Import");
+        importTab.setClosable(true);
+
         try {
             EditProfileController.setEditedUser(loggedUser);
             editProfileTab.setContent(FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml")));
             administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
+            importTab.setContent(FXMLLoader.load(getClass().getResource("/gui/ImportPage.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -204,5 +208,9 @@ public class MainDashboardPageController implements Initializable {
         chatWindowPageController.setChatGroup(group);
 
         selectTab(chatTab);
+    }
+
+    public void onImportClicked(MouseEvent mouseEvent) {
+        selectTab(importTab);
     }
 }
