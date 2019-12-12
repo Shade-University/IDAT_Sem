@@ -28,6 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -92,8 +93,8 @@ public class AdministrationPageController implements Initializable {
             listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
             listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditProfileController.setEditedUser(newValue);
-                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml"));
+                    EditUserController.setEditedUser(newValue);
+                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
 
                     stackPaneEditUser.getChildren().clear();
                     stackPaneEditUser.getChildren().add(parent);
@@ -122,6 +123,19 @@ public class AdministrationPageController implements Initializable {
                 SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onClickAddUser(MouseEvent mouseEvent) {
+        EditUserController.setEditedUser(null);
+        AnchorPane parent = null;
+        try {
+            parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        stackPaneEditUser.getChildren().clear();
+        stackPaneEditUser.getChildren().add(parent);
     }
 }
     /*

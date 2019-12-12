@@ -1,5 +1,7 @@
 package controller;
 
+import controller.enums.INSTITUTE;
+import controller.enums.YEAR_STUDY;
 import data.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,41 +14,6 @@ import model.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
-enum YEAR_STUDY {
-    FIRST_YEAR("1. ročník"),
-    SECOND_YEAR("2. ročník"),
-    THIRD_YEAR("3. ročník"),
-    FOURTH_YEAR("4. ročník");
-
-    private String value;
-    YEAR_STUDY(String value){this.value = value;}
-
-    public String getValue() {return value; }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-}
-
-enum INSTITUTE {
-    KE("Katedra elektrotechniky"),
-    KIT("Katedra informačních technologií"),
-    KMF("Katedra matematiky a fyziky"),
-    KRP("Katedra řízení procesů"),
-    KST("Katedra matematiky a fyziky");
-
-    private String value;
-    INSTITUTE(String value){this.value = value;}
-
-    public String getValue() {return value; }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-}
 
 public class EditProfileController implements Initializable {
     public TextField txtFieldFirstName;

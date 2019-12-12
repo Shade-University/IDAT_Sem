@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -15,8 +16,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.Cursor?>
 
-<BorderPane prefHeight="598.0" prefWidth="981.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
+<BorderPane prefHeight="598.0" prefWidth="981.0" stylesheets="stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministrationPageController">
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
@@ -26,8 +28,30 @@
                      <content>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <ListView fx:id="listViewUsers" minHeight="-Infinity" minWidth="150.0" prefHeight="569.0" prefWidth="150.0" />
-                              <StackPane fx:id="stackPaneEditUser" style="-fx-background-color: black;" HBox.hgrow="ALWAYS">
+                              <VBox alignment="CENTER" prefHeight="569.0" prefWidth="200.0" minWidth="200" style="-fx-background-color: #333645;">
+                                 <children>
+                                    <ListView fx:id="listViewUsers" minHeight="-Infinity" minWidth="150.0" prefHeight="509.0" prefWidth="163.0" VBox.vgrow="ALWAYS" />
+                                     <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAddUser" prefHeight="60.0" prefWidth="140.0" style="-fx-border-color: black;" styleClass="btns" VBox.vgrow="ALWAYS">
+                                         <children>
+                                             <Label text="Vytvořit uživatele" textFill="#7c8184">
+                                                 <font>
+                                                     <Font name="Calibri Light" size="14.0" />
+                                                 </font>
+                                                 <HBox.margin>
+                                                     <Insets left="10.0" />
+                                                 </HBox.margin>
+                                             </Label>
+                                         </children>
+                                         <cursor>
+                                             <Cursor fx:constant="HAND" />
+                                         </cursor>
+                                         <padding>
+                                             <Insets left="10.0" />
+                                         </padding>
+                                     </HBox>
+                                 </children>
+                              </VBox>
+                              <StackPane fx:id="stackPaneEditUser" style="-fx-background-color: #333645;;" HBox.hgrow="ALWAYS">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin></StackPane>
