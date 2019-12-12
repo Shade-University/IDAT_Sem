@@ -1,10 +1,6 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -105,7 +101,20 @@ public class SubjectDAOImpl implements SubjectDAO {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    @Override
+    public void updateSubject(Subject subject) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call update_predmet(?,?,?)"
+        );
+        callableStatement.setInt(1, subject.getId());
+        callableStatement.setString(2, subject.getName());
+        callableStatement.setString(3, subject.getDescription());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject updated!");
+    }
+
     @Override
     public void removeSubjectsFromField(List<Subject> predmety, Field obor) {
         try {
@@ -130,4 +139,14 @@ public class SubjectDAOImpl implements SubjectDAO {
         }
     }
 
+    @Override
+    public void removeSubject(Subject subject) throws SQLException{
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_predmet(?)"
+        );
+        callableStatement.setInt(1, subject.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Subject deleted!");
+    }
 }

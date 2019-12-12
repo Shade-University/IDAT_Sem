@@ -177,6 +177,7 @@ public class AdministrationPageController implements Initializable {
     }
 
     public void refreshSubject() throws SQLException {
+        listViewSubjects.getItems().clear();
         listViewSubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjects()));
     }
 
@@ -188,10 +189,7 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-
     /*=====PaneLoader=====*/
-
-
     //Group
     private void loadGroupPane(Group gp) throws IOException {
         EditGroupPageController.setParams(gp, this);

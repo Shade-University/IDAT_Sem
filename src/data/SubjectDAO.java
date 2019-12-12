@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import model.Field;
@@ -14,8 +15,12 @@ public interface SubjectDAO {
     public Collection<Subject> getAllSubjects();
     
     public Collection<Subject> getSubjectsForField(Field obor);
+
+    public void updateSubject(Subject subject) throws SQLException;
     
     public void insertSubjectsToField(List<Subject> predmety, Field obor);
     
     public void removeSubjectsFromField(List<Subject> predmety, Field obor);
+
+    public void removeSubject(Subject subject) throws SQLException;
 }

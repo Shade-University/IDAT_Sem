@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import javafx.scene.image.Image;
 import model.Group;
+import model.Subject;
 import model.User;
 
 /**
@@ -16,7 +17,11 @@ public interface UserDAO {
 
     public Collection<User> getAllUsers() throws SQLException;
 
+    public Collection<User> getTeachers() throws SQLException;
+
     public Collection<User> getAllUsersFromGroup(Group skupina) throws SQLException;
+
+    public Collection<User> getTeachersBySubject(Subject subject) throws SQLException;
 
     public User getUserByLogin(String email, String heslo) throws SQLException;
 

@@ -23,13 +23,12 @@
             <Label text="Přidat do:" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Button mnemonicParsing="false" onAction="#btnSubjectSaveClicked" prefHeight="32.0" prefWidth="235.0" text="Uložit předmět" GridPane.columnIndex="4" GridPane.rowIndex="9" />
             <Label fx:id="lblError111" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="9" />
-            <Label text="Objekt:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
             <Button mnemonicParsing="false" onAction="#btnSubjectDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat předmět" GridPane.columnIndex="2" GridPane.rowIndex="9" />
             <TextArea fx:id="textAreaSubjectDescription" prefHeight="38.0" prefWidth="527.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
             <ListView fx:id="listViewSubjectUniversal" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.rowSpan="3" />
-            <ComboBox fx:id="comboBoxAddSubjectToUniversal" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-            <Button fx:id="btnAddSubjectToUniversal" mnemonicParsing="false" onAction="#btnbtnAddSubjectToUniversalClicked" prefHeight="25.0" prefWidth="235.0" text="add Universal" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <ComboBox fx:id="comboBoxSubjectsUniversal" prefHeight="25.0" prefWidth="237.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ComboBox fx:id="comboBoxAddSubjectToUniversal" onAction="#cbUniversalChanged" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+            <Button fx:id="btnAddSubjectToUniversal" mnemonicParsing="false" onAction="#btnAddSubjectToUniversalClicked" prefHeight="25.0" prefWidth="235.0" text="add Universal" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <ComboBox fx:id="comboBoxSubjectsUniversal" onAction="#cbSubjectTypeChanged" prefHeight="25.0" prefWidth="237.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
          </children>
          <columnConstraints>
             <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />

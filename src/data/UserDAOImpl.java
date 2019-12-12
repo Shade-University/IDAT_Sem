@@ -47,6 +47,20 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public Collection<User> getTeachers() throws SQLException {
+        Collection<User> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM GETUCITELE");
+        while (rs.next()) {
+            User user = getUser(rs);
+            collection.add(user);
+        }
+        return collection;
+    }
+
+    @Override
     public User getUserByLogin(String email, String password) throws SQLException {
 
         //Hash password
@@ -79,6 +93,22 @@ public class UserDAOImpl implements UserDAO {
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM getUzivateleVeSkupine g WHERE g.id_skupina = " + group.getId());
+
+        while (rs.next()) {
+            User user = getUser(rs);
+            collection.add(user);
+        }
+
+        return collection;
+    }
+
+    @Override
+    public Collection<User> getTeachersBySubject(Subject subject) throws SQLException {
+        Collection<User> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getUciteleSPredmetem g WHERE g.id_predmet = " + subject.getId());
 
         while (rs.next()) {
             User user = getUser(rs);

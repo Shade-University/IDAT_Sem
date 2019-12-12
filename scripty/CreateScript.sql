@@ -395,6 +395,12 @@ BEGIN
     UPDATE SKUPINY s SET s.nazev = nazev_in, s.popis = popis_in WHERE s.id_skupina = id;
 END;
 /
+CREATE OR REPLACE PROCEDURE update_predmet(id integer, nazev_in in VARCHAR2, popis_in in VARCHAR2)
+    IS
+BEGIN
+    UPDATE predmety p SET p.nazev = nazev_in, p.popis = popis_in WHERE p.id_predmet = id;
+END;
+/
 /*=====Delete procedury=====*/
 CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_in IN NUMBER, element_type_in IN NUMBER)
     IS
@@ -409,9 +415,10 @@ END;
 CREATE OR REPLACE PROCEDURE delete_predmet(id_in IN NUMBER)
     IS
 BEGIN
+    DELETE FROM SKUPINY_PREDMETY WHERE  PREDMETY_ID_PREDMET = id_in;
+    DELETE FROM UCITELE_PREDMETY WHERE  PREDMET_ID_PREDMET = id_in;
+    DELETE FROM obor_predmet WHERE PREDMET_ID_PREDMET = id_in;
     DELETE FROM PREDMETY WHERE PREDMETY.ID_PREDMET = id_in;
-    /*skupiny*/
-    delete_obor_predmet(id_in, 0);
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_hodnoceni(id_in IN NUMBER)
@@ -533,6 +540,17 @@ from OBOR_PREDMET ob
          JOIN STUDIJNI_OBORY o ON o.id_obor = ob.studijni_obor_id_obor
          JOIN PREDMETY p on ob.predmet_id_predmet = p.id_predmet;
 
+CREATE OR REPLACE VIEW getOborySPredmetem AS
+SELECT o.id_obor,
+       o.nazev,
+       o.popis,
+       p.id_predmet
+from OBOR_PREDMET ob
+         JOIN STUDIJNI_OBORY o ON o.id_obor = ob.studijni_obor_id_obor
+         JOIN PREDMETY p on ob.predmet_id_predmet = p.id_predmet;
+
+
+
 CREATE OR REPLACE VIEW getUzivatele AS
 SELECT u.id_uzivatel,
        u.jmeno,
@@ -606,6 +624,26 @@ FROM getUzivatele u
          LEFT JOIN STUDIJNI_OBORY so ON u.id_obor = so.id_obor
          join SKUPINY s on us.SKUPINY_ID_SKUPINA = s.ID_SKUPINA;
 
+CREATE OR REPLACE VIEW getUciteleSPredmetem AS
+SELECT u.id_uzivatel,
+       u.jmeno,
+       u.prijmeni,
+       u.heslo,
+       u.email,
+       u.datum_vytvoreni,
+       u.uzivatel_typ,
+       u.avatar,
+       u.rok_studia,
+       u.id_obor,
+       so.nazev "nazev_obor",
+       so.popis "popis_obor",
+       u.katedra,
+       s.id_predmet
+FROM getUzivatele u
+         left join UCITELE_PREDMETY up on u.ID_UZIVATEL = up.UCITELE_ID_UCITEL
+         LEFT JOIN STUDIJNI_OBORY so ON u.id_obor = so.id_obor
+         join predmety s on up.PREDMET_ID_PREDMET = s.ID_PREDMET;
+
 CREATE OR REPLACE VIEW getHodnoceni AS
 SELECT h.id_hodnoceni,
        h.hodnota_hodnoceni,
@@ -646,8 +684,14 @@ SELECT id_skupina,
 from SKUPINY;
 
 CREATE OR REPLACE VIEW getSkupinyUzivatele AS
-    SELECT UZIVATELE_ID_UZIVATEL,id_skupina, nazev "nazev_skupina", popis "popis_skupina" FROM UZIVATELE_SKUPINY
+SELECT UZIVATELE_ID_UZIVATEL, id_skupina, nazev "nazev_skupina", popis "popis_skupina"
+FROM UZIVATELE_SKUPINY
          JOIN SKUPINY S on UZIVATELE_SKUPINY.SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
+
+CREATE OR REPLACE VIEW getSkupinyPredmetu AS
+SELECT id_skupina, nazev "nazev_skupina", popis "popis_skupina"
+FROM SKUPINY_PREDMETY
+         JOIN SKUPINY S on SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
 
 CREATE OR REPLACE VIEW getZpravyHierarchicky AS
 SELECT nazev,

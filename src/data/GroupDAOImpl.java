@@ -79,6 +79,22 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
+    public Collection<Group> getSubjectGroups(Subject subject) throws SQLException {
+        Collection<Group> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getSkupinyPredmetu WHERE PREDMETY_ID_PREDMET = " + subject.getId());
+
+        while (rs.next()) {
+            Group group = getGroup(rs);
+            collection.add(group);
+        }
+
+        return collection;
+    }
+
+    @Override
     public void updateGroup(Group group) throws SQLException {
         CallableStatement callableStatement = conn.prepareCall(
                 "call update_skupina(?,?,?)"

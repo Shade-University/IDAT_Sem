@@ -2,31 +2,38 @@
 package model;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class Subject {
 
-    private final int id;
-    private final String nazevString;
-    private final String popis;
+    private int id;
+    private String name;
+    private String description;
 
-    public Subject(int id, String nazevString, String popis) {
+    public Subject(int id, String name, String popis) {
         this.id = id;
-        this.nazevString = nazevString;
-        this.popis = popis;
+        this.name = name;
+        this.description = popis;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getNazevString() {
-        return nazevString;
+    public String getName() {
+        return name;
     }
 
-    public String getPopis() {
-        return popis;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -52,13 +59,12 @@ public class Subject {
         }
         return true;
     }
-    
+
 
     @Override
     public String toString() {
-        return getNazevString();
+        return getName();
     }
-    
 
-   
+
 }

@@ -51,6 +51,7 @@ drop view getVyucovanePredmety;
 drop view getPredmetyVeSkupine;
 drop view getPoctyVeSkupinach;
 drop view getZpravyHierarchicky;
+drop view getOborySPredmetem;
 
 drop PROCEDURE delete_student;
 drop PROCEDURE delete_ucitel;
@@ -60,6 +61,8 @@ drop PROCEDURE insert_student;
 drop PROCEDURE insert_ucitel;
 drop PROCEDURE delete_field;
 
+drop procedure delete_predmet;
+drop procedure update_predmet;
 drop procedure delete_uzivatel_skupina;
 drop procedure delete_obor_predmet;
 drop procedure delete_zprava;

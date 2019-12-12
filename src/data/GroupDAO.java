@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import model.Group;
+import model.Subject;
 import model.User;
 
 public interface GroupDAO {
@@ -14,6 +15,8 @@ public interface GroupDAO {
     public Collection<Group> getAllGroupWithUserQuantity() throws SQLException;
 
     public Collection<Group> getUserGroups(User user) throws SQLException;
+
+    public Collection<Group> getSubjectGroups(Subject subject) throws SQLException;
 
     public Group getGroup(ResultSet rs) throws SQLException;
 

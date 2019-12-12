@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.Field;
+import model.Subject;
+import model.User;
 
 /**
  * @author Tomáš Vondra
@@ -53,6 +55,26 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public Collection<Field> getFieldsBySubjects(Subject subject) throws SQLException {
+        Collection<Field> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM getOborySPredmetem g WHERE g.id_predmet = " + subject.getId());
+
+        while (rs.next()) {
+            Field obor = new Field(
+                    rs.getInt("id_obor"),
+                    rs.getString("nazev"),
+                    rs.getString("popis")
+            );
+            collection.add(obor);
+        }
+
+        return collection;
     }
 
     @Override
