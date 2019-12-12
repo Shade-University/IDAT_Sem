@@ -1,14 +1,7 @@
 package controller;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
-import data.FieldOfStudyDAO;
-import data.FieldOfStudyDAOImpl;
-import data.GroupDAO;
-import data.GroupDAOImpl;
-import data.SubjectDAO;
-import data.SubjectDAOImpl;
-import data.UserDAO;
-import data.UserDAOImpl;
+import data.*;
 import gui.Main;
 
 import java.io.IOException;
@@ -32,10 +25,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import model.Field;
-import model.Group;
-import model.Subject;
-import model.User;
+import model.*;
+
+import javax.activation.FileDataSource;
 
 /**
  * FXML Controller class
@@ -49,6 +41,8 @@ public class AdministrationPageController implements Initializable {
     public StackPane stackPaneEditRating;
     public StackPane stackPaneEditMessage;
     public StackPane stackPaneEditFile;
+    public ListView<Message> listViewMessage;
+    public ListView<File> listViewFile;
 
     @FXML
     private ListView<User> listViewUsers;
@@ -63,6 +57,7 @@ public class AdministrationPageController implements Initializable {
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
+    private final FileDAO fileDAO = new FileDAOImpl();
 
     /**
      * Initializes the controller class.
@@ -75,6 +70,9 @@ public class AdministrationPageController implements Initializable {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
 
+            /* Předměty */
+            AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
+            stackPaneEditSubject.getChildren().add(subjectPane);
             /* Hodnocení */
             AnchorPane ratingPane = FXMLLoader.load(getClass().getResource("/gui/EditRatingPage.fxml"));
             stackPaneEditRating.getChildren().add(ratingPane);
@@ -82,9 +80,18 @@ public class AdministrationPageController implements Initializable {
             AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
             stackPaneEditMessage.getChildren().add(messagePane);
             /* Soubory */
-            AnchorPane filePane = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
-            stackPaneEditFile.getChildren().add(filePane);
+            listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
+            listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    EditFilePageController.setEditedFile(newValue);
+                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
 
+                    stackPaneEditFile.getChildren().clear();
+                    stackPaneEditFile.getChildren().add(parent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             /*============USERS============*/
             listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
@@ -131,8 +138,19 @@ public class AdministrationPageController implements Initializable {
                 }
             });
 
-            //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-            //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+            /*============Files============*/
+            listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
+            listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    EditFilePageController.setEditedFile(newValue);
+                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
+
+                    stackPaneEditFile.getChildren().clear();
+                    stackPaneEditFile.getChildren().add(parent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (
                 SQLException | IOException e) {
             e.printStackTrace();
@@ -208,6 +226,18 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
     }
 
+
+    public void onClickAddFile(MouseEvent mouseEvent) {
+        AnchorPane parent = null;
+        EditFilePageController.setEditedFile(null);
+        try {
+            parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stackPaneEditFile.getChildren().clear();
+        stackPaneEditFile.getChildren().add(parent);
+    }
     //Subject
     private void loadSubject(Subject sb) throws IOException {
         EditSubjectPageController.setParams(sb, this);
@@ -215,8 +245,6 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditSubject.getChildren().clear();
         stackPaneEditSubject.getChildren().add(subjectPane);
     }
-
-
 }
     /*
 
