@@ -70,9 +70,6 @@ public class AdministrationPageController implements Initializable {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
 
-            /* Předměty */
-            AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
-            stackPaneEditSubject.getChildren().add(subjectPane);
             /* Hodnocení */
             AnchorPane ratingPane = FXMLLoader.load(getClass().getResource("/gui/EditRatingPage.fxml"));
             stackPaneEditRating.getChildren().add(ratingPane);
@@ -111,12 +108,11 @@ public class AdministrationPageController implements Initializable {
             refreshGroups();
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                   loadGroupPane(newValue);
+                    loadGroupPane(newValue);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
-
 
             /*============FieldsOfStudy============*/
             refreshFieldOfStudy();
@@ -132,7 +128,7 @@ public class AdministrationPageController implements Initializable {
             refreshSubject();
             listViewSubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                  loadSubject(newValue);
+                    loadSubject(newValue);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -176,7 +172,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddGroup(MouseEvent mouseEvent) {
         try {
-           loadGroupPane(null);
+            loadGroupPane(null);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -188,7 +184,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
         try {
-           loadFieldOfStudyPane(null);
+            loadFieldOfStudyPane(null);
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -224,6 +220,13 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
     }
 
+    //Subject
+    private void loadSubject(Subject sb) throws IOException {
+        EditSubjectPageController.setParams(sb, this);
+        AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
+        stackPaneEditSubject.getChildren().clear();
+        stackPaneEditSubject.getChildren().add(subjectPane);
+    }
 
     public void onClickAddFile(MouseEvent mouseEvent) {
         AnchorPane parent = null;
@@ -235,13 +238,6 @@ public class AdministrationPageController implements Initializable {
         }
         stackPaneEditFile.getChildren().clear();
         stackPaneEditFile.getChildren().add(parent);
-    }
-    //Subject
-    private void loadSubject(Subject sb) throws IOException {
-        EditSubjectPageController.setParams(sb, this);
-        AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
-        stackPaneEditSubject.getChildren().clear();
-        stackPaneEditSubject.getChildren().add(subjectPane);
     }
 }
     /*
