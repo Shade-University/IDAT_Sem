@@ -2,6 +2,7 @@ package data;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -275,7 +276,7 @@ public class UserDAOImpl implements UserDAO {
             System.out.println("Admin deleted");
         }
 
-    } //TODO Občas používám preparedStatement, občas stm
+    }
 
     @Override
     public void updateAvatar(File image, User user) throws SQLException {

@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditFilePageController">
    <children>
       <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -21,16 +20,19 @@
             <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <TextField fx:id="txtFieldFileName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Přípona souboru" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button mnemonicParsing="false" onAction="#btnFileSaveClicked" prefHeight="32.0" prefWidth="248.0" text="Uložit soubor" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <Label fx:id="" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <Button mnemonicParsing="false" onAction="#btnFileDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat soubor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <DatePicker fx:id="dateFileUploadedDate" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <Button mnemonicParsing="false" onAction="#btnFileUpdateClicked" prefHeight="32.0" prefWidth="248.0" text="Provést akci" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <Label fx:id="" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+            <DatePicker fx:id="dateFileUploadedDate" disable="true" editable="false" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <TextField fx:id="txtFieldFileSuffix" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label text="Nahrát soubor" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" onAction="#btnAddFileClicked" prefHeight="25.0" prefWidth="235.0" text="Otevřít soubor z počítače" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="Datum úpravy" GridPane.rowIndex="5" />
-            <DatePicker fx:id="dateFileEditedDate" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Label text="Nahrát soubor" GridPane.rowIndex="4" />
+            <Button fx:id="btnAddFile" mnemonicParsing="false" onAction="#btnAddFileClicked" prefHeight="25.0" prefWidth="235.0" text="Otevřít soubor z počítače" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="Datum úpravy" GridPane.rowIndex="6" />
+            <DatePicker fx:id="dateFileEditedDate" disable="true" editable="false" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <ComboBox fx:id="actionTypeComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Label text="Typ souboru" GridPane.rowIndex="3" />
+            <TextField fx:id="txtFieldTypeFile" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="2" GridPane.rowIndex="9" />
          </children>
          <columnConstraints>
             <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -49,8 +51,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />

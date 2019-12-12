@@ -844,7 +844,12 @@ CREATE OR REPLACE TRIGGER soubory_trigger
     ON SOUBORY
     FOR EACH ROW
 BEGIN
+    if(updating) then
+        :new.upraveno := sysdate;
+    end if;
+
     if (inserting) then
+        :new.nahrano := sysdate;
         SELECT increment_soubory.nextval
         INTO :NEW.id_souboru
         FROM dual;

@@ -103,12 +103,14 @@ public class EditUserController implements Initializable {
         try {
             switch (actionTypeComboBox.getValue()) {
                 case DELETE:
+                    updateUser.setId(editedUser.getId());
                     userDAO.deleteUser(updateUser);
                     break;
                 case INSERT:
                     userDAO.insertUser(updateUser);
                     break;
                 case UPDATE:
+                    updateUser.setId(editedUser.getId());
                     userDAO.updateUser(updateUser);
                     break;
                 default:

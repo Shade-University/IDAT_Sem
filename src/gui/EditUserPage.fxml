@@ -56,7 +56,7 @@
              <Label text="Potvrzení hesla" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
              <PasswordField fx:id="txtFieldPasswordConfirm" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
              <Button mnemonicParsing="false" onAction="#btnUpdateClicked" prefHeight="32.0" prefWidth="232.0" text="Provést akci" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-             <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+             <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="8" />
             <ComboBox fx:id="actionTypeComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
          </children>
 
