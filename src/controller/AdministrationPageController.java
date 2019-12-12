@@ -130,10 +130,9 @@ public class AdministrationPageController implements Initializable {
     }
 
     public void onClickAddUser(MouseEvent mouseEvent) {
-        EditUserController.setEditedUser(null);
         AnchorPane parent = null;
         try {
-            parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
+            parent = FXMLLoader.load(getClass().getResource("/gui/RegistrationPage.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
