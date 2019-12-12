@@ -32,11 +32,13 @@ public class EditGroupPageController implements Initializable {
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
     private ObservableList<User> usersInGroup;
+    private static AdministrationPageController parent;
 
     private static Group editedGroup;
 
-    public static void setEditedGroup(Group group) {
+    public static void setParams(Group group, AdministrationPageController aP) {
         editedGroup = group;
+        parent = aP;
     }
 
     public static Group getEditedGroup() {
@@ -63,6 +65,10 @@ public class EditGroupPageController implements Initializable {
             } catch (SQLException e) {
                 System.out.println(e.getStackTrace());
             }
+        } else {
+            txtFieldGroupName.setText("");
+            textAreaGroupDescription.setText("");
+            listViewUsersInGroup.setItems(null);
         }
     }
 
@@ -91,6 +97,7 @@ public class EditGroupPageController implements Initializable {
         groupDAO.removeGroup(editedGroup);
         editedGroup = null;
         initData();
+        parent.refreshGroups();
     }
 
 

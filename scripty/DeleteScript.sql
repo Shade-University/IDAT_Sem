@@ -55,7 +55,7 @@ drop view getZpravyHierarchicky;
 drop PROCEDURE delete_student;
 drop PROCEDURE delete_ucitel;
 drop PROCEDURE delete_admin;
-drop PROCEDURE delete_group;
+drop PROCEDURE delete_skupina;
 drop PROCEDURE insert_student;
 drop PROCEDURE insert_ucitel;
 drop PROCEDURE delete_field;
@@ -75,6 +75,7 @@ drop procedure insert_hodnoceni;
 drop procedure insert_konta;
 drop procedure insert_skupiny_predmety;
 drop procedure insert_produkty;
+drop procedure insert_predmet_ucitel;
 
 drop function fnc_prumer_hodnoceni;
 drop function fnc_get_nejlepe_hodnocenou_skupinu;

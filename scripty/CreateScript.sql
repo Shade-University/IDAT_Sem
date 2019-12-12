@@ -79,12 +79,6 @@ create table UCITELE_PREDMETY
             references PREDMETY
 );
 
-CREATE TABLE uzivatele_skupiny
-(
-    uzivatele_id_uzivatel INTEGER NOT NULL,
-    skupiny_id_skupina    INTEGER NOT NULL
-);
-
 CREATE TABLE uzivatele
 (
     id_uzivatel     INTEGER      NOT NULL,
@@ -95,6 +89,16 @@ CREATE TABLE uzivatele
     datum_vytvoreni DATE         NOT NULL,
     uzivatel_typ    VARCHAR2(50),
     avatar          BLOB
+);
+
+create table uzivatele_skupiny
+(
+    UZIVATELE_ID_UZIVATEL NUMBER not null
+        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    SKUPINY_ID_SKUPINA    NUMBER not null
+        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
+            references SKUPINY
 );
 
 ALTER TABLE uzivatele
@@ -433,7 +437,7 @@ CREATE OR REPLACE PROCEDURE insert_student(jmeno_in IN VARCHAR2, prijmeni_in IN 
     user_id INTEGER;
 BEGIN
     INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
-    VALUES (jmeno_in, prijmeni_in, email_in, heslo_in, datum_vytvoreni_in, 'STUDENT');
+    VALUES (jmeno_in, prijmeni_in, email_in, heslo_in, datum_vytvoreni_in, 'student');
     SELECT MAX(id_uzivatel) into user_id from UZIVATELE;
     INSERT INTO STUDENTI(id_uzivatel, rok_studia, id_obor)
     VALUES (user_id, rok_studia_in, id_obor_in);
@@ -486,6 +490,7 @@ CREATE OR REPLACE PROCEDURE delete_skupina(id_in IN NUMBER)
 BEGIN
     DELETE FROM ZPRAVY WHERE zpravy.id_skupina_prijemce = id_in;
     DELETE FROM UZIVATELE_SKUPINY WHERE skupiny_id_skupina = id_in;
+    DELETE FROM SKUPINY_PREDMETY WHERE skupiny_id_skupina = id_in;
     DELETE FROM HODNOCENI WHERE HODNOCENI.ID_SKUPINA = id_in;
     DELETE FROM SKUPINY WHERE SKUPINY.id_skupina = id_in;
 END;
@@ -573,12 +578,6 @@ SELECT s.id_skupina,
        s.nazev "nazev_skupina",
        s.popis "popis_skupina"
 FROM SKUPINY S;
-
-CREATE OR REPLACE VIEW getUzivateleVeSkupineOld AS
-SELECT *
-FROM UZIVATELE_SKUPINY us
-         JOIN (SELECT * FROM getSkupiny) g on us.skupiny_id_skupina = g.id_skupina
-         JOIN (SELECT * FROM getuzivatele) u on us.uzivatele_id_uzivatel = u.id_uzivatel;
 
 CREATE OR REPLACE VIEW getUzivateleVeSkupine AS
 SELECT u.id_uzivatel,

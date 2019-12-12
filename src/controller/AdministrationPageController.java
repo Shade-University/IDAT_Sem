@@ -102,12 +102,12 @@ public class AdministrationPageController implements Initializable {
                     e.printStackTrace();
                 }
             });
-            /*============GROUPS============*/
 
+            /*============GROUPS============*/
             listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    EditGroupPageController.setEditedGroup(newValue);
+                    EditGroupPageController.setParams(newValue,this);
                     AnchorPane groupPane = FXMLLoader.load(getClass().getResource("/gui/EditGroupPage.fxml"));
 
                     stackPaneEditGroup.getChildren().clear();
@@ -123,6 +123,10 @@ public class AdministrationPageController implements Initializable {
                 SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void refreshGroups() throws SQLException {
+        listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
     }
 
     public void onClickAddUser(MouseEvent mouseEvent) {

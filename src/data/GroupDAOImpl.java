@@ -170,10 +170,10 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public void removeGroup(Group group) throws SQLException {
         CallableStatement callableStatement = conn.prepareCall(
-                "call delete_group(?)"
+                "call delete_skupina(?)"
         );
+        System.out.println(group.getId());
         callableStatement.setInt(1, group.getId());
-
         callableStatement.execute();
         conn.commit();
         System.out.println("Group deleted");
