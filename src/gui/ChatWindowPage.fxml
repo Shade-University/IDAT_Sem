@@ -11,12 +11,15 @@
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <TextArea fx:id="txtAreaMessages" prefHeight="200.0" prefWidth="200.0" promptText="Test" BorderPane.alignment="CENTER" />
+            <TextArea fx:id="txtAreaMessages" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font></TextArea>
          </center>
          <bottom>
             <HBox prefHeight="65.0" prefWidth="767.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField onAction="#txtFieldNewMessage" prefHeight="87.0" prefWidth="577.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="txtFieldNewMessage" prefHeight="87.0" prefWidth="577.0" HBox.hgrow="ALWAYS" />
                   <Button mnemonicParsing="false" onMouseClicked="#btnSendClicked" prefHeight="64.0" prefWidth="197.0" text="Odeslat" />
                </children>
             </HBox>

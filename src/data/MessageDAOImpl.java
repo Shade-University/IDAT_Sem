@@ -21,12 +21,11 @@ import model.Message;
 public class MessageDAOImpl implements MessageDAO {
 
     private Connection conn;
-    private UserDAO userDAO;
+    private UserDAO userDAO = new UserDAOImpl();
 
     public MessageDAOImpl() {
         try {
             conn = OracleConnection.getConnection();
-            userDAO = new UserDAOImpl();
         } catch (SQLException ex) {
             Logger.getLogger(MessageDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -34,49 +33,43 @@ public class MessageDAOImpl implements MessageDAO {
 
 
     @Override
-    public void createMessage(Message message) {
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
+    public void createMessage(Message message) throws SQLException {
+            PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT INTO ZPRAVY(nazev, telo, datum_vytvoreni, "
                     + "id_uzivatel_odesilatel, id_skupina_prijemce, id_uzivatel_prijemce) "
                     + "VALUES (?,?,?,?,?,?)");
-            stmt.setString(1, message.getNazev());
-            stmt.setString(2, message.getObsah());
-            stmt.setDate(3, message.getDatum_vytvoreni());
-            stmt.setInt(4, message.getOdesilatel().getId());
+            preparedStatement.setString(1, message.getNazev());
+            preparedStatement.setString(2, message.getObsah());
+            preparedStatement.setDate(3, message.getDatum_vytvoreni());
+            preparedStatement.setInt(4, message.getOdesilatel().getId());
 
             if (message.getPrijemce_uzivatel() != null) {
-                stmt.setNull(5, Types.INTEGER);
-                stmt.setInt(6, message.getPrijemce_uzivatel().getId());
+                preparedStatement.setNull(5, Types.INTEGER);
+                preparedStatement.setInt(6, message.getPrijemce_uzivatel().getId());
             } else {
-                stmt.setInt(5, message.getPrijemce_skupina().getId());
-                stmt.setNull(6, Types.INTEGER);
+                preparedStatement.setInt(5, message.getPrijemce_skupina().getId());
+                preparedStatement.setNull(6, Types.INTEGER);
             } //Načte buď příjemce skupinu nebo uživatele
 
-            stmt.executeUpdate();
+            preparedStatement.executeUpdate();
             System.out.println("Message created");
             conn.commit();
-        } catch (SQLException ex) {
-            Logger.getLogger(MessageDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     @Override
-    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) {
+    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
+            PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT * FROM ZPRAVY z WHERE (z.id_uzivatel_odesilatel = ? OR z.id_uzivatel_PRIJEMCE = ?)\n"
                     + "AND (z.id_uzivatel_odesilatel = ? OR z.id_uzivatel_prijemce = ?) "
                     + "ORDER BY z.datum_vytvoreni");
-            stmt.setInt(1, uzivatel1.getId());
-            stmt.setInt(2, uzivatel1.getId());
-            stmt.setInt(3, uzivatel2.getId());
-            stmt.setInt(4, uzivatel2.getId());
+            preparedStatement.setInt(1, uzivatel1.getId());
+            preparedStatement.setInt(2, uzivatel1.getId());
+            preparedStatement.setInt(3, uzivatel2.getId());
+            preparedStatement.setInt(4, uzivatel2.getId());
 
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
             //Načte zprávy kde je příjemce buď uživatel1 nebo 2 nebo je odesílatel uživatel1 nebo 2
             while (rs.next()) {
                 Message zprava;
@@ -103,18 +96,12 @@ public class MessageDAOImpl implements MessageDAO {
             } //Načte zprávy mezi dvouma uživatelama
 
             return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(MessageDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
     }
 
     @Override
-    public Collection<Message> getMessagesForGroupChat(Group skupina) {
+    public Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
-        try {
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT z.id_zprava, z.nazev, z.telo, z.datum_vytvoreni \"zprava_datum_vytvoreni\" ,u.* \n"
                     + "FROM ZPRAVY z\n"
@@ -140,11 +127,6 @@ public class MessageDAOImpl implements MessageDAO {
             }
 
             return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(MessageDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
     }
 
 //    private User getUser(ResultSet rs) throws SQLException {

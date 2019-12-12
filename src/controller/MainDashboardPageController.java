@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import gui.Main;
@@ -76,7 +78,12 @@ public class MainDashboardPageController implements Initializable {
         initFileChooser();
         loadUserData();
         loadLabels();
+
         listViewUsers.setItems(userData);
+        listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+           openChatWith(FXCollections.observableArrayList(newValue));
+        });
+
 
     }
 
@@ -162,5 +169,20 @@ public class MainDashboardPageController implements Initializable {
                 new FileChooser.ExtensionFilter("JPG", "*.jpg")
                 , new FileChooser.ExtensionFilter("PNG", "*.png")
         );
+    }
+
+    private void openChatWith(ObservableList<User> list) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
+        Tab chatTab = new Tab("Chat");
+        try {
+            chatTab.setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ChatWindowPageController chatWindowPageController = loader.getController();
+        chatWindowPageController.setChatUsers(list);
+
+        selectTab(chatTab);
     }
 }
