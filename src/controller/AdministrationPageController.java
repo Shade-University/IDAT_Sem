@@ -53,13 +53,13 @@ public class AdministrationPageController implements Initializable {
     private ListView<User> listViewUsers;
     @FXML
     private ListView<Group> listViewGroups;
+    @FXML
+    private ListView<Field> listViewFieldsOfStudy;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
-    @FXML
-    private ListView<Field> listViewFields;
 
     /**
      * Initializes the controller class.
@@ -72,9 +72,6 @@ public class AdministrationPageController implements Initializable {
         try {
             //TODO IMPLEMENTOVAT ADMINISTRACI
 
-            /* OBORY */
-            AnchorPane fieldOfStudyPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
-            stackPaneEditFieldsOfStudy.getChildren().add(fieldOfStudyPane);
             /* Předměty */
             AnchorPane subjectPane = FXMLLoader.load(getClass().getResource("/gui/EditSubjectPage.fxml"));
             stackPaneEditSubject.getChildren().add(subjectPane);
@@ -104,7 +101,7 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============GROUPS============*/
-            listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+            refreshGroups();
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     EditGroupPageController.setParams(newValue,this);
@@ -117,12 +114,38 @@ public class AdministrationPageController implements Initializable {
                 }
             });
 
+            /*============FieldsOfStudy============*/
+            refreshFieldOfStudy();
+            listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    EditFieldOfStudyPageController.setParams(newValue,this);
+                    AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
+
+                    stackPaneEditFieldsOfStudy.getChildren().clear();
+                    stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
             //listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
             //listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
         } catch (
                 SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onClickAddUser(MouseEvent mouseEvent) {
+        AnchorPane parent = null;
+        try {
+            parent = FXMLLoader.load(getClass().getResource("/gui/RegistrationPage.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        stackPaneEditUser.getChildren().clear();
+        stackPaneEditUser.getChildren().add(parent);
     }
 
     public void refreshGroups() throws SQLException {
@@ -142,17 +165,24 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void onClickAddUser(MouseEvent mouseEvent) {
-        AnchorPane parent = null;
-        try {
-            parent = FXMLLoader.load(getClass().getResource("/gui/RegistrationPage.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        stackPaneEditUser.getChildren().clear();
-        stackPaneEditUser.getChildren().add(parent);
+    public void refreshFieldOfStudy() throws SQLException {
+        listViewFieldsOfStudy.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
     }
+
+    public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
+        try {
+            EditFieldOfStudyPageController.setParams(null,this);
+            AnchorPane fieldPane = FXMLLoader.load(getClass().getResource("/gui/EditFieldOfStudyPage.fxml"));
+            stackPaneEditFieldsOfStudy.getChildren().clear();
+            stackPaneEditFieldsOfStudy.getChildren().add(fieldPane);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+
+
+
 }
     /*
 

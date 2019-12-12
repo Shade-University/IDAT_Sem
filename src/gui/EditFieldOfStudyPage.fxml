@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditFieldOfStudyPageController">
    <children>
       <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -21,9 +20,9 @@
             <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <TextField fx:id="txtFieldFieldOfStudyName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Popis" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button mnemonicParsing="false" onAction="#btnFieldOfStudySaveClicked" prefHeight="32.0" prefWidth="334.0" text="Uložit obor" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnFieldOfStudySaveClicked" prefHeight="32.0" prefWidth="334.0" text="Uložit obor" GridPane.columnIndex="4" GridPane.rowIndex="6" />
             <Label fx:id="lblError11" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-            <Button mnemonicParsing="false" onAction="#btnFieldOfStudyDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat obor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnFieldOfStudyDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat obor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <TextArea fx:id="textAreaFieldOfStudyDescription" prefHeight="30.0" prefWidth="261.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
          </children>
          <columnConstraints>

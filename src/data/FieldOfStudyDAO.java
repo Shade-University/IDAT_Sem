@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import model.Field;
 
@@ -13,8 +14,8 @@ public interface FieldOfStudyDAO {
     
     public void deleteField(Field obor);
     
-    public void insertField(Field obor);
+    public void insertField(Field obor) throws SQLException;
     
-    public void updateField(Field obor);
+    public void updateField(Field obor)  throws SQLException;
     
 }

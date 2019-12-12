@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import model.Field;
 
 /**
- *
  * @author Tomáš Vondra
  */
 public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
@@ -28,10 +27,10 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             Logger.getLogger(FieldOfStudyDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
-    public Collection<Field> getAllFields(){
-        
+    public Collection<Field> getAllFields() {
+
         Collection<Field> collection = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();
@@ -44,7 +43,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
                         rs.getString("nazev"),
                         rs.getString("popis")
                 );
-                
+
                 collection.add(obor);
             } //Načte všechny obory
 
@@ -70,54 +69,37 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     @Override
-    public void insertField(Field obor) {
-         try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO STUDIJNI_OBORY(nazev, popis)"
-                    + "VALUES(?, ?)"
-            );
-            pstm.setString(1, obor.getNazev());
-            pstm.setString(2, obor.getPopis());
-
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("Field created");
-            
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT MAX(id_obor) \"id\" FROM STUDIJNI_OBORY");
-            if (rs.next()) {
-                obor.setId(rs.getInt("id"));
-            } //Získání id z databáze
-            //TODO Toto vlastně asi ani nepotřebuju, protože po každým insertu aktualizuju listview z databáze
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void insertField(Field obor) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call insert_studijni_obor(?,?)"
+        );
+        callableStatement.setString(1, obor.getNazev());
+        callableStatement.setString(2, obor.getPopis());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Field added.");
     }
 
     @Override
-    public void updateField(Field obor) {
-       try {
-            PreparedStatement pstm = conn.prepareStatement(
-                    "UPDATE STUDIJNI_OBORY SET "
-                    + "nazev = ?, "
-                    + "popis = ?"
-                    + " where id_obor = ?"
-            );
-            pstm.setString(1, obor.getNazev());
-            pstm.setString(2, obor.getPopis());
-            pstm.setInt(3, obor.getId());
+    public void updateField(Field obor) throws SQLException {
+        PreparedStatement pstm = conn.prepareStatement(
+                "UPDATE STUDIJNI_OBORY SET "
+                        + "nazev = ?, "
+                        + "popis = ?"
+                        + " where id_obor = ?"
+        );
+        pstm.setString(1, obor.getNazev());
+        pstm.setString(2, obor.getPopis());
+        pstm.setInt(3, obor.getId());
 
-            pstm.executeUpdate();
-            conn.commit();
-            System.out.println("Field updated");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        pstm.executeUpdate();
+        conn.commit();
+        System.out.println("Field updated");
     }
-    
+
 
 }
