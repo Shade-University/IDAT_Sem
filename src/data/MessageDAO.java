@@ -12,11 +12,15 @@ public interface MessageDAO {
 
     public void createMessage(Message message) throws SQLException;
 
+    public void insertMessage(Message message) throws SQLException;
+
     public Collection<Message> getAllMessages() throws SQLException;
 
     public Message getMessageById(int id) throws SQLException;
 
     public Message getMessage(ResultSet rs) throws SQLException;
+
+    public void updateMessage(Message message) throws SQLException;
 
     public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) throws SQLException;
 

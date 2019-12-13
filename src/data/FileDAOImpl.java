@@ -34,6 +34,7 @@ public class FileDAOImpl implements FileDAO {
         preparedStatement.setDate(6, file.getDate_created());
 
         preparedStatement.executeUpdate();
+        preparedStatement.close();
         conn.commit();
         System.out.println("File inserted");
     }
@@ -51,6 +52,8 @@ public class FileDAOImpl implements FileDAO {
             collection.add(file);
         }
         System.out.println("file data loaded");
+        statement.close();
+        conn.commit();
         return collection;
     }
 
@@ -61,9 +64,10 @@ public class FileDAOImpl implements FileDAO {
                 "SELECT * FROM soubory WHERE ID_SOUBORU="+id);
 
         while (rs.next()) {
-            statement.close();
+            conn.commit();
             return getFile(rs);
         }
+        statement.close();
         return null;
     }
 
@@ -98,6 +102,7 @@ public class FileDAOImpl implements FileDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("File edited updated");
     }
 
@@ -109,6 +114,7 @@ public class FileDAOImpl implements FileDAO {
         preparedStatement.setInt(1, editedFile.getId());
         preparedStatement.executeQuery();
         conn.commit();
+        preparedStatement.close();
         System.out.println("File deleted");
     }
 }

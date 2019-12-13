@@ -21,9 +21,9 @@
             <TextField fx:id="txtFieldMessageName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Tělo zprávy" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="237.0" text="Uložit zprávu" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="31.0" prefWidth="237.0" text="Uložit zprávu" GridPane.columnIndex="4" GridPane.rowIndex="11" />
             <Label fx:id="lblError1112" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="11" />
-            <Button mnemonicParsing="false" onAction="#btnDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat zprávu" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat zprávu" GridPane.columnIndex="2" GridPane.rowIndex="11" />
             <TextArea fx:id="textAreaMessageBody" prefHeight="30.0" prefWidth="261.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
             <DatePicker fx:id="dateMessagePicker" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="Odesílatel" GridPane.rowIndex="5" />

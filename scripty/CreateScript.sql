@@ -403,11 +403,34 @@ BEGIN
     UPDATE predmety p SET p.nazev = nazev_in, p.popis = popis_in WHERE p.id_predmet = id;
 END;
 /
-CREATE OR REPLACE PROCEDURE update_hodnoceni(id_hodnoceni_in in INTEGER, hodnoceni_in in INTEGER, popis_in in VARCHAR2, id_uzivatel_in in INTEGER,
+CREATE OR REPLACE PROCEDURE update_hodnoceni(id_hodnoceni_in in INTEGER, hodnoceni_in in INTEGER, popis_in in VARCHAR2,
+                                             id_uzivatel_in in INTEGER,
                                              id_skupina_in in INTEGER)
     IS
 BEGIN
-    UPDATE hodnoceni h SET h.hodnota_hodnoceni = hodnoceni_in, h.popis = popis_in, h.id_uzivatel = id_uzivatel_in, h.id_skupina = id_skupina_in WHERE h.id_hodnoceni = id_hodnoceni_in;
+    UPDATE hodnoceni h
+    SET h.hodnota_hodnoceni = hodnoceni_in,
+        h.popis             = popis_in,
+        h.id_uzivatel       = id_uzivatel_in,
+        h.id_skupina        = id_skupina_in
+    WHERE h.id_hodnoceni = id_hodnoceni_in;
+END;
+/
+CREATE OR REPLACE PROCEDURE update_zprava(id_in integer, nazev_in in VARCHAR2, obsah_in in VARCHAR2, datum_in date,
+                                            id_odesilatel_in integer, id_prijemce_uzivatel_in integer, id_prijemce_skupina_in integer,
+                                          id_rodic_in integer, id_soubor_in integer)
+    IS
+BEGIN
+    UPDATE ZPRAVY z
+    SET z.nazev                = nazev_in,
+        z.telo                 = obsah_in,
+        z.datum_vytvoreni      = datum_in,
+        z.id_uzivatel_odesilatel = id_odesilatel_in,
+        z.id_uzivatel_prijemce = id_prijemce_uzivatel_in,
+        z.id_skupina_prijemce  = id_prijemce_skupina_in,
+        z.id_rodic             = id_rodic_in,
+        z.id_souboru           = id_soubor_in
+    WHERE z.id_zprava = id_in;
 END;
 /
 /*=====Delete procedury=====*/
@@ -591,38 +614,38 @@ FROM UZIVATELE u
          LEFT JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor;
 
 CREATE OR REPLACE VIEW getUzivatelOdesilatel AS
-SELECT u.id_uzivatel "id_odesilatel",
-       u.jmeno "jmeno_odesilatel",
-       u.prijmeni "prijmeni_odesilatel",
-       u.heslo "heslo_odesilatel",
-       u.email "email_odesilatel",
+SELECT u.id_uzivatel     "id_odesilatel",
+       u.jmeno           "jmeno_odesilatel",
+       u.prijmeni        "prijmeni_odesilatel",
+       u.heslo           "heslo_odesilatel",
+       u.email           "email_odesilatel",
        u.datum_vytvoreni "datum_vytvoreni_odesilatel",
-       u.uzivatel_typ "uzivatel_typ_odesilatel",
-       u.avatar "avatar_odesilatel",
-       s.rok_studia "rok_studia_odesilatel",
-       so.id_obor "id_obor_odesilatel",
-       so.nazev "nazev_obor_odesilatel",
-       so.popis "popis_obor_odesilatel",
-       uc.katedra "katedra_odesilatel"
+       u.uzivatel_typ    "uzivatel_typ_odesilatel",
+       u.avatar          "avatar_odesilatel",
+       s.rok_studia      "rok_studia_odesilatel",
+       so.id_obor        "id_obor_odesilatel",
+       so.nazev          "nazev_obor_odesilatel",
+       so.popis          "popis_obor_odesilatel",
+       uc.katedra        "katedra_odesilatel"
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel
          LEFT JOIN STUDIJNI_OBORY so ON s.id_obor = so.id_obor;
 
 CREATE OR REPLACE VIEW getUzivatelPrijemce AS
-SELECT u.id_uzivatel "id_prijemce",
-       u.jmeno "jmeno_prijemce",
-       u.prijmeni "prijmeni_prijemce",
-       u.heslo "heslo_prijemce",
-       u.email "email_prijemce",
+SELECT u.id_uzivatel     "id_prijemce",
+       u.jmeno           "jmeno_prijemce",
+       u.prijmeni        "prijmeni_prijemce",
+       u.heslo           "heslo_prijemce",
+       u.email           "email_prijemce",
        u.datum_vytvoreni "datum_vytvoreni_prijemce",
-       u.uzivatel_typ "uzivatel_typ_prijemce",
-       u.avatar "avatar_prijemce",
-       s.rok_studia "rok_studia_prijemce",
-       so.id_obor "id_obor_prijemce",
-       so.nazev "nazev_obor_prijemce",
-       so.popis "popis_obor_prijemce",
-       uc.katedra "katedra_prijemce"
+       u.uzivatel_typ    "uzivatel_typ_prijemce",
+       u.avatar          "avatar_prijemce",
+       s.rok_studia      "rok_studia_prijemce",
+       so.id_obor        "id_obor_prijemce",
+       so.nazev          "nazev_obor_prijemce",
+       so.popis          "popis_obor_prijemce",
+       uc.katedra        "katedra_prijemce"
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel

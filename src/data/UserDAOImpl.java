@@ -43,6 +43,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
+        statement.close();
         return collection;
     }
 
@@ -57,6 +58,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
+        statement.close();
         return collection;
     }
 
@@ -83,7 +85,8 @@ public class UserDAOImpl implements UserDAO {
         if (rs.next())
             user = getUser(rs);
 
-
+        callableStatement.close();
+        preparedStatement.close();
         return user;
     }
 
@@ -97,7 +100,7 @@ public class UserDAOImpl implements UserDAO {
         User user = null;
         if (rs.next())
             user = getUser(rs);
-
+        preparedStatement.close();
         return user;
     }
 
@@ -114,6 +117,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
+        statement.close();
         return collection;
     }
 
@@ -129,6 +133,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
+        statement.close();
         return collection;
     }
 
@@ -215,6 +220,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("User updated");
     }
 
@@ -234,6 +240,7 @@ public class UserDAOImpl implements UserDAO {
         if (rs.next()) {
             user.setId(rs.getInt("id"));
         }
+        statement.close();
     }
 
    /* private void insertUcitel(Teacher TEACHER) throws SQLException {
@@ -269,6 +276,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeQuery();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Student inserted");
     }
 
@@ -287,6 +295,7 @@ public class UserDAOImpl implements UserDAO {
 
             preparedStatement.executeQuery();
             conn.commit();
+            preparedStatement.close();
             System.out.println("Admin deleted");
         }
 
@@ -311,6 +320,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Avatar updated");
     }
 
@@ -322,6 +332,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeQuery();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Student deleted");
     }
 
@@ -333,6 +344,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeQuery();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Teacher deleted");
     }
 
@@ -350,6 +362,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Admin inserted");
 
     }

@@ -223,8 +223,8 @@ public class AdministrationPageController implements Initializable {
     }
 
     public void refreshRating() throws SQLException {
-        listViewRatings.getItems().clear();
-        listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
+            listViewRatings.getItems().clear();
+            listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
     }
 
     public void onClickAddRating(MouseEvent mouseEvent) {
@@ -236,8 +236,12 @@ public class AdministrationPageController implements Initializable {
     }
 
     public void refreshMessage() throws SQLException {
-        listViewMessage.getItems().clear();
-        listViewMessage.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+            listViewMessage.getItems().clear();
+            try {
+                listViewMessage.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     public void onClickAddMessage(MouseEvent mouseEvent) {
@@ -283,10 +287,10 @@ public class AdministrationPageController implements Initializable {
 
     //Message
     private void loadMessage(Message msg) throws IOException {
-       EditMessagePageController.setParams(msg, this);
-       AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
-       stackPaneEditMessage.getChildren().clear();
-       stackPaneEditMessage.getChildren().add(messagePane);
+        EditMessagePageController.setParams(msg, this);
+        AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
+        stackPaneEditMessage.getChildren().clear();
+        stackPaneEditMessage.getChildren().add(messagePane);
     }
 
     public void onClickAddFile(MouseEvent mouseEvent) {

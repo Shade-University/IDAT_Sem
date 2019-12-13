@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import model.File;
+import model.Group;
 import model.Message;
 import model.User;
 
@@ -78,6 +79,9 @@ public class EditMessagePageController implements Initializable {
     private Button btnSave;
 
     @FXML
+    private Button btnDelete;
+
+    @FXML
     private ComboBox<File> cBFile;
 
     @FXML
@@ -109,12 +113,19 @@ public class EditMessagePageController implements Initializable {
                     cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
                     cBRecipientTypeChanged(null);
                     cBRecipientUniversal.setValue(editedMessage.getPrijemce_skupina());
-
                 } else {
                     cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
                     cBRecipientTypeChanged(null);
                     cBRecipientUniversal.setValue(editedMessage.getPrijemce_uzivatel());
                 }
+                cBFile.setValue(editedMessage.getSoubor());
+                cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getRodic()));
+                System.out.println(editedMessage.getRodic());
+            } else {
+                cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
+                cBRecipientTypeChanged(null);
+                btnDelete.setVisible(false);
+                btnSave.setText("Vytvořit");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,7 +134,44 @@ public class EditMessagePageController implements Initializable {
 
     @FXML
     void btnSaveClicked(ActionEvent event) {
+        try {
+            Message msg = new Message();
+            msg.setNazev(txtFieldMessageName.getText());
+            msg.setObsah(textAreaMessageBody.getText());
+            msg.setOdesilatel((User) cBSender.getValue());
+            msg.setDatum_vytvoreni(Date.valueOf(dateMessagePicker.getValue()));
+            if (cBFile.getValue() != null) {
+                msg.setSoubor(cBFile.getValue());
+            } else {
+                msg.setSoubor(null);
+            }
+            if (cBMessageParent.getValue() != null) {
+                msg.setRodic(cBMessageParent.getValue());
+            } else {
+                msg.setRodic(null);
+            }
+            if (cBRecipientType.getValue() == RECIPIENT_TYPE.SKUPINA) {
+                msg.setPrijemce_uzivatel(null);
+                msg.setPrijemce_skupina((Group) cBRecipientUniversal.getValue());
+            } else {
+                msg.setPrijemce_skupina(null);
+                msg.setPrijemce_uzivatel((User) cBRecipientUniversal.getValue());
+            }
+            if (cBRecipientUniversal.getValue() != null) {
+                if(editedMessage!=null){
+                    msg.setId(editedMessage.getId());
+                     messageDAO.updateMessage(msg);
 
+                } else {
+                        messageDAO.insertMessage(msg);
+                }
+                exitPane();
+            } else {
+                AlertDialog.show("Zpráva nemá žádného příjemce", Alert.AlertType.ERROR);
+            }
+        } catch (Exception e) {
+            AlertDialog.show("Zadané údaje nejsou správné!", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML

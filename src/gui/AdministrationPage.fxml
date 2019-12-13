@@ -217,6 +217,7 @@
                                        </children>
                                     </VBox>
                                     <StackPane fx:id="stackPaneEditRating1" style="-fx-background-color: #333645;" HBox.hgrow="ALWAYS" />
+                                    <VBox prefHeight="200.0" prefWidth="100.0" />
                                  </children>
                               </HBox>
                               <StackPane fx:id="stackPaneEditMessage" style="-fx-background-color: #333645;" HBox.hgrow="ALWAYS" />
