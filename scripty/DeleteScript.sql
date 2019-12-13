@@ -70,7 +70,6 @@ drop procedure delete_uzivatel_skupina;
 drop procedure delete_obor_predmet;
 drop procedure delete_zprava;
 drop procedure delete_hodnoceni;
-drop procedure delete_predmet;
 drop procedure insert_skupina;
 drop procedure insert_uzivatele_skupiny;
 drop procedure insert_obor_predmet;

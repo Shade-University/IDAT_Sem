@@ -1,6 +1,7 @@
 package controller;
 
 import controller.enums.INSTITUTE;
+import controller.enums.USER_TYPE;
 import controller.enums.YEAR_STUDY;
 import data.*;
 import javafx.collections.FXCollections;

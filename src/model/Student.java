@@ -1,6 +1,8 @@
 
 package model;
 
+import controller.enums.USER_TYPE;
+
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 

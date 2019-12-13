@@ -1,7 +1,7 @@
 package model;
 
+import controller.enums.USER_TYPE;
 import data.OracleConnection;
-import javafx.scene.image.Image;
 
 import java.awt.image.BufferedImage;
 import java.sql.Date;

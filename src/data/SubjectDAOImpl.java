@@ -38,7 +38,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                 Subject predmet = getPredmet(rs);
                 collection.add(predmet);
             }
-
+            statement.close();
             return collection;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,18 +50,19 @@ public class SubjectDAOImpl implements SubjectDAO {
     public Collection<Subject> getSubjectsForField(Field obor) {
         Collection<Subject> collection = new ArrayList<>();
         try {
-            PreparedStatement pstm = conn.prepareStatement(
+            PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT * FROM OBOR_PREDMET op\n"
                     + "JOIN PREDMETY p ON p.id_predmet = op.predmet_id_predmet\n"
                     + "WHERE op.studijni_obor_id_obor = ?"
             );
-            pstm.setInt(1, obor.getId());
+            preparedStatement.setInt(1, obor.getId());
 
-            ResultSet rs = pstm.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Subject p = getPredmet(rs);
                 collection.add(p);
             }
+            preparedStatement.close();
             return collection;
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,6 +89,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setString(2, subject.getDescription());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject created.");
     }
 
@@ -96,15 +98,15 @@ public class SubjectDAOImpl implements SubjectDAO {
         try {
 
             for (int i = 0; i < predmety.size(); i++) {
-                PreparedStatement pstm = conn.prepareStatement(
+                PreparedStatement preparedStatement = conn.prepareStatement(
                         "INSERT INTO OBOR_PREDMET(studijni_obor_id_obor, predmet_id_predmet)"
                         + "VALUES (?, ?)"
                 );
-                pstm.setInt(1, obor.getId());
-                pstm.setInt(2, predmety.get(i).getId());
+                preparedStatement.setInt(1, obor.getId());
+                preparedStatement.setInt(2, predmety.get(i).getId());
                 
                 
-                pstm.executeUpdate();
+                preparedStatement.executeUpdate();
                 conn.commit();
                 System.out.println("Subject added to field");
             }
@@ -122,6 +124,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, subject.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject added to Field");
     }
 
@@ -134,6 +137,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, subject.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Teacher added to subject");
     }
 
@@ -146,6 +150,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, subject.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject added to group.");
     }
 
@@ -159,6 +164,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setString(3, subject.getDescription());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject updated!");
     }
 
@@ -167,18 +173,19 @@ public class SubjectDAOImpl implements SubjectDAO {
         try {
 
             for (int i = 0; i < predmety.size(); i++) {
-                PreparedStatement pstm = conn.prepareStatement(
+                PreparedStatement preparedStatement = conn.prepareStatement(
                         "DELETE FROM OBOR_PREDMET "
                                 + "WHERE predmet_id_predmet = ? AND "
                                 + "studijni_obor_id_obor = ?"
                 );
-                pstm.setInt(1, predmety.get(i).getId());
-                pstm.setInt(2, obor.getId());
-                pstm.setInt(1, predmety.get(i).getId());
+                preparedStatement.setInt(1, predmety.get(i).getId());
+                preparedStatement.setInt(2, obor.getId());
+                preparedStatement.setInt(1, predmety.get(i).getId());
                 
                 
-                pstm.executeUpdate();
+                preparedStatement.executeUpdate();
                 conn.commit();
+                preparedStatement.close();
                 System.out.println("Subject deleted from field");
             }
         } catch (SQLException ex) {
@@ -195,6 +202,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, fieldOfStudy.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject removed from field of study.");
     }
 
@@ -207,6 +215,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, teacher.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject removed from field of study.");
     }
 
@@ -219,6 +228,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(2, group.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject removed from field of study.");
     }
 
@@ -230,6 +240,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(1, subject.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Subject deleted!");
     }
 }

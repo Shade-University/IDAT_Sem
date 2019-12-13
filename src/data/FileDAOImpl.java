@@ -35,6 +35,7 @@ public class FileDAOImpl implements FileDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("File inserted");
     }
 
@@ -50,7 +51,7 @@ public class FileDAOImpl implements FileDAO {
             File file = getFile(rs);
             collection.add(file);
         }
-
+        statement.close();
         System.out.println("file data loaded");
         return collection;
     }
@@ -85,6 +86,7 @@ public class FileDAOImpl implements FileDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("File edited updated");
     }
 
@@ -97,6 +99,7 @@ public class FileDAOImpl implements FileDAO {
 
         preparedStatement.execute();
         conn.commit();
+        preparedStatement.close();
         System.out.println("File deleted");
     }
 }
