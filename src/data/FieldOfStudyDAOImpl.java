@@ -48,6 +48,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             collection.add(obor);
         }
         conn.commit();
+        statement.close();
         return collection;
     }
 
@@ -68,24 +69,25 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             collection.add(obor);
         }
         conn.commit();
+        statement.close();
         return collection;
     }
 
     @Override
     public void deleteField(Field obor) {
         try {
-            CallableStatement pstm = conn.prepareCall(
+            CallableStatement callableStatement = conn.prepareCall(
                     "call delete_field(?)"
             );
-            pstm.setInt(1, obor.getId());
+            callableStatement.setInt(1, obor.getId());
 
-            pstm.execute();
+            callableStatement.execute();
             conn.commit();
+            callableStatement.close();
             System.out.println("Field deleted");
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
@@ -97,23 +99,25 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         callableStatement.setString(2, obor.getPopis());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Field added.");
     }
 
     @Override
     public void updateField(Field obor) throws SQLException {
-        PreparedStatement pstm = conn.prepareStatement(
+        PreparedStatement preparedStatement = conn.prepareStatement(
                 "UPDATE STUDIJNI_OBORY SET "
                         + "nazev = ?, "
                         + "popis = ?"
                         + " where id_obor = ?"
         );
-        pstm.setString(1, obor.getNazev());
-        pstm.setString(2, obor.getPopis());
-        pstm.setInt(3, obor.getId());
+        preparedStatement.setString(1, obor.getNazev());
+        preparedStatement.setString(2, obor.getPopis());
+        preparedStatement.setInt(3, obor.getId());
 
-        pstm.executeUpdate();
+        preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Field updated");
     }
 

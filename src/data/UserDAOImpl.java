@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.scene.image.Image;
+import controller.enums.USER_TYPE;
 import model.*;
 import model.Group;
 
@@ -43,7 +43,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-
+        statement.close();
         return collection;
     }
 
@@ -58,6 +58,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
+        statement.close();
         return collection;
     }
 
@@ -80,10 +81,13 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.setString(2, hashedPassword);
         ResultSet rs = preparedStatement.executeQuery();
 
+        User user = null;
         if (rs.next())
-            return getUser(rs);
+            user = getUser(rs);
 
-        return null;
+        callableStatement.close();
+        preparedStatement.close();
+        return user;
     }
 
     @Override
@@ -93,10 +97,12 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.setInt(1, userID);
         ResultSet rs = preparedStatement.executeQuery();
 
+        User user = null;
         if (rs.next())
-            return getUser(rs);
+            user = getUser(rs);
 
-        return null;
+        preparedStatement.close();
+        return user;
     }
 
     @Override
@@ -112,7 +118,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-
+        statement.close();
         return collection;
     }
 
@@ -128,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-
+        statement.close();
         return collection;
     }
 
@@ -216,6 +222,7 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         System.out.println("User updated");
+        preparedStatement.close();
     }
 
     @Override
@@ -229,11 +236,12 @@ public class UserDAOImpl implements UserDAO {
             insertAdmin(user);
         }
 
-        Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery("SELECT MAX(id_uzivatel) \"id\" FROM UZIVATELE");
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT MAX(id_uzivatel) \"id\" FROM UZIVATELE");
         if (rs.next()) {
             user.setId(rs.getInt("id"));
         }
+        statement.close();
     }
 
    /* private void insertUcitel(Teacher TEACHER) throws SQLException {
@@ -269,6 +277,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.execute();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Student inserted");
     }
 
@@ -287,6 +296,7 @@ public class UserDAOImpl implements UserDAO {
 
             preparedStatement.execute();
             conn.commit();
+            preparedStatement.close();
             System.out.println("Admin deleted");
         }
 
@@ -311,6 +321,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Avatar updated");
     }
 
@@ -322,6 +333,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.execute();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Student deleted");
     }
 
@@ -333,6 +345,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.execute();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Teacher deleted");
     }
 
@@ -350,6 +363,7 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("Admin inserted");
 
     }

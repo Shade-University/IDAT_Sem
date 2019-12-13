@@ -2,19 +2,17 @@ package controller;
 
 import controller.enums.ACTION_TYPE;
 import controller.enums.INSTITUTE;
+import controller.enums.USER_TYPE;
 import controller.enums.YEAR_STUDY;
 import data.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import model.*;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;

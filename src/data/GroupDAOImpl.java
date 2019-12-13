@@ -44,6 +44,7 @@ public class GroupDAOImpl implements GroupDAO {
             Group group = getGroup(rs);
             collection.add(group);
         } //Načte všechny existující skupin.
+        statement.close();
         return collection;
     }
 
@@ -59,7 +60,7 @@ public class GroupDAOImpl implements GroupDAO {
             Group group = getGroupWithQuantity(rs);
             collection.add(group);
         } //Načte všechny existující skupiny s počty členů.
-
+        statement.close();
         return collection;
     }
 
@@ -75,7 +76,7 @@ public class GroupDAOImpl implements GroupDAO {
             Group group = getGroup(rs);
             collection.add(group);
         } //Vybere všechny skupiny daného uživatele
-
+        statement.close();
         return collection;
     }
 
@@ -85,10 +86,12 @@ public class GroupDAOImpl implements GroupDAO {
                 "SELECT * FROM getSkupinaPodleHodnoceni WHERE ID_hodnoceni = " + rt.getId());
         ResultSet rs = preparedStatement.executeQuery();
 
+        Group group = null;
         if (rs.next())
-            return getGroup(rs);
+            group =  getGroup(rs);
 
-        return null;
+        preparedStatement.close();
+        return group;
     }
 
     @Override
@@ -115,7 +118,7 @@ public class GroupDAOImpl implements GroupDAO {
             Group group = getGroup(rs);
             collection.add(group);
         }
-
+        statement.close();
         return collection;
     }
 
@@ -129,6 +132,7 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setString(3, group.getDescription());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Group updated!");
     }
 
@@ -166,6 +170,7 @@ public class GroupDAOImpl implements GroupDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
+        preparedStatement.close();
         System.out.println("User added to group");
     }
 
@@ -178,6 +183,7 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setInt(2, s.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("User removed from group");
     }
 
@@ -190,6 +196,7 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setString(2, group.getDescription());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Group added.");
     }
 
@@ -202,6 +209,7 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setInt(1, group.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Group deleted");
     }
 

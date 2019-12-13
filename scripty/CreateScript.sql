@@ -862,8 +862,8 @@ CREATE OR REPLACE TRIGGER obory_trigger
     ON STUDIJNI_OBORY
     FOR EACH ROW
 BEGIN
-    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
-        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znakù');
+    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
+        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 50 znakù');
     end if;
 
     if (inserting) then

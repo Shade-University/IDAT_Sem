@@ -32,14 +32,15 @@ public class RatingDAOImpl implements RatingDAO {
     public Collection<Rating> getAllRatings() {
         Collection<Rating> collection = new ArrayList<>();
         try {
-            Statement stmt = conn.createStatement();
+            Statement statement = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery(
+            ResultSet rs = statement.executeQuery(
                     "SELECT * FROM GETHODNOCENI");
             while (rs.next()) {
                 Rating hodnoceni = getRating(rs);
                 collection.add(hodnoceni);
             }
+            statement.close();
             return collection;
 
         } catch (SQLException ex) {
@@ -51,17 +52,18 @@ public class RatingDAOImpl implements RatingDAO {
     @Override
     public void createRating(Rating hodnoceni) {
         try {
-            PreparedStatement stmt = conn.prepareStatement(
+            PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)"
                     + "VALUES(?,?,?,?)");
-            stmt.setInt(1, hodnoceni.getHodnota());
-            stmt.setString(2, hodnoceni.getPopis());
-            stmt.setInt(3, hodnoceni.getHodnoticiUzivatel().getId());
-            stmt.setInt(4, hodnoceni.getHodnoticiSkupina().getId());
+            preparedStatement.setInt(1, hodnoceni.getHodnota());
+            preparedStatement.setString(2, hodnoceni.getPopis());
+            preparedStatement.setInt(3, hodnoceni.getHodnoticiUzivatel().getId());
+            preparedStatement.setInt(4, hodnoceni.getHodnoticiSkupina().getId());
 
-            stmt.executeUpdate();
+            preparedStatement.executeUpdate();
             System.out.println("Rating created");
             conn.commit();
+            preparedStatement.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,6 +81,7 @@ public class RatingDAOImpl implements RatingDAO {
         callableStatement.setInt(5, hodnoceni.getHodnoticiSkupina().getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Rating has been updated.");
     }
 
@@ -97,15 +100,18 @@ public class RatingDAOImpl implements RatingDAO {
     @Override
     public double getAverageRating(Group skupina) {
         try {
-            Statement stmt = conn.createStatement();
+            Statement statement = conn.createStatement();
 
 //            ResultSet rs = stmt.executeQuery(
 //                    "SELECT (SUM(hodnota_hodnoceni) / COUNT(*)) AS AVERAGE FROM getRatings");
-            ResultSet rs = stmt.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
+            ResultSet rs = statement.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
                     + "WHERE id_skupina = " + skupina.getId());
+            double output = -1;
             if (rs.next()) {
-                return rs.getDouble("AVERAGE");
+                output =  rs.getDouble("AVERAGE");
             }
+            statement.close();
+            return output;
         } catch (SQLException ex) {
             Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -120,6 +126,7 @@ public class RatingDAOImpl implements RatingDAO {
         callableStatement.setInt(1, rt.getId());
         callableStatement.execute();
         conn.commit();
+        callableStatement.close();
         System.out.println("Rating has been deleted.");
     }
 }
