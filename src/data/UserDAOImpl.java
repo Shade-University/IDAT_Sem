@@ -43,7 +43,6 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
         return collection;
     }
 
@@ -58,7 +57,6 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
         return collection;
     }
 
@@ -72,7 +70,7 @@ public class UserDAOImpl implements UserDAO {
         callableStatement.registerOutParameter(1, Types.VARCHAR);
         callableStatement.setString(2, email);
         callableStatement.setString(3, password);
-        callableStatement.execute();
+        callableStatement.executeQuery();
         String hashedPassword = callableStatement.getString(1);
 
         PreparedStatement preparedStatement = conn.prepareStatement(
@@ -85,8 +83,7 @@ public class UserDAOImpl implements UserDAO {
         if (rs.next())
             user = getUser(rs);
 
-        callableStatement.close();
-        preparedStatement.close();
+
         return user;
     }
 
@@ -101,7 +98,6 @@ public class UserDAOImpl implements UserDAO {
         if (rs.next())
             user = getUser(rs);
 
-        preparedStatement.close();
         return user;
     }
 
@@ -118,7 +114,6 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
         return collection;
     }
 
@@ -134,7 +129,6 @@ public class UserDAOImpl implements UserDAO {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
         return collection;
     }
 
@@ -222,7 +216,6 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         System.out.println("User updated");
-        preparedStatement.close();
     }
 
     @Override
@@ -241,7 +234,6 @@ public class UserDAOImpl implements UserDAO {
         if (rs.next()) {
             user.setId(rs.getInt("id"));
         }
-        statement.close();
     }
 
    /* private void insertUcitel(Teacher TEACHER) throws SQLException {
@@ -275,9 +267,8 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.setString(6, student.getStudyYear());
         preparedStatement.setInt(7, student.getField().getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Student inserted");
     }
 
@@ -294,9 +285,8 @@ public class UserDAOImpl implements UserDAO {
             );
             preparedStatement.setInt(1, user.getId());
 
-            preparedStatement.execute();
+            preparedStatement.executeQuery();
             conn.commit();
-            preparedStatement.close();
             System.out.println("Admin deleted");
         }
 
@@ -321,7 +311,6 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Avatar updated");
     }
 
@@ -331,9 +320,8 @@ public class UserDAOImpl implements UserDAO {
         );
         preparedStatement.setInt(1, student.getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Student deleted");
     }
 
@@ -343,9 +331,8 @@ public class UserDAOImpl implements UserDAO {
         );
         preparedStatement.setInt(1, teacher.getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Teacher deleted");
     }
 
@@ -363,7 +350,6 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Admin inserted");
 
     }

@@ -40,7 +40,6 @@ public class RatingDAOImpl implements RatingDAO {
                 Rating hodnoceni = getRating(rs);
                 collection.add(hodnoceni);
             }
-            statement.close();
             return collection;
 
         } catch (SQLException ex) {
@@ -63,7 +62,6 @@ public class RatingDAOImpl implements RatingDAO {
             preparedStatement.executeUpdate();
             System.out.println("Rating created");
             conn.commit();
-            preparedStatement.close();
         } catch (SQLException ex) {
             Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,9 +77,8 @@ public class RatingDAOImpl implements RatingDAO {
         callableStatement.setString(3, hodnoceni.getPopis());
         callableStatement.setInt(4, hodnoceni.getHodnoticiUzivatel().getId());
         callableStatement.setInt(5, hodnoceni.getHodnoticiSkupina().getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
-        callableStatement.close();
         System.out.println("Rating has been updated.");
     }
 
@@ -110,7 +107,6 @@ public class RatingDAOImpl implements RatingDAO {
             if (rs.next()) {
                 output =  rs.getDouble("AVERAGE");
             }
-            statement.close();
             return output;
         } catch (SQLException ex) {
             Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,9 +120,8 @@ public class RatingDAOImpl implements RatingDAO {
                 "call delete_hodnoceni(?)"
         );
         callableStatement.setInt(1, rt.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
-        callableStatement.close();
         System.out.println("Rating has been deleted.");
     }
 }

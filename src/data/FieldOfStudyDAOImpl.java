@@ -48,7 +48,6 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             collection.add(obor);
         }
         conn.commit();
-        statement.close();
         return collection;
     }
 
@@ -69,7 +68,6 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             collection.add(obor);
         }
         conn.commit();
-        statement.close();
         return collection;
     }
 
@@ -81,9 +79,8 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             );
             callableStatement.setInt(1, obor.getId());
 
-            callableStatement.execute();
+            callableStatement.executeQuery();
             conn.commit();
-            callableStatement.close();
             System.out.println("Field deleted");
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,9 +94,8 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         );
         callableStatement.setString(1, obor.getNazev());
         callableStatement.setString(2, obor.getPopis());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
-        callableStatement.close();
         System.out.println("Field added.");
     }
 
@@ -117,7 +113,6 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
-        preparedStatement.close();
         System.out.println("Field updated");
     }
 

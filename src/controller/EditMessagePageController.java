@@ -2,6 +2,7 @@ package controller;
 
 import controller.enums.RECIPIENT_TYPE;
 import data.*;
+import gui.AlertDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -9,12 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import model.File;
 import model.Message;
@@ -40,6 +36,7 @@ public class EditMessagePageController implements Initializable {
     ObservableList<Object> users;
     private static AdministrationPageController parent;
     private static Message editedMessage;
+
     /**
      * Nastavení vstupních parametrů
      *
@@ -55,6 +52,17 @@ public class EditMessagePageController implements Initializable {
         return Instant.ofEpochMilli(dateToConvert.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    /**
+     * Obnovení dat ve formuláři a předkovi
+     *
+     * @throws SQLException
+     */
+    private void exitPane() throws SQLException {
+        editedMessage = null;
+        parent.refreshMessage();
+        parent.stackPaneEditMessage.getChildren().clear();
     }
 
     @FXML
@@ -87,18 +95,17 @@ public class EditMessagePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-             users = FXCollections.observableArrayList(userDAO.getAllUsers());
+            users = FXCollections.observableArrayList(userDAO.getAllUsers());
             cBMessageParent.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
             cBFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
             cBSender.setItems(users);
             cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
-            if(editedMessage!=null)
-            {
+            if (editedMessage != null) {
                 txtFieldMessageName.setText(editedMessage.getNazev());
                 textAreaMessageBody.setText(editedMessage.getObsah());
                 dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDatum_vytvoreni()));
                 cBSender.setValue(editedMessage.getOdesilatel());
-                if(editedMessage.getPrijemce_uzivatel()==null){
+                if (editedMessage.getPrijemce_uzivatel() == null) {
                     cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
                     cBRecipientTypeChanged(null);
                     cBRecipientUniversal.setValue(editedMessage.getPrijemce_skupina());
@@ -121,13 +128,18 @@ public class EditMessagePageController implements Initializable {
 
     @FXML
     void btnDeleteClicked(ActionEvent event) {
-
+        try {
+            messageDAO.deleteMessage(editedMessage);
+            exitPane();
+        } catch (SQLException e) {
+            AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
     void cBRecipientTypeChanged(ActionEvent event) throws SQLException {
         cBRecipientUniversal.setItems(null);
-        if(cBRecipientType.getValue() == RECIPIENT_TYPE.SKUPINA){
+        if (cBRecipientType.getValue() == RECIPIENT_TYPE.SKUPINA) {
             cBRecipientUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
         } else {
             cBRecipientUniversal.setItems(users);

@@ -38,11 +38,9 @@ public class MessageDAOImpl implements MessageDAO {
         while (rs.next()) {
             Message msg = getMessage(rs);
             conn.commit();
-            statement.close();
             return msg;
         }
         conn.commit();
-        statement.close();
         return null;
     }
 
@@ -74,7 +72,6 @@ public class MessageDAOImpl implements MessageDAO {
             collection.add(getMessage(rs));
         }
         conn.commit();
-        statement.close();
         return collection;
     }
 
@@ -100,7 +97,6 @@ public class MessageDAOImpl implements MessageDAO {
         preparedStatement.executeUpdate();
         System.out.println("Message created");
         conn.commit();
-        preparedStatement.close();
     }
 
     @Override
@@ -142,7 +138,6 @@ public class MessageDAOImpl implements MessageDAO {
             collection.add(zprava);
         } //Načte zprávy mezi dvouma uživatelama
         conn.commit();
-        preparedStatement.close();
         return collection;
     }
 
@@ -174,11 +169,21 @@ public class MessageDAOImpl implements MessageDAO {
             collection.add(zprava);
         }
         conn.commit();
-        preparedStatement.close();
         return collection;
     }
 
-//    private User getUser(ResultSet rs) throws SQLException {
+    @Override
+    public void deleteMessage(Message message) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_zprava(?)"
+        );
+        callableStatement.setInt(1, message.getId());
+        callableStatement.executeQuery();
+        conn.commit();
+        System.out.println("Message deleted!");
+    }
+
+    //    private User getUser(ResultSet rs) throws SQLException {
 //        User uzivatel;
 //        if (rs.getString("uzivatel_typ").equals("STUDENT")) {
 //            uzivatel = new Student(
