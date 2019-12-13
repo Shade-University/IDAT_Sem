@@ -7,7 +7,7 @@ package model;
  */
 public class Rating {
 
-    private final int id;
+    private int id;
     private final int hodnota;
     private final String popis;
     private final User hodnoticiUzivatel;
@@ -37,6 +37,8 @@ public class Rating {
         return popis;
     }
 
+    public void setId(int id){this.id = id;}
+
     public User getHodnoticiUzivatel() {
         return hodnoticiUzivatel;
     }
@@ -47,8 +49,7 @@ public class Rating {
 
     @Override
     public String toString() {
-        return "Hodnocení";
-        //TODO Hodnocení
+        return "[hodnocení: "+hodnota+"] skupina - " + id;
     }
     
     

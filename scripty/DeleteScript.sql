@@ -52,6 +52,7 @@ drop view getPredmetyVeSkupine;
 drop view getPoctyVeSkupinach;
 drop view getZpravyHierarchicky;
 drop view getOborySPredmetem;
+drop view getSkupinaPodleHodnoceni;
 
 drop PROCEDURE delete_student;
 drop PROCEDURE delete_ucitel;

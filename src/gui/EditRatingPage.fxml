@@ -8,10 +8,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditRatingPageController">
    <children>
-      <GridPane alignment="center" hgap="10" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane alignment="center" hgap="10" layoutX="14.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label contentDisplay="CENTER" text="Hodnocení" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <font>
@@ -19,19 +18,18 @@
                </font>
             </Label>
             <Label text="Známka" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Label text="Hodnocení:" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button mnemonicParsing="false" onAction="#btnRatingSaveClicked" prefHeight="32.0" prefWidth="235.0" text="Uložit hodnocení" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-            <Label fx:id="lblError1111" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-            <Label text="Objekt:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" onAction="#btnSubjectDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat hodnocení" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-            <ListView fx:id="listViewRatingUniversal" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="3" />
-            <ComboBox fx:id="comboBoxAddRatingToUniversal" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-            <Button fx:id="btnAddRatingToUniversal" mnemonicParsing="false" onAction="#btnAddRatingToUniversalClicked" prefHeight="25.0" prefWidth="235.0" text="add Universal" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <ComboBox fx:id="comboBoxRating" prefHeight="25.0" prefWidth="231.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <ComboBox fx:id="comboBoxRatingUniversal" prefHeight="25.0" prefWidth="231.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label prefHeight="17.0" prefWidth="69.0" text="Hodnotící" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSave" prefHeight="30.0" prefWidth="237.0" text="Uložit hodnocení" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onAction="#btnDelete" prefHeight="30.0" prefWidth="250.0" text="Smazat hodnocení" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <ComboBox fx:id="cBRating" prefHeight="25.0" prefWidth="172.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <ComboBox fx:id="cBRatingUser" prefHeight="25.0" prefWidth="240.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label text="Hodnocená skupina" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cBRatedGroup" prefHeight="25.0" prefWidth="405.0" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="2" />
          </children>
          <columnConstraints>
             <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+            <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+            <ColumnConstraints />
             <ColumnConstraints />
             <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
             <ColumnConstraints hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -45,8 +43,6 @@
             <RowConstraints />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />

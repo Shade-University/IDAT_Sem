@@ -1,10 +1,6 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -72,6 +68,21 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
+    public void updateRating(Rating hodnoceni) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call update_hodnoceni(?,?,?,?,?)"
+        );
+        callableStatement.setInt(1, hodnoceni.getId());
+        callableStatement.setInt(2, hodnoceni.getHodnota());
+        callableStatement.setString(3, hodnoceni.getPopis());
+        callableStatement.setInt(4, hodnoceni.getHodnoticiUzivatel().getId());
+        callableStatement.setInt(5, hodnoceni.getHodnoticiSkupina().getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Rating has been updated.");
+    }
+
+    @Override
     public Rating getRating(ResultSet rs) throws SQLException {
         Rating hodnoceni = new Rating(
                 rs.getInt("id_hodnoceni"),
@@ -101,4 +112,14 @@ public class RatingDAOImpl implements RatingDAO {
         return -1;
     }
 
+    @Override
+    public void deleteRating(Rating rt) throws SQLException {
+        CallableStatement callableStatement = conn.prepareCall(
+                "call delete_hodnoceni(?)"
+        );
+        callableStatement.setInt(1, rt.getId());
+        callableStatement.execute();
+        conn.commit();
+        System.out.println("Rating has been deleted.");
+    }
 }

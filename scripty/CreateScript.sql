@@ -398,11 +398,21 @@ BEGIN
     UPDATE predmety p SET p.nazev = nazev_in, p.popis = popis_in WHERE p.id_predmet = id;
 END;
 /
+CREATE OR REPLACE PROCEDURE update_hodnoceni(id_hodnoceni_in in INTEGER, hodnoceni_in in INTEGER, popis_in in VARCHAR2, id_uzivatel_in in INTEGER,
+                                             id_skupina_in in INTEGER)
+    IS
+BEGIN
+    UPDATE hodnoceni h SET h.hodnota_hodnoceni = hodnoceni_in, h.popis = popis_in, h.id_uzivatel = id_uzivatel_in, h.id_skupina = id_skupina_in WHERE h.id_hodnoceni = id_hodnoceni_in;
+END;
+/
 /*=====Delete procedury=====*/
 CREATE OR REPLACE PROCEDURE delete_obor_predmet(id_obor_in integer, id_predmet_in integer)
     IS
 BEGIN
-        DELETE FROM OBOR_PREDMET WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_predmet_in AND OBOR_PREDMET.studijni_obor_id_obor = id_obor_in;
+    DELETE
+    FROM OBOR_PREDMET
+    WHERE OBOR_PREDMET.PREDMET_ID_PREDMET = id_predmet_in
+      AND OBOR_PREDMET.studijni_obor_id_obor = id_obor_in;
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_predmet(id_in IN NUMBER)
@@ -417,7 +427,7 @@ END;
 CREATE OR REPLACE PROCEDURE delete_hodnoceni(id_in IN NUMBER)
     IS
 BEGIN
-    DELETE FROM HODNOCENI WHERE HODNOCENI.ID_UZIVATEL = id_in;
+    DELETE FROM HODNOCENI WHERE HODNOCENI.id_hodnoceni = id_in;
 END;
 /
 CREATE OR REPLACE PROCEDURE delete_zprava(id_in IN NUMBER)
@@ -659,7 +669,6 @@ FROM HODNOCENI h
          JOIN (select * from getUzivatele) u ON u.id_uzivatel = h.id_uzivatel
          JOIN (select * from getSkupiny) g ON g.id_skupina = h.id_skupina;
 
-
 /*Pøedpøipravený select pro volání:
   select ID_PREDMET, NAZEV, POPIS from getVyucovanePredmety where ID_UZIVATEL = (ID UZIVATELE/UCITELE)
  */
@@ -697,6 +706,11 @@ CREATE OR REPLACE VIEW getSkupinyPredmetu AS
 SELECT id_skupina, nazev "nazev_skupina", popis "popis_skupina"
 FROM SKUPINY_PREDMETY
          JOIN SKUPINY S on SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
+
+CREATE OR REPLACE VIEW getSkupinaPodleHodnoceni AS
+SELECT id_skupina, nazev "nazev_skupina", popis "popis_skupina", id_hodnoceni
+FROM SKUPINY s
+         JOIN HODNOCENI h on s.id_skupina = h.id_skupina;
 
 CREATE OR REPLACE VIEW getZpravyHierarchicky AS
 SELECT nazev,

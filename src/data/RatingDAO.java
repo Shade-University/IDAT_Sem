@@ -16,7 +16,11 @@ public interface RatingDAO {
 
     public void createRating(Rating hodnoceni);
 
+    public void updateRating(Rating hodnoceni) throws SQLException;
+
     public double getAverageRating(Group skupina);
 
     public Rating getRating(ResultSet rs) throws SQLException;
+
+    public void deleteRating(Rating rt) throws SQLException;
 }

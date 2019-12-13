@@ -23,6 +23,8 @@ public interface UserDAO {
 
     public Collection<User> getTeachersBySubject(Subject subject) throws SQLException;
 
+    public User getUserById(int userID) throws SQLException;
+
     public User getUserByLogin(String email, String heslo) throws SQLException;
 
     public User getUser(ResultSet rs) throws SQLException;

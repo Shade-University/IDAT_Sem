@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import jdk.nashorn.internal.runtime.Debug;
 import model.Group;
+import model.Rating;
 import model.Subject;
 import model.User;
 
@@ -76,6 +77,18 @@ public class GroupDAOImpl implements GroupDAO {
         } //Vybere všechny skupiny daného uživatele
 
         return collection;
+    }
+
+    @Override
+    public Group getRatedGroup(Rating rt) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getSkupinaPodleHodnoceni WHERE ID_hodnoceni = " + rt.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+
+        if (rs.next())
+            return getGroup(rs);
+
+        return null;
     }
 
     @Override

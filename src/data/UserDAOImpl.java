@@ -87,6 +87,19 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public User getUserById(int userID) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getUzivatele WHERE ID_UZIVATEL = ?");
+        preparedStatement.setInt(1, userID);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        if (rs.next())
+            return getUser(rs);
+
+        return null;
+    }
+
+    @Override
     public Collection<User> getAllUsersFromGroup(Group group) throws SQLException {
 
         Collection<User> collection = new ArrayList<>();
