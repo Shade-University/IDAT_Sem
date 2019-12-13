@@ -21,6 +21,9 @@ public class Message {
     private User prijemce_uzivatel;
     private Group prijemce_skupina;
 
+    private Message rodic;
+    private File soubor;
+
     public Message(String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina){
         this(-1, nazev, obsah, odesilatel, prijemce_uzivatel, prijemce_skupina,
                 OracleConnection.parseDate(LocalDateTime.now().toString(), "yyyy-MM-dd'T'HH:mm:ss"));
@@ -37,6 +40,18 @@ public class Message {
         this.odesilatel = odesilatel;
         this.prijemce_uzivatel = prijemce_uzivatel;
         this.prijemce_skupina = prijemce_skupina;
+    }
+
+    public Message(int id, String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina, Date datum_vytvoreni, Message rodic, File soubor) {
+        this.id = id;
+        this.nazev = nazev;
+        this.obsah = obsah;
+        this.datum_vytvoreni = datum_vytvoreni;
+        this.odesilatel = odesilatel;
+        this.prijemce_uzivatel = prijemce_uzivatel;
+        this.prijemce_skupina = prijemce_skupina;
+        this.rodic = rodic;
+        this.soubor = soubor;
     }
 
     public int getId() {

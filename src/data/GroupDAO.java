@@ -21,6 +21,8 @@ public interface GroupDAO {
 
     public Group getRatedGroup(Rating rt) throws SQLException;
 
+    public Group getGroupById(int id) throws SQLException;
+
     public Group getGroup(ResultSet rs) throws SQLException;
 
     public Group getGroupWithQuantity(ResultSet rs) throws SQLException;

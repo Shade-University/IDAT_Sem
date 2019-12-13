@@ -1,6 +1,8 @@
 package data;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -36,4 +38,6 @@ public interface UserDAO {
     public void deleteUser(User uzivatel) throws SQLException;
 
     public void updateAvatar(File image, User user) throws SQLException;
+
+    public BufferedImage readImage(Blob img) throws SQLException;
 }

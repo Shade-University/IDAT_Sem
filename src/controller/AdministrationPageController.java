@@ -74,11 +74,6 @@ public class AdministrationPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            //TODO IMPLEMENTOVAT ADMINISTRACI
-
-            /* Message */
-            AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
-            stackPaneEditMessage.getChildren().add(messagePane);
             /* Soubory */
             listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
             listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -149,7 +144,8 @@ public class AdministrationPageController implements Initializable {
 
             /*============Message============*/
             refreshMessage();
-            /*listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+           // loadMessage(messageDAO.getMessageById(1));
+/*            listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadMessage(newValue);
                 } catch (IOException e) {
@@ -171,7 +167,7 @@ public class AdministrationPageController implements Initializable {
                 }
             });
         } catch (
-                SQLException | IOException e) {
+                SQLException e) {
             e.printStackTrace();
         }
     }
@@ -241,7 +237,7 @@ public class AdministrationPageController implements Initializable {
 
     public void refreshMessage() throws SQLException {
         listViewMessages.getItems().clear();
-       // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+        listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
     }
 
     public void onClickAddMessage(MouseEvent mouseEvent) {

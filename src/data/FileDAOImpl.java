@@ -55,7 +55,20 @@ public class FileDAOImpl implements FileDAO {
         return collection;
     }
 
-    private File getFile(ResultSet rs) throws SQLException {
+    @Override
+    public File getFileById(int id) throws SQLException {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM soubory WHERE ID_SOUBORU="+id);
+
+        while (rs.next()) {
+            return getFile(rs);
+        }
+        return null;
+    }
+
+    @Override
+    public File getFile(ResultSet rs) throws SQLException {
         return new File(
                 rs.getInt("id_souboru"),
                 rs.getString("nazev_souboru"),

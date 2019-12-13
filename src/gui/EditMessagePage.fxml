@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditMessagePageController">
    <children>
       <GridPane alignment="center" hgap="10" layoutX="10.0" layoutY="10.0" prefHeight="554.0" prefWidth="836.0" style="-fx-background-color: #202332;" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -22,19 +21,19 @@
             <TextField fx:id="txtFieldMessageName" prefHeight="25.0" prefWidth="226.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Tělo zprávy" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
             <Label text="Datum odeslání" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-            <Button mnemonicParsing="false" onAction="#btnMessageSaveClicked" prefHeight="25.0" prefWidth="237.0" text="Uložit zprávu" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="237.0" text="Uložit zprávu" GridPane.columnIndex="4" GridPane.rowIndex="11" />
             <Label fx:id="lblError1112" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="11" />
-            <Button mnemonicParsing="false" onAction="#btnMessageDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat zprávu" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+            <Button mnemonicParsing="false" onAction="#btnDeleteClicked" prefHeight="32.0" prefWidth="232.0" text="Smazat zprávu" GridPane.columnIndex="2" GridPane.rowIndex="11" />
             <TextArea fx:id="textAreaMessageBody" prefHeight="30.0" prefWidth="261.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2" />
             <DatePicker fx:id="dateMessagePicker" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="Odesílatel" GridPane.rowIndex="5" />
-            <ComboBox fx:id="comboBoxSender" prefHeight="25.0" prefWidth="233.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <ComboBox fx:id="cBSender" prefHeight="30.0" prefWidth="233.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label text="Příjemce" GridPane.rowIndex="6" />
-            <ComboBox fx:id="comboBoxRecipientType" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-            <ComboBox fx:id="comboBoxRecipientUniversal" prefHeight="25.0" prefWidth="236.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <ComboBox fx:id="cBRecipientType" onAction="#cBRecipientTypeChanged" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <ComboBox fx:id="cBRecipientUniversal" prefHeight="25.0" prefWidth="236.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
             <Label text="Nadřazená zpráva" GridPane.rowIndex="8" />
-            <ComboBox fx:id="comboBoxMessageParent" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-            <ComboBox fx:id="comboBoxFile" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+            <ComboBox fx:id="cBMessageParent" prefHeight="25.0" prefWidth="235.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <ComboBox fx:id="cBFile" prefHeight="25.0" prefWidth="234.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
             <Label text="Připojený soubor" GridPane.rowIndex="9" />
             <Button mnemonicParsing="false" onAction="#btnMessageParentNullClicked" text="Vynulovat" GridPane.columnIndex="4" GridPane.rowIndex="8" />
             <Button mnemonicParsing="false" onAction="#btnMessageFileNullClicked" text="Vynulovat" GridPane.columnIndex="4" GridPane.rowIndex="9" />

@@ -183,7 +183,8 @@ public class UserDAOImpl implements UserDAO {
         return user;
     } //Metoda rozparsuje a vytvoří uživatele
 
-    private BufferedImage readImage(Blob img) throws SQLException {
+    @Override
+    public BufferedImage readImage(Blob img) throws SQLException {
         if (img == null)
             return null;
 

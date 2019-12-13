@@ -92,6 +92,18 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
+    public Group getGroupById(int id) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM GETSKUPINY WHERE ID_SKUPINA = " + id);
+        ResultSet rs = preparedStatement.executeQuery();
+
+        if (rs.next())
+            return getGroup(rs);
+
+        return null;
+    }
+
+    @Override
     public Collection<Group> getSubjectGroups(Subject subject) throws SQLException {
         Collection<Group> collection = new ArrayList<>();
 

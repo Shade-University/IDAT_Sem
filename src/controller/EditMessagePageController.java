@@ -1,21 +1,26 @@
 package controller;
 
+import data.MessageDAO;
+import data.MessageDAOImpl;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.Message;
-import model.Rating;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EditMessagePageController implements Initializable {
 
+    private MessageDAO messageDAO = new MessageDAOImpl();
     private static AdministrationPageController parent;
     private static Message editedMessage;
     /**
@@ -29,50 +34,57 @@ public class EditMessagePageController implements Initializable {
         parent = aP;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
     @FXML
     private TextField txtFieldMessageName;
 
     @FXML
-    private ComboBox<?> comboBoxRecipientUniversal;
-
-    @FXML
-    private ComboBox<?> comboBoxFile;
+    private ComboBox<?> cBSender;
 
     @FXML
     private TextArea textAreaMessageBody;
 
     @FXML
-    private ComboBox<?> comboBoxRecipientType;
+    private Button btnSave;
 
     @FXML
-    private ComboBox<?> comboBoxSender;
+    private ComboBox<?> cBFile;
 
     @FXML
     private DatePicker dateMessagePicker;
 
     @FXML
+    private ComboBox<?> cBRecipientUniversal;
+
+    @FXML
     private Label lblError1112;
 
     @FXML
-    private ComboBox<?> comboBoxMessageParent;
+    private ComboBox<?> cBRecipientType;
 
     @FXML
-    void btnMessageSaveClicked(ActionEvent event) {
+    private ComboBox<Message> cBMessageParent;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            cBMessageParent.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void btnSaveClicked(ActionEvent event) {
 
     }
 
     @FXML
-    void e40b0b(ActionEvent event) {
+    void btnDeleteClicked(ActionEvent event) {
 
     }
 
     @FXML
-    void btnMessageDeleteClicked(ActionEvent event) {
+    void cBRecipientTypeChanged(ActionEvent event) {
 
     }
 
