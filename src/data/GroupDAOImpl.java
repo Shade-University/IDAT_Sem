@@ -100,10 +100,14 @@ public class GroupDAOImpl implements GroupDAO {
                 "SELECT * FROM GETSKUPINY WHERE ID_SKUPINA = " + id);
         ResultSet rs = preparedStatement.executeQuery();
 
-        if (rs.next())
-            return getGroup(rs);
-
+        if (rs.next()) {
+            Group group = getGroup(rs);
+            preparedStatement.close();
+            return group;
+        }
+        preparedStatement.close();
         return null;
+
     }
 
     @Override

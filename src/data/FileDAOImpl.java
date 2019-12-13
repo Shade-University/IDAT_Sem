@@ -63,8 +63,10 @@ public class FileDAOImpl implements FileDAO {
                 "SELECT * FROM soubory WHERE ID_SOUBORU="+id);
 
         while (rs.next()) {
+            statement.close();
             return getFile(rs);
         }
+        statement.close();
         return null;
     }
 

@@ -1,15 +1,12 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import model.File;
 import model.Group;
 import model.User;
 import model.Message;
@@ -21,6 +18,8 @@ public class MessageDAOImpl implements MessageDAO {
 
     private Connection conn;
     private UserDAO userDAO = new UserDAOImpl();
+    private GroupDAO groupDAO = new GroupDAOImpl();
+    private FileDAO fileDAO = new FileDAOImpl();
 
     public MessageDAOImpl() {
         try {
@@ -32,17 +31,51 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     public Message getMessageById(int id) throws SQLException {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM ZPRAVY WHERE ID_SOUBORU="+id);
+
+        while (rs.next()) {
+            Message msg = getMessage(rs);
+            conn.commit();
+            statement.close();
+            return msg;
+        }
+        conn.commit();
+        statement.close();
         return null;
     }
 
     @Override
     public Message getMessage(ResultSet rs) throws SQLException {
-        return null;
+        Message newMessage = new Message(
+                rs.getInt("id_zprava"),
+                rs.getString("nazev"),
+                rs.getString("telo"),
+                userDAO.getUserById(rs.getInt("id_uzivatel_odesilatel")),
+                userDAO.getUserById(rs.getInt("id_uzivatel_prijemce")),
+                groupDAO.getGroupById(rs.getInt("id_skupina_prijemce")),
+                rs.getDate("datum_vytvoreni"),
+                this.getMessageById(rs.getInt("id_rodic")),
+                fileDAO.getFileById(rs.getInt("id_souboru"))
+        );
+        return newMessage;
     }
 
     @Override
     public Collection<Message> getAllMessages() throws SQLException {
-        return null;
+        Collection<Message> collection = new ArrayList<>();
+
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM ZPRAVY");
+
+        while (rs.next()) {
+            collection.add(getMessage(rs));
+        }
+        conn.commit();
+        statement.close();
+        return collection;
     }
 
     @Override
@@ -108,6 +141,7 @@ public class MessageDAOImpl implements MessageDAO {
             } //Pokud je uživatel1 příjemce, vytvoř tuto
             collection.add(zprava);
         } //Načte zprávy mezi dvouma uživatelama
+        conn.commit();
         preparedStatement.close();
         return collection;
     }
@@ -139,6 +173,7 @@ public class MessageDAOImpl implements MessageDAO {
             );
             collection.add(zprava);
         }
+        conn.commit();
         preparedStatement.close();
         return collection;
     }

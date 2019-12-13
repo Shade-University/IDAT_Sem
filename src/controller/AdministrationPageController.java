@@ -2,6 +2,7 @@ package controller;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import data.*;
+import gui.AlertDialog;
 import gui.Main;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -41,7 +43,7 @@ public class AdministrationPageController implements Initializable {
     public StackPane stackPaneEditRating;
     public StackPane stackPaneEditMessage;
     public StackPane stackPaneEditFile;
-    public ListView<Message> listViewMessage;
+
     public ListView<File> listViewFile;
 
     @FXML
@@ -55,7 +57,7 @@ public class AdministrationPageController implements Initializable {
     @FXML
     private ListView<Rating> listViewRatings;
     @FXML
-    private ListView<Message> listViewMessages;
+    private ListView<Message> listViewMessage;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
@@ -94,7 +96,6 @@ public class AdministrationPageController implements Initializable {
                 try {
                     EditUserController.setEditedUser(newValue);
                     AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
-
                     stackPaneEditUser.getChildren().clear();
                     stackPaneEditUser.getChildren().add(parent);
                 } catch (IOException e) {
@@ -144,14 +145,13 @@ public class AdministrationPageController implements Initializable {
 
             /*============Message============*/
             refreshMessage();
-           // loadMessage(messageDAO.getMessageById(1));
-/*            listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadMessage(newValue);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });*/
+            });
 
             /*============Files============*/
             listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
@@ -236,8 +236,8 @@ public class AdministrationPageController implements Initializable {
     }
 
     public void refreshMessage() throws SQLException {
-        listViewMessages.getItems().clear();
-       // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+        listViewMessage.getItems().clear();
+        listViewMessage.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
     }
 
     public void onClickAddMessage(MouseEvent mouseEvent) {
@@ -283,10 +283,10 @@ public class AdministrationPageController implements Initializable {
 
     //Message
     private void loadMessage(Message msg) throws IOException {
-        EditMessagePageController.setParams(msg, this);
-        AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
-        stackPaneEditMessage.getChildren().clear();
-        stackPaneEditMessage.getChildren().add(messagePane);
+       EditMessagePageController.setParams(msg, this);
+       AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
+       stackPaneEditMessage.getChildren().clear();
+       stackPaneEditMessage.getChildren().add(messagePane);
     }
 
     public void onClickAddFile(MouseEvent mouseEvent) {
