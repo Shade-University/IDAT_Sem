@@ -237,7 +237,7 @@ public class AdministrationPageController implements Initializable {
 
     public void refreshMessage() throws SQLException {
         listViewMessages.getItems().clear();
-        listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+       // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
     }
 
     public void onClickAddMessage(MouseEvent mouseEvent) {

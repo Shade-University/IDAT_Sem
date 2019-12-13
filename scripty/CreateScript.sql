@@ -746,7 +746,7 @@ FROM UZIVATELE_SKUPINY
          JOIN SKUPINY S on UZIVATELE_SKUPINY.SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
 
 CREATE OR REPLACE VIEW getSkupinyPredmetu AS
-SELECT id_skupina, nazev "nazev_skupina", popis "popis_skupina"
+SELECT id_skupina, nazev "nazev_skupina", popis "popis_skupina", PREDMETY_ID_PREDMET
 FROM SKUPINY_PREDMETY
          JOIN SKUPINY S on SKUPINY_ID_SKUPINA = S.ID_SKUPINA;
 

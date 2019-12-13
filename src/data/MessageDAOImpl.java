@@ -31,6 +31,16 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    public Message getMessageById(int id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Message getMessage(ResultSet rs) throws SQLException {
+        return null;
+    }
+
+    @Override
     public Collection<Message> getAllMessages() throws SQLException {
         return null;
     }
