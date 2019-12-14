@@ -1,4 +1,6 @@
-package model;
+package controller.enums;
+
+import model.Rating;
 
 public enum RATING_GRADE {
     A("5 - skvělý"),

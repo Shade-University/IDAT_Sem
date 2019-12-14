@@ -27,7 +27,7 @@
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="317.0" spacing="10.0" styleClass="sidebar">
+            <VBox fx:id="vBoxMenu" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="317.0" spacing="10.0" styleClass="sidebar">
                <children>
                   <Label maxWidth="1.7976931348623157E308" minHeight="75.0" prefHeight="75.0" prefWidth="304.0" style="-fx-background-color: #00A2D3;" styleClass="title" text="Sociální síť StuxNET">
                      <padding>
@@ -58,9 +58,43 @@
                      </font>
                   </Label>
                   <Pane prefHeight="253.0" prefWidth="328.0" VBox.vgrow="ALWAYS" />
-                  <HBox alignment="CENTER" layoutX="10.0" layoutY="252.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                  <HBox fx:id="hBoxChangeUser" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onToolboxClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
                      <children>
-                        <Label onMouseClicked="#onAdministrationClicked" text="Administrace" textFill="#7c8184">
+                        <Label text="Přihlásit se jako:" />
+                        <ComboBox fx:id="cbChangeUser" onAction="#cbChangeUserChanged" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="hBoxToolboxForTeachers" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onToolboxClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                     <children>
+                        <Label text="Nástroje pro učitele" textFill="#7c8184">
+                           <font>
+                              <Font name="Calibri Light" size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hBoxAdministration" alignment="CENTER" layoutX="10.0" layoutY="252.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onAdministrationClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                     <children>
+                        <Label text="Administrace" textFill="#7c8184">
                            <font>
                               <Font name="Calibri Light" size="25.0" />
                            </font>
@@ -76,9 +110,9 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </HBox>
-                  <HBox alignment="CENTER" layoutX="10.0" layoutY="252.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                  <HBox fx:id="hBoxImport" alignment="CENTER" layoutX="10.0" layoutY="252.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onImportClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
                      <children>
-                        <Label onMouseClicked="#onImportClicked" text="Import dat" textFill="#7c8184">
+                        <Label text="Import dat" textFill="#7c8184">
                            <font>
                               <Font name="Calibri Light" size="25.0" />
                            </font>
@@ -145,7 +179,7 @@
                      <children>
                         <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS">
                           <tabs>
-                            <Tab closable="false" text="Nástěnka">
+                            <Tab fx:id="tabChat" closable="false" text="Nástěnka">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>

@@ -1,5 +1,6 @@
 package controller;
 
+import controller.enums.USER_TYPE;
 import data.GroupDAOImpl;
 import data.MessageDAO;
 import data.MessageDAOImpl;
@@ -16,16 +17,17 @@ import gui.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.*;
 import data.UserDAO;
@@ -62,7 +64,15 @@ public class MainDashboardPageController implements Initializable {
     private Tab editProfileTab = new Tab();
     private Tab administrationTab = new Tab();
     private Tab importTab = new Tab();
+    private Tab toolboxForTeachers = new Tab();
 
+    @FXML private Tab tabChat;
+    @FXML private HBox hBoxToolboxForTeachers;
+    @FXML private HBox hBoxAdministration;
+    @FXML private HBox hBoxImport;
+    @FXML private VBox vBoxMenu;
+    @FXML private HBox hBoxChangeUser;
+    @FXML private ComboBox<User> cbChangeUser;
 
     public static void setLoggedUser(User user) {
         loggedUser = user;
@@ -78,7 +88,13 @@ public class MainDashboardPageController implements Initializable {
         initFileChooser();
         loadUserData();
         loadLabels();
-
+        try {
+            cbChangeUser.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
+            cbChangeUser.setValue(getLoggedUser());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        listViewUsers.setItems(userData);
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
            openChatWith(newValue);
         });
@@ -90,7 +106,13 @@ public class MainDashboardPageController implements Initializable {
     }
 
 
-
+    @FXML
+    void cbChangeUserChanged(ActionEvent event) {
+        setLoggedUser(cbChangeUser.getValue());
+        tabPane.getTabs().clear();
+        tabPane.getTabs().add(tabChat);
+        initialize(null,null);
+    }
 
     public void onClickEditProfile(MouseEvent mouseEvent) throws IOException {
         selectTab(editProfileTab);
@@ -122,6 +144,10 @@ public class MainDashboardPageController implements Initializable {
         selectTab(administrationTab);
     }
 
+    public void onToolboxClicked(MouseEvent mouseEvent) {
+        selectTab(toolboxForTeachers);
+    }
+
     private void selectTab(Tab tab) {
         if (!tabPane.getTabs().contains(tab))
             tabPane.getTabs().add(tab);
@@ -138,11 +164,31 @@ public class MainDashboardPageController implements Initializable {
         importTab.setText("Import");
         importTab.setClosable(true);
 
+        toolboxForTeachers.setText("Nástroje pro učitele");
+        toolboxForTeachers.setClosable(true);
+
         try {
             EditProfileController.setEditedUser(loggedUser);
+            switch (loggedUser.getUserType()){
+                case TEACHER:
+                    vBoxMenu.getChildren().remove(hBoxAdministration);
+                    vBoxMenu.getChildren().remove(hBoxImport);
+                    vBoxMenu.getChildren().remove(hBoxChangeUser);
+                    toolboxForTeachers.setContent(FXMLLoader.load(getClass().getResource("/gui/ToolboxForTeachersPage.fxml")));
+                    break;
+                case ADMIN:
+                    administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
+                    importTab.setContent(FXMLLoader.load(getClass().getResource("/gui/ImportPage.fxml")));
+                    vBoxMenu.getChildren().remove(hBoxToolboxForTeachers);
+                    break;
+                case STUDENT:
+                    vBoxMenu.getChildren().remove(hBoxChangeUser);
+                    vBoxMenu.getChildren().remove(hBoxAdministration);
+                    vBoxMenu.getChildren().remove(hBoxImport);
+                    vBoxMenu.getChildren().remove(hBoxToolboxForTeachers);
+                    break;
+            }
             editProfileTab.setContent(FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml")));
-            administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
-            importTab.setContent(FXMLLoader.load(getClass().getResource("/gui/ImportPage.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
