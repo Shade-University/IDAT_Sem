@@ -1,5 +1,6 @@
 package controller;
 
+import controller.enums.RATING_GRADE;
 import data.*;
 import gui.AlertDialog;
 import javafx.collections.FXCollections;
@@ -14,7 +15,6 @@ import model.*;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class EditRatingPageController implements Initializable {

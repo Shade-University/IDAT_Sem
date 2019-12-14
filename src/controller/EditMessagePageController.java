@@ -120,7 +120,6 @@ public class EditMessagePageController implements Initializable {
                 }
                 cBFile.setValue(editedMessage.getSoubor());
                 cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getRodic()));
-                System.out.println(editedMessage.getRodic());
             } else {
                 cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
                 cBRecipientTypeChanged(null);
