@@ -67,7 +67,7 @@
                      </padding>
                      <children>
                         <Label text="Přihlásit se jako:" />
-                        <ComboBox fx:id="cbChangeUser" onAction="#cbChangeUserChanged" prefWidth="150.0">
+                        <ComboBox fx:id="cbChangeUser" prefWidth="150.0">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

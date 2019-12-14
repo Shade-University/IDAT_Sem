@@ -21,6 +21,7 @@ import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class ToolboxForTeachersPageController implements Initializable {
@@ -52,15 +53,13 @@ public class ToolboxForTeachersPageController implements Initializable {
         this.mdpc = mdpc;
         Thread t = new Thread(() -> {
             try {
-                lVMySubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjectsByTeacher(loggedUser)));
+                Collection<Subject> subjects = subjectDAO.getAllSubjectsByTeacher(loggedUser);
+                Platform.runLater(() -> lVMySubjects.setItems(FXCollections.observableArrayList(subjects)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            Platform.runLater(() -> {
-
-            });
         });
-        t.run();
+        t.start();
     }
 
     @Override
@@ -71,7 +70,8 @@ public class ToolboxForTeachersPageController implements Initializable {
             loading(1, true);
             Thread t = new Thread(() -> {
                 try {
-                    lVGroups.setItems(FXCollections.observableArrayList(groupDAO.getSubjectGroups(newValue)));
+                    Collection<Group> groups = groupDAO.getSubjectGroups(newValue);
+                    Platform.runLater(() -> lVGroups.setItems(FXCollections.observableArrayList(groups)));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -79,7 +79,7 @@ public class ToolboxForTeachersPageController implements Initializable {
                     loading(1, false);
                 });
             });
-            t.run();
+            t.start();
         });
         //Zprávy
         lVGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -93,7 +93,8 @@ public class ToolboxForTeachersPageController implements Initializable {
         Thread tt = new Thread(() -> {
             try {
                 if (gp != null) {
-                    lVGroupMessages.setItems(FXCollections.observableArrayList(messageDAO.getMessagesForGroupChat(gp)));
+                    Collection<Message> messages = messageDAO.getMessagesForGroupChat(gp);
+                    Platform.runLater(() -> lVGroupMessages.setItems(FXCollections.observableArrayList(messages)));
                 } else {
                     lVGroupMessages.setItems(null);
                 }
@@ -104,7 +105,7 @@ public class ToolboxForTeachersPageController implements Initializable {
                 loading(2, false);
             });
         });
-        tt.run();
+        tt.start();
     }
 
     @FXML

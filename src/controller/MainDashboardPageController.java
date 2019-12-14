@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import gui.Main;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -92,30 +93,22 @@ public class MainDashboardPageController implements Initializable {
         loadUserData();
         loadLabels();
 
-        try {
-            cbChangeUser.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-            cbChangeUser.setValue(getLoggedUser());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        listViewUsers.setItems(userData);
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-           openChatWith(newValue);
+            openChatWith(newValue);
         });
         listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             openChatWith(newValue);
         });
 
-
-    }
-
-
-    @FXML
-    void cbChangeUserChanged(ActionEvent event) {
-        setLoggedUser(cbChangeUser.getValue());
-        tabPane.getTabs().clear();
-        tabPane.getTabs().add(tabChat);
-        initialize(null,null);
+        cbChangeUser.getSelectionModel().select(loggedUser);
+        cbChangeUser.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            MainDashboardPageController.setLoggedUser(newValue);
+            try {
+                Main.switchScene(getClass().getResource("/gui/MainDashboardPage.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     public void onClickEditProfile(MouseEvent mouseEvent) {
@@ -143,7 +136,7 @@ public class MainDashboardPageController implements Initializable {
             String passwordTemp = loggedUser.getPassword();
             loggedUser = userDAO.getUserByLogin(loggedUser.getEmail(), passwordTemp);
             loggedUser.setPassword(passwordTemp);
-            initialize(null, null);
+            this.initialize(null, null);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -183,7 +176,7 @@ public class MainDashboardPageController implements Initializable {
         try {
             tabPane.getTabs().remove(tab);
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -239,8 +232,9 @@ public class MainDashboardPageController implements Initializable {
             try {
                 userData = FXCollections.observableArrayList(userDAO.getAllUsers());
                 groupData = FXCollections.observableArrayList(groupDAO.getUserGroups(loggedUser));
-                listViewUsers.setItems(userData);
-                listViewGroups.setItems(groupData);
+                Platform.runLater(() -> listViewUsers.setItems(userData));
+                Platform.runLater(() -> cbChangeUser.setItems(userData));
+                Platform.runLater(() -> listViewGroups.setItems(groupData));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
