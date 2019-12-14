@@ -98,7 +98,7 @@ public class ToolboxForTeachersPageController implements Initializable {
                     Collection<Message> messages = messageDAO.getMessagesForGroupChat(gp);
                     Platform.runLater(() -> lVGroupMessages.setItems(FXCollections.observableArrayList(messages)));
                 } else {
-                    lVGroupMessages.setItems(null);
+                    Platform.runLater(() -> lVGroupMessages.setItems(null));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
