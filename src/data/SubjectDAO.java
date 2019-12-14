@@ -11,9 +11,9 @@ import model.*;
  */
 public interface SubjectDAO {
 
-    public Collection<Subject> getAllSubjects();
+    public Collection<Subject> getAllSubjects() throws SQLException;
 
-    public Collection<Subject> getSubjectsForField(Field obor);
+    public Collection<Subject> getSubjectsForField(Field obor) throws SQLException;
 
     public void insertSubject(Subject subject) throws SQLException;
 

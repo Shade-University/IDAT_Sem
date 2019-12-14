@@ -79,11 +79,9 @@ public class MainDashboardPageController implements Initializable {
         loadUserData();
         loadLabels();
 
-        listViewUsers.setItems(userData);
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
            openChatWith(newValue);
         });
-        listViewGroups.setItems(groupData);
         listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             openChatWith(newValue);
         });
@@ -166,12 +164,16 @@ public class MainDashboardPageController implements Initializable {
             lblInfo.setVisible(false);
     }
     private void loadUserData() {
-        try {
-            userData = FXCollections.observableArrayList(userDAO.getAllUsers());
-            groupData = FXCollections.observableArrayList(groupDAO.getUserGroups(loggedUser));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            try {
+                userData = FXCollections.observableArrayList(userDAO.getAllUsers());
+                groupData = FXCollections.observableArrayList(groupDAO.getUserGroups(loggedUser));
+                listViewUsers.setItems(userData);
+                listViewGroups.setItems(groupData);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
     private void initFileChooser() {
         fileChooser.getExtensionFilters().addAll(

@@ -12,13 +12,13 @@ import model.Group;
  */
 public interface RatingDAO {
 
-    public Collection<Rating> getAllRatings();
+    public Collection<Rating> getAllRatings() throws SQLException;
 
-    public void createRating(Rating hodnoceni);
+    public void createRating(Rating hodnoceni) throws SQLException;
 
     public void updateRating(Rating hodnoceni) throws SQLException;
 
-    public double getAverageRating(Group skupina);
+    public double getAverageRating(Group skupina) throws SQLException;
 
     public Rating getRating(ResultSet rs) throws SQLException;
 

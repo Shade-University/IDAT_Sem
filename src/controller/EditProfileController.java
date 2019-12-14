@@ -73,7 +73,12 @@ public class EditProfileController implements Initializable {
 
         subjectListView.setPrefHeight(200);
         subjectListView.setPrefWidth(200);
-        ObservableList<Subject> allSubjects = FXCollections.observableArrayList(subjectDAO.getAllSubjects());
+        ObservableList<Subject> allSubjects = null;
+        try {
+            allSubjects = FXCollections.observableArrayList(subjectDAO.getAllSubjects());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         subjectListView.setItems(allSubjects);
         subjectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 

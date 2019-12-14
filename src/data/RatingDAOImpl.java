@@ -29,44 +29,34 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public Collection<Rating> getAllRatings() {
+    public Collection<Rating> getAllRatings() throws SQLException {
         Collection<Rating> collection = new ArrayList<>();
-        try {
-            Statement statement = conn.createStatement();
+        Statement statement = conn.createStatement();
 
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM GETHODNOCENI");
-            while (rs.next()) {
-                Rating hodnoceni = getRating(rs);
-                collection.add(hodnoceni);
-            }
-            statement.close();
-            return collection;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM GETHODNOCENI");
+        while (rs.next()) {
+            Rating hodnoceni = getRating(rs);
+            collection.add(hodnoceni);
         }
-        return null;
+        statement.close();
+        return collection;
     }
 
     @Override
-    public void createRating(Rating hodnoceni) {
-        try {
-            PreparedStatement preparedStatement = conn.prepareStatement(
-                    "INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)"
-                    + "VALUES(?,?,?,?)");
-            preparedStatement.setInt(1, hodnoceni.getHodnota());
-            preparedStatement.setString(2, hodnoceni.getPopis());
-            preparedStatement.setInt(3, hodnoceni.getHodnoticiUzivatel().getId());
-            preparedStatement.setInt(4, hodnoceni.getHodnoticiSkupina().getId());
+    public void createRating(Rating hodnoceni) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)"
+                        + "VALUES(?,?,?,?)");
+        preparedStatement.setInt(1, hodnoceni.getHodnota());
+        preparedStatement.setString(2, hodnoceni.getPopis());
+        preparedStatement.setInt(3, hodnoceni.getHodnoticiUzivatel().getId());
+        preparedStatement.setInt(4, hodnoceni.getHodnoticiSkupina().getId());
 
-            preparedStatement.executeUpdate();
-            System.out.println("Rating created");
+        preparedStatement.executeUpdate();
+        System.out.println("Rating created");
             conn.commit();
             preparedStatement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
@@ -98,24 +88,19 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public double getAverageRating(Group skupina) {
-        try {
-            Statement statement = conn.createStatement();
+    public double getAverageRating(Group skupina) throws SQLException {
+        Statement statement = conn.createStatement();
 
 //            ResultSet rs = stmt.executeQuery(
 //                    "SELECT (SUM(hodnota_hodnoceni) / COUNT(*)) AS AVERAGE FROM getRatings");
-            ResultSet rs = statement.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
-                    + "WHERE id_skupina = " + skupina.getId());
-            double output = -1;
-            if (rs.next()) {
-                output =  rs.getDouble("AVERAGE");
-            }
-            statement.close();
-            return output;
-        } catch (SQLException ex) {
-            Logger.getLogger(RatingDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        ResultSet rs = statement.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
+                + "WHERE id_skupina = " + skupina.getId());
+        double output = -1;
+        if (rs.next()) {
+            output = rs.getDouble("AVERAGE");
         }
-        return -1;
+        statement.close();
+        return output;
     }
 
     @Override

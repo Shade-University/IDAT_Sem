@@ -26,48 +26,37 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public Collection<Subject> getAllSubjects() {
+    public Collection<Subject> getAllSubjects() throws SQLException {
         Collection<Subject> collection = new ArrayList<>();
-        try {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(
+                "SELECT * FROM PREDMETY");
 
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM PREDMETY");
-
-            while (rs.next()) {
-                Subject predmet = getPredmet(rs);
-                collection.add(predmet);
-            }
-            statement.close();
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        while (rs.next()) {
+            Subject predmet = getPredmet(rs);
+            collection.add(predmet);
         }
-        return null;
+        statement.close();
+        return collection;
     }
 
     @Override
-    public Collection<Subject> getSubjectsForField(Field obor) {
+    public Collection<Subject> getSubjectsForField(Field obor) throws SQLException {
         Collection<Subject> collection = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT * FROM OBOR_PREDMET op\n"
-                    + "JOIN PREDMETY p ON p.id_predmet = op.predmet_id_predmet\n"
-                    + "WHERE op.studijni_obor_id_obor = ?"
-            );
-            preparedStatement.setInt(1, obor.getId());
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM OBOR_PREDMET op\n"
+                        + "JOIN PREDMETY p ON p.id_predmet = op.predmet_id_predmet\n"
+                        + "WHERE op.studijni_obor_id_obor = ?"
+        );
+        preparedStatement.setInt(1, obor.getId());
 
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                Subject p = getPredmet(rs);
-                collection.add(p);
-            }
-            preparedStatement.close();
-            return collection;
-        } catch (SQLException ex) {
-            Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            Subject p = getPredmet(rs);
+            collection.add(p);
         }
-        return null;
+        preparedStatement.close();
+        return collection;
     }
 
     private Subject getPredmet(ResultSet rs) throws SQLException {

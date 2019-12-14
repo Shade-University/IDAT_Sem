@@ -35,6 +35,7 @@ public class UserDAOImpl implements UserDAO {
 
         Collection<User> collection = new ArrayList<>();
 
+        System.out.println();
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM getUzivatele");

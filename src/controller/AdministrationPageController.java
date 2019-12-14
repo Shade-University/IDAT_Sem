@@ -73,33 +73,18 @@ public class AdministrationPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            /* Soubory */
-            listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
-            listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    EditFilePageController.setEditedFile(newValue);
-                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
-
-                    stackPaneEditFile.getChildren().clear();
-                    stackPaneEditFile.getChildren().add(parent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
             /*============USERS============*/
-            listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-            listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    EditUserController.setEditedUser(newValue);
-                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
+            refreshUsers();
+        listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                EditUserController.setEditedUser(newValue);
+                AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
 
-                    stackPaneEditUser.getChildren().clear();
-                    stackPaneEditUser.getChildren().add(parent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                stackPaneEditUser.getChildren().clear();
+                stackPaneEditUser.getChildren().add(parent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             });
 
             /*============GROUPS============*/
@@ -154,22 +139,40 @@ public class AdministrationPageController implements Initializable {
             });*/
 
             /*============Files============*/
-            listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
-            listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    EditFilePageController.setEditedFile(newValue);
-                    AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
+        refreshFiles();
+        listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                EditFilePageController.setEditedFile(newValue);
+                AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
 
-                    stackPaneEditFile.getChildren().clear();
-                    stackPaneEditFile.getChildren().add(parent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (
-                SQLException e) {
-            e.printStackTrace();
-        }
+                stackPaneEditFile.getChildren().clear();
+                stackPaneEditFile.getChildren().add(parent);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void refreshUsers() {
+        listViewUsers.getItems().clear();
+        new Thread(() -> {
+            try {
+                listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void refreshFiles() {
+        listViewFile.getItems().clear();
+        new Thread(() -> {
+            try {
+                listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void onClickAddUser(MouseEvent mouseEvent) {
@@ -184,8 +187,15 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditUser.getChildren().add(parent);
     }
 
-    public void refreshGroups() throws SQLException {
-        listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+    public void refreshGroups() {
+        listViewGroups.getItems().clear();
+        new Thread(() -> {
+            try {
+                listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 
@@ -197,8 +207,15 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshFieldOfStudy() throws SQLException {
-        listViewFieldsOfStudy.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+    public void refreshFieldOfStudy() {
+        listViewFieldsOfStudy.getItems().clear();
+        new Thread(() -> {
+            try {
+                listViewFieldsOfStudy.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
@@ -209,9 +226,15 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshSubject() throws SQLException {
+    public void refreshSubject() {
         listViewSubjects.getItems().clear();
-        listViewSubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjects()));
+        new Thread(() -> {
+            try {
+                listViewSubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjects()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void onClickAddSubject(MouseEvent mouseEvent) {
@@ -222,9 +245,15 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshRating() throws SQLException {
+    public void refreshRating() {
         listViewRatings.getItems().clear();
-        listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
+        new Thread(() -> {
+            try {
+                listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void onClickAddRating(MouseEvent mouseEvent) {
@@ -235,9 +264,9 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshMessage() throws SQLException {
+    public void refreshMessage() {
         listViewMessages.getItems().clear();
-       // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
+        // listViewMessages.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
     }
 
     public void onClickAddMessage(MouseEvent mouseEvent) {
