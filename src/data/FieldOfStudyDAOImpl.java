@@ -81,7 +81,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
             );
             callableStatement.setInt(1, obor.getId());
 
-            callableStatement.execute();
+            callableStatement.executeQuery();
             conn.commit();
             callableStatement.close();
             System.out.println("Field deleted");
@@ -97,7 +97,7 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         );
         callableStatement.setString(1, obor.getNazev());
         callableStatement.setString(2, obor.getPopis());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Field added.");

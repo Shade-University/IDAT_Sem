@@ -34,7 +34,7 @@ public class Main extends Application {
             return;
         } //Pravděpodobně bysme měli vyhazovat vyjímky při vytváření DAO, ale tam jsem nechal jen zalogování
         primaryStage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("AdministrationPage.fxml"));
         Scene scene = new Scene(root);
 
         primaryStage.setTitle("Sociální síť");

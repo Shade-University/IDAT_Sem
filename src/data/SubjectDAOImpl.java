@@ -76,9 +76,9 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setString(1, subject.getName());
         callableStatement.setString(2, subject.getDescription());
-        callableStatement.execute();
-        conn.commit();
+        callableStatement.executeQuery();
         callableStatement.close();
+        conn.commit();
         System.out.println("Subject created.");
     }
 
@@ -93,9 +93,9 @@ public class SubjectDAOImpl implements SubjectDAO {
                 );
                 preparedStatement.setInt(1, obor.getId());
                 preparedStatement.setInt(2, predmety.get(i).getId());
-                
-                
+
                 preparedStatement.executeUpdate();
+                preparedStatement.close();
                 conn.commit();
                 System.out.println("Subject added to field");
             }
@@ -111,7 +111,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, fieldOfStudy.getId());
         callableStatement.setInt(2, subject.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject added to Field");
@@ -124,7 +124,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, teacher.getId());
         callableStatement.setInt(2, subject.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Teacher added to subject");
@@ -137,7 +137,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, group.getId());
         callableStatement.setInt(2, subject.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject added to group.");
@@ -151,7 +151,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(1, subject.getId());
         callableStatement.setString(2, subject.getName());
         callableStatement.setString(3, subject.getDescription());
-        callableStatement.execute();
+        callableStatement.executeUpdate();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject updated!");
@@ -172,7 +172,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                 preparedStatement.setInt(1, predmety.get(i).getId());
                 
                 
-                preparedStatement.executeUpdate();
+                preparedStatement.executeQuery();
                 conn.commit();
                 preparedStatement.close();
                 System.out.println("Subject deleted from field");
@@ -189,7 +189,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, fieldOfStudy.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject removed from field of study.");
@@ -202,7 +202,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, teacher.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject removed from field of study.");
@@ -215,7 +215,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, group.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject removed from field of study.");
@@ -227,7 +227,7 @@ public class SubjectDAOImpl implements SubjectDAO {
                 "call delete_predmet(?)"
         );
         callableStatement.setInt(1, subject.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Subject deleted!");

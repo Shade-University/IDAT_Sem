@@ -69,9 +69,9 @@ public class RatingDAOImpl implements RatingDAO {
         callableStatement.setString(3, hodnoceni.getPopis());
         callableStatement.setInt(4, hodnoceni.getHodnoticiUzivatel().getId());
         callableStatement.setInt(5, hodnoceni.getHodnoticiSkupina().getId());
-        callableStatement.execute();
-        conn.commit();
+        callableStatement.executeQuery();
         callableStatement.close();
+        conn.commit();
         System.out.println("Rating has been updated.");
     }
 
@@ -109,9 +109,9 @@ public class RatingDAOImpl implements RatingDAO {
                 "call delete_hodnoceni(?)"
         );
         callableStatement.setInt(1, rt.getId());
-        callableStatement.execute();
-        conn.commit();
+        callableStatement.executeQuery();
         callableStatement.close();
+        conn.commit();
         System.out.println("Rating has been deleted.");
     }
 }

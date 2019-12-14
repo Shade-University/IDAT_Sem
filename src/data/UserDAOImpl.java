@@ -73,7 +73,7 @@ public class UserDAOImpl implements UserDAO {
         callableStatement.registerOutParameter(1, Types.VARCHAR);
         callableStatement.setString(2, email);
         callableStatement.setString(3, password);
-        callableStatement.execute();
+        callableStatement.executeQuery();
         String hashedPassword = callableStatement.getString(1);
 
         PreparedStatement preparedStatement = conn.prepareStatement(
@@ -101,7 +101,6 @@ public class UserDAOImpl implements UserDAO {
         User user = null;
         if (rs.next())
             user = getUser(rs);
-
         preparedStatement.close();
         return user;
     }
@@ -222,8 +221,8 @@ public class UserDAOImpl implements UserDAO {
 
         preparedStatement.executeUpdate();
         conn.commit();
-        System.out.println("User updated");
         preparedStatement.close();
+        System.out.println("User updated");
     }
 
     @Override
@@ -276,7 +275,7 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.setString(6, student.getStudyYear());
         preparedStatement.setInt(7, student.getField().getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
         preparedStatement.close();
         System.out.println("Student inserted");
@@ -295,7 +294,7 @@ public class UserDAOImpl implements UserDAO {
             );
             preparedStatement.setInt(1, user.getId());
 
-            preparedStatement.execute();
+            preparedStatement.executeQuery();
             conn.commit();
             preparedStatement.close();
             System.out.println("Admin deleted");
@@ -332,7 +331,7 @@ public class UserDAOImpl implements UserDAO {
         );
         preparedStatement.setInt(1, student.getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
         preparedStatement.close();
         System.out.println("Student deleted");
@@ -344,7 +343,7 @@ public class UserDAOImpl implements UserDAO {
         );
         preparedStatement.setInt(1, teacher.getId());
 
-        preparedStatement.execute();
+        preparedStatement.executeQuery();
         conn.commit();
         preparedStatement.close();
         System.out.println("Teacher deleted");

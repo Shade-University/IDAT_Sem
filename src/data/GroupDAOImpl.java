@@ -51,7 +51,6 @@ public class GroupDAOImpl implements GroupDAO {
     @Override
     public Collection<Group> getAllGroupWithUserQuantity() throws SQLException {
         Collection<Group> collection = new ArrayList<>();
-
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM getPoctyVeSkupinach");
@@ -100,10 +99,14 @@ public class GroupDAOImpl implements GroupDAO {
                 "SELECT * FROM GETSKUPINY WHERE ID_SKUPINA = " + id);
         ResultSet rs = preparedStatement.executeQuery();
 
-        if (rs.next())
-            return getGroup(rs);
-
+        if (rs.next()) {
+            Group group = getGroup(rs);
+            preparedStatement.close();
+            return group;
+        }
+        preparedStatement.close();
         return null;
+
     }
 
     @Override
@@ -130,9 +133,9 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setInt(1, group.getId());
         callableStatement.setString(2, group.getName());
         callableStatement.setString(3, group.getDescription());
-        callableStatement.execute();
-        conn.commit();
+        callableStatement.executeUpdate();
         callableStatement.close();
+        conn.commit();
         System.out.println("Group updated!");
     }
 
@@ -181,7 +184,7 @@ public class GroupDAOImpl implements GroupDAO {
         );
         callableStatement.setInt(1, u.getId());
         callableStatement.setInt(2, s.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("User removed from group");
@@ -194,7 +197,7 @@ public class GroupDAOImpl implements GroupDAO {
         );
         callableStatement.setString(1, group.getName());
         callableStatement.setString(2, group.getDescription());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Group added.");
@@ -207,7 +210,7 @@ public class GroupDAOImpl implements GroupDAO {
         );
         System.out.println(group.getId());
         callableStatement.setInt(1, group.getId());
-        callableStatement.execute();
+        callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
         System.out.println("Group deleted");
