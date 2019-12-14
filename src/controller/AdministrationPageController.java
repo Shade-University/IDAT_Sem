@@ -8,6 +8,7 @@ import gui.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,8 +76,8 @@ public class AdministrationPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        refreshAll();
             /*============USERS============*/
-            refreshUsers();
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 EditUserController.setEditedUser(newValue);
@@ -90,7 +91,6 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============GROUPS============*/
-            refreshGroups();
             listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadGroupPane(newValue);
@@ -100,7 +100,6 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============FieldsOfStudy============*/
-            refreshFieldOfStudy();
             listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadFieldOfStudyPane(newValue);
@@ -110,7 +109,6 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============Subjects============*/
-            refreshSubject();
             listViewSubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadSubject(newValue);
@@ -120,7 +118,6 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============Rating============*/
-            refreshRating();
             listViewRatings.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     loadRating(newValue);
@@ -130,7 +127,6 @@ public class AdministrationPageController implements Initializable {
             });
 
             /*============Message============*/
-        refreshMessage();
         listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 loadMessage(newValue);
@@ -140,7 +136,6 @@ public class AdministrationPageController implements Initializable {
         });
 
             /*============Files============*/
-        refreshFiles();
         listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 EditFilePageController.setEditedFile(newValue);
@@ -154,11 +149,21 @@ public class AdministrationPageController implements Initializable {
         });
     }
 
+    private void refreshAll() {
+        refreshUsers();
+        refreshFiles();
+        refreshGroups();
+        refreshFieldOfStudy();
+        refreshSubject();
+        refreshRating();
+        refreshMessage();
+    }
     private void refreshUsers() {
         listViewUsers.getItems().clear();
         new Thread(() -> {
             try {
-                listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
+                Collection<User> users = userDAO.getAllUsers();
+                Platform.runLater(() -> listViewUsers.setItems(FXCollections.observableArrayList(users)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -167,9 +172,75 @@ public class AdministrationPageController implements Initializable {
 
     private void refreshFiles() {
         listViewFile.getItems().clear();
+        Thread t = new Thread(() -> {
+            try {
+                Collection<File> files = fileDAO.getAllFiles();
+                Platform.runLater(() -> listViewFile.setItems(FXCollections.observableArrayList(files)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshGroups() {
+        listViewGroups.getItems().clear();
         new Thread(() -> {
             try {
-                listViewFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
+                Collection<Group> groups = groupDAO.getAllGroups();
+                Platform.runLater(() -> listViewGroups.setItems(FXCollections.observableArrayList(groups)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void refreshFieldOfStudy() {
+        listViewFieldsOfStudy.getItems().clear();
+        new Thread(() -> {
+            try {
+                Collection<Field> fields = fieldDAO.getAllFields();
+                Platform.runLater(() -> listViewFieldsOfStudy.setItems(FXCollections.observableArrayList(fields)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void refreshSubject() {
+        listViewSubjects.getItems().clear();
+        new Thread(() -> {
+            try {
+                Collection<Subject> subjects = subjectDAO.getAllSubjects();
+                Platform.runLater(() -> listViewSubjects.setItems(FXCollections.observableArrayList(subjects)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void refreshRating() {
+        listViewRatings.getItems().clear();
+        new Thread(() -> {
+            try {
+                Collection<Rating> ratings = ratingDAO.getAllRatings();
+                Platform.runLater(() -> listViewRatings.setItems(FXCollections.observableArrayList(ratings)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+    public void refreshMessage() {
+        listViewMessage.getItems().clear();
+        new Thread(() -> {
+            try {
+                Collection<Message> messages = messageDAO.getAllMessages();
+                Platform.runLater(() -> listViewMessage.setItems(FXCollections.observableArrayList(messages)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -187,36 +258,12 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditUser.getChildren().clear();
         stackPaneEditUser.getChildren().add(parent);
     }
-
-    public void refreshGroups() {
-        listViewGroups.getItems().clear();
-        new Thread(() -> {
-            try {
-                listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-
     public void onClickAddGroup(MouseEvent mouseEvent) {
         try {
             loadGroupPane(null);
         } catch (IOException e) {
             System.out.println(e);
         }
-    }
-
-    public void refreshFieldOfStudy() {
-        listViewFieldsOfStudy.getItems().clear();
-        new Thread(() -> {
-            try {
-                listViewFieldsOfStudy.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 
     public void onClickAddFieldOfStudy(MouseEvent mouseEvent) {
@@ -227,17 +274,6 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshSubject() {
-        listViewSubjects.getItems().clear();
-        new Thread(() -> {
-            try {
-                listViewSubjects.setItems(FXCollections.observableArrayList(subjectDAO.getAllSubjects()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
     public void onClickAddSubject(MouseEvent mouseEvent) {
         try {
             loadSubject(null);
@@ -246,31 +282,11 @@ public class AdministrationPageController implements Initializable {
         }
     }
 
-    public void refreshRating() {
-        listViewRatings.getItems().clear();
-        new Thread(() -> {
-            try {
-                listViewRatings.setItems(FXCollections.observableArrayList(ratingDAO.getAllRatings()));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
     public void onClickAddRating(MouseEvent mouseEvent) {
         try {
             loadRating(null);
         } catch (IOException e) {
             System.out.println(e);
-        }
-    }
-
-    public void refreshMessage() {
-        listViewMessage.getItems().clear();
-        try {
-            listViewMessage.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -335,180 +351,3 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditFile.getChildren().add(parent);
     }
 }
-    /*
-
-    @FXML
-    private void btnDoneClicked(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-
-            loader.setLocation(Main.class.getResource("/gui/MainDashboardPage.fxml"));
-            loader.load();
-            MainDashboardPageController controller = loader.getController();
-            controller.initialize(null, null); //Refresh stránky
-            Main.switchScene("/gui/MainDashboardPage.fxml");
-
-        } catch (IOException ex) {
-
-            Logger.getLogger(AdministrationPageController.class.getFirstName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    private void onUpravitUzivateleMenuItemClicked(ActionEvent event) {
-        User user = listViewUsers.getSelectionModel().getSelectedItem();
-        if (user != null) {
-            EditUserDialog edit = new EditUserDialog(user);
-            edit.showAndWait().ifPresent((u) -> {
-                if (user.equals(MainDashboardPageController.getLoggedUser())) {
-                    MainDashboardPageController.setLoggedUser(u);
-                }
-                try {
-                    userDAO.updateUser(u);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                updateUserListView();
-            });
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Uživatel nebyl vybrán").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onSkupinyUpravitMenuItemClicked(ActionEvent event) {
-        Group group = listViewGroups.getSelectionModel().getSelectedItem();
-        if (group != null) {
-            EditGroupDialog edit = new EditGroupDialog(group);
-            edit.showAndWait().ifPresent((u) -> {
-                groupDAO.updateGroup(u);
-                updateGroupListView();
-            });
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Group nebyla vybrána").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onAddToGroupClicked(ActionEvent event) {
-        User uzivatel = listViewUsers.getSelectionModel().getSelectedItem();
-        if (uzivatel != null && !listViewGroups.getItems().isEmpty()) {
-            ChoiceDialog<Group> chDialog = new ChoiceDialog<>(listViewGroups.getItems().get(0), listViewGroups.getItems());
-            chDialog.setTitle("Vlož do skupiny");
-            chDialog.setHeaderText("");
-            chDialog.setContentText("Vyberte skupinu");
-
-            chDialog.showAndWait().ifPresent((s) -> {
-                groupDAO.insertUserToGroup(uzivatel, s);
-            });
-
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Uživatel nebyl vybrán nebo nejsou skupiny").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onCreateUserClicked(ActionEvent event) {
-        InsertUserDialog insertDialog = new InsertUserDialog();
-        insertDialog.showAndWait().ifPresent((u) -> {
-            userDAO.insertUser(u);
-            updateUserListView();
-        });
-    }
-
-    @FXML
-    private void onRemoveUserClicked(ActionEvent event) {
-        if (!listViewUsers.getSelectionModel().isEmpty()) {
-            if (listViewUsers.getSelectionModel().getSelectedItem().equals(MainDashboardPageController.getLoggedUser())) {
-                new Alert(Alert.AlertType.INFORMATION, "Nelze odstranit sebe").showAndWait();
-                return;
-            }
-            userDAO.deleteUser(listViewUsers.getSelectionModel().getSelectedItem());
-            updateUserListView();
-
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Uživatel nebyl vybrán").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onGroupInsertClicked(ActionEvent event) {
-        InsertGroupDialog groupDialog = new InsertGroupDialog();
-        groupDialog.showAndWait().ifPresent((g) -> {
-            groupDAO.insertGroup(g);
-            updateGroupListView();
-        });
-    }
-
-    @FXML
-    private void onGroupDeleteClicked(ActionEvent event) {
-        if (!listViewGroups.getSelectionModel().isEmpty()) {
-            groupDAO.removeGroup(listViewGroups.getSelectionModel().getSelectedItem());
-            updateGroupListView();
-
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Group nebyla vybrána").showAndWait();
-        }
-    }
-
-    private void updateUserListView() {
-        listViewUsers.getItems().clear();
-        listViewUsers.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-    }
-
-    private void updateGroupListView() {
-        listViewGroups.getItems().clear();
-        listViewGroups.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-    }
-
-    private void updateFieldListView() {
-        listViewFields.getItems().clear();
-        listViewFields.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
-    }
-
-    @FXML
-    private void onFieldInsertClicked(ActionEvent event) {
-        InsertFieldDialog fieldDialog = new InsertFieldDialog();
-        fieldDialog.showAndWait().ifPresent((f) -> {
-            fieldDAO.insertField(f);
-            updateFieldListView();
-        });
-    }
-
-    @FXML
-    private void onFieldRemoveClicked(ActionEvent event) {
-        if (!listViewFields.getSelectionModel().isEmpty()) {
-            fieldDAO.deleteField(listViewFields.getSelectionModel().getSelectedItem());
-            updateFieldListView();
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onFieldEditClicked(ActionEvent event) {
-        if (!listViewFields.getSelectionModel().isEmpty()) {
-            new EditFieldDialog(listViewFields.getSelectionModel().getSelectedItem()).showAndWait().ifPresent((f) -> {
-                fieldDAO.updateField(f);
-                updateFieldListView();
-            });
-
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
-        }
-    }
-
-    @FXML
-    private void onFieldShowSubjectsClicked(ActionEvent event) {
-    }
-
-    @FXML
-    private void onFieldSubjectAddClicked(ActionEvent event) {
-        if (!listViewFields.getSelectionModel().isEmpty()) {
-            new AddRemoveSubjectsDialog(listViewFields.getSelectionModel().getSelectedItem()).showAndWait();
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Field nebyl vybrán").showAndWait();
-        }
-    }
-
-} */

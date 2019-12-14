@@ -88,6 +88,7 @@ public class MainDashboardPageController implements Initializable {
         initFileChooser();
         loadUserData();
         loadLabels();
+
         try {
             cbChangeUser.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
             cbChangeUser.setValue(getLoggedUser());
@@ -114,8 +115,13 @@ public class MainDashboardPageController implements Initializable {
         initialize(null,null);
     }
 
-    public void onClickEditProfile(MouseEvent mouseEvent) throws IOException {
-        selectTab(editProfileTab);
+    public void onClickEditProfile(MouseEvent mouseEvent) {
+        try {
+            editProfileTab.setContent(FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml")));
+            selectTab(editProfileTab);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClickLogOut(MouseEvent mouseEvent) {
@@ -141,11 +147,21 @@ public class MainDashboardPageController implements Initializable {
     }
 
     public void onAdministrationClicked(MouseEvent mouseEvent) {
-        selectTab(administrationTab);
+        try {
+            administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
+            selectTab(administrationTab);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onToolboxClicked(MouseEvent mouseEvent) {
-        selectTab(toolboxForTeachers);
+        try {
+            toolboxForTeachers.setContent(FXMLLoader.load(getClass().getResource("/gui/ToolboxForTeachersPage.fxml")));
+            selectTab(toolboxForTeachers);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void selectTab(Tab tab) {
@@ -167,18 +183,14 @@ public class MainDashboardPageController implements Initializable {
         toolboxForTeachers.setText("Nástroje pro učitele");
         toolboxForTeachers.setClosable(true);
 
-        try {
-            EditProfileController.setEditedUser(loggedUser);
+        EditProfileController.setEditedUser(loggedUser);
             switch (loggedUser.getUserType()){
                 case TEACHER:
                     vBoxMenu.getChildren().remove(hBoxAdministration);
                     vBoxMenu.getChildren().remove(hBoxImport);
                     vBoxMenu.getChildren().remove(hBoxChangeUser);
-                    toolboxForTeachers.setContent(FXMLLoader.load(getClass().getResource("/gui/ToolboxForTeachersPage.fxml")));
                     break;
                 case ADMIN:
-                    administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
-                    importTab.setContent(FXMLLoader.load(getClass().getResource("/gui/ImportPage.fxml")));
                     vBoxMenu.getChildren().remove(hBoxToolboxForTeachers);
                     break;
                 case STUDENT:
@@ -188,10 +200,6 @@ public class MainDashboardPageController implements Initializable {
                     vBoxMenu.getChildren().remove(hBoxToolboxForTeachers);
                     break;
             }
-            editProfileTab.setContent(FXMLLoader.load(getClass().getResource("/gui/EditProfilePage.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     private void loadLabels() {
         lblNickName.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
@@ -259,6 +267,11 @@ public class MainDashboardPageController implements Initializable {
     }
 
     public void onImportClicked(MouseEvent mouseEvent) {
-        selectTab(importTab);
+        try {
+            importTab.setContent(FXMLLoader.load(getClass().getResource("/gui/ImportPage.fxml")));
+            selectTab(importTab);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
