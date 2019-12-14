@@ -35,19 +35,17 @@ public class EditMessagePageController implements Initializable {
     private FileDAO fileDAO = new FileDAOImpl();
     private GroupDAO groupDAO = new GroupDAOImpl();
     ObservableList<Object> users;
-    private static AdministrationPageController parent;
-    private static Message editedMessage;
-
+    private AdministrationPageController parent;
+    private MainDashboardPageController mdpc;
+    private ToolboxForTeachersPageController tftp;
+    private Tab tab;
+    private Message editedMessage;
     /**
-     * Nastavení vstupních parametrů
-     *
-     * @param message - editovaná skupina
-     * @param aP      - Předek ve kterém je zobrazený formulář
+     * Called from
+     * true -> Administration
+     * false -> ToolboxForTeachers
      */
-    public static void setParams(Message message, AdministrationPageController aP) {
-        editedMessage = message;
-        parent = aP;
-    }
+    private boolean calledFrom = true;
 
     private LocalDate convertToLocalDate(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime())
@@ -98,6 +96,28 @@ public class EditMessagePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+       // initPane();
+    }
+
+    public void initDataFromToolBox(Message msg, Tab tab, MainDashboardPageController mdpc, ToolboxForTeachersPageController tftp){
+        this.editedMessage = msg;
+        this.tab = tab;
+        this.mdpc = mdpc;
+        this.tftp = tftp;
+        calledFrom = false;
+        Thread t = new Thread(()-> {initPane();});
+        t.run();
+    }
+
+    public void initDataFromAdministration(Message msg, AdministrationPageController apc){
+        this.editedMessage = msg;
+        this.parent = apc;
+        calledFrom = true;
+        Thread t = new Thread(()-> {initPane();});
+        t.run();
+    }
+
+    private void initPane(){
         try {
             users = FXCollections.observableArrayList(userDAO.getAllUsers());
             cBMessageParent.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
@@ -164,7 +184,11 @@ public class EditMessagePageController implements Initializable {
                 } else {
                         messageDAO.insertMessage(msg);
                 }
-                exitPane();
+                if(calledFrom){
+                    exitPane();
+                }else{
+                    exitTab();
+                }
             } else {
                 AlertDialog.show("Zpráva nemá žádného příjemce", Alert.AlertType.ERROR);
             }
@@ -173,11 +197,20 @@ public class EditMessagePageController implements Initializable {
         }
     }
 
+    private void exitTab(){
+        mdpc.removeTab(tab);
+        tftp.reloadMessagesByGroup(tftp.lVGroups.getSelectionModel().getSelectedItem());
+    }
+
     @FXML
     void btnDeleteClicked(ActionEvent event) {
         try {
             messageDAO.deleteMessage(editedMessage);
-            exitPane();
+            if(calledFrom){
+                exitPane();
+            }else{
+                exitTab();
+            }
         } catch (SQLException e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }

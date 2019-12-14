@@ -15,6 +15,8 @@ public interface SubjectDAO {
 
     public Collection<Subject> getSubjectsForField(Field obor) throws SQLException;
 
+    public Collection<Subject> getAllSubjectsByTeacher(User user) throws SQLException;
+
     public void insertSubject(Subject subject) throws SQLException;
 
     public void insertSubjectsToField(List<Subject> predmety, Field obor);

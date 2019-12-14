@@ -8,6 +8,7 @@ import data.UserDAOImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -21,6 +22,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -157,17 +160,31 @@ public class MainDashboardPageController implements Initializable {
 
     public void onToolboxClicked(MouseEvent mouseEvent) {
         try {
-            toolboxForTeachers.setContent(FXMLLoader.load(getClass().getResource("/gui/ToolboxForTeachersPage.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ToolboxForTeachersPage.fxml"));
+            Parent toolBoxPane = loader.load();
+
+            ToolboxForTeachersPageController toolbox = loader.getController();
+            toolbox.initData(getLoggedUser(), this);
+
+            toolboxForTeachers.setContent(toolBoxPane);
             selectTab(toolboxForTeachers);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void selectTab(Tab tab) {
+    public void selectTab(Tab tab) {
         if (!tabPane.getTabs().contains(tab))
             tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
+    }
+
+    public void removeTab(Tab tab) {
+        try {
+            tabPane.getTabs().remove(tab);
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     private void initTabs() {

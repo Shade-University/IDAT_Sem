@@ -333,10 +333,16 @@ public class AdministrationPageController implements Initializable {
 
     //Message
     private void loadMessage(Message msg) throws IOException {
-        EditMessagePageController.setParams(msg, this);
-        AnchorPane messagePane = FXMLLoader.load(getClass().getResource("/gui/EditMessagePage.fxml"));
-        stackPaneEditMessage.getChildren().clear();
-        stackPaneEditMessage.getChildren().add(messagePane);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/EditMessagePage.fxml"));
+            Parent editMessagePane = loader.load();
+            EditMessagePageController toolbox = loader.getController();
+            toolbox.initDataFromAdministration(msg, this);
+            stackPaneEditMessage.getChildren().clear();
+            stackPaneEditMessage.getChildren().add(editMessagePane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClickAddFile(MouseEvent mouseEvent) {

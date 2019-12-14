@@ -41,6 +41,22 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
+    public Collection<Subject> getAllSubjectsByTeacher(User user) throws SQLException {
+        Collection<Subject> collection = new ArrayList<>();
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "select * from PREDMETY p join UCITELE_PREDMETY up on p.ID_PREDMET = up.PREDMET_ID_PREDMET where up.UCITELE_ID_UCITEL =  ?");
+        preparedStatement.setInt(1, user.getId());
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            Subject predmet = getPredmet(rs);
+            collection.add(predmet);
+        }
+        preparedStatement.close();
+        return collection;
+    }
+
+    @Override
     public Collection<Subject> getSubjectsForField(Field obor) throws SQLException {
         Collection<Subject> collection = new ArrayList<>();
         PreparedStatement preparedStatement = conn.prepareStatement(
