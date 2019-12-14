@@ -51,36 +51,38 @@ public class ToolboxForTeachersPageController implements Initializable {
     void initData(User loggedUser, MainDashboardPageController mdpc) {
         this.loggedUser = loggedUser;
         this.mdpc = mdpc;
-        Thread t = new Thread(() -> {
+        new Thread(() -> {
             try {
                 Collection<Subject> subjects = subjectDAO.getAllSubjectsByTeacher(loggedUser);
                 Platform.runLater(() -> lVMySubjects.setItems(FXCollections.observableArrayList(subjects)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        });
-        t.start();
+        }).start();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         //Předměty
-        lVMySubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            loading(1, true);
-            Thread t = new Thread(() -> {
-                try {
-                    Collection<Group> groups = groupDAO.getSubjectGroups(newValue);
-                    Platform.runLater(() -> lVGroups.setItems(FXCollections.observableArrayList(groups)));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                Platform.runLater(() -> {
-                    loading(1, false);
-                });
+        try {
+            lVMySubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                loading(1, true);
+                new Thread(() -> {
+                    try {
+                        Collection<Group> groups = groupDAO.getSubjectGroups(newValue);
+                        Platform.runLater(() -> lVGroups.setItems(FXCollections.observableArrayList(groups)));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    Platform.runLater(() -> {
+                        loading(1, false);
+                    });
+                }).start();
             });
-            t.start();
-        });
+        } catch (Exception e) {
+
+        }
         //Zprávy
         lVGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             reloadMessagesByGroup(newValue);
@@ -90,7 +92,7 @@ public class ToolboxForTeachersPageController implements Initializable {
 
     public void reloadMessagesByGroup(Group gp) {
         loading(2, true);
-        Thread tt = new Thread(() -> {
+        new Thread(() -> {
             try {
                 if (gp != null) {
                     Collection<Message> messages = messageDAO.getMessagesForGroupChat(gp);
@@ -104,8 +106,7 @@ public class ToolboxForTeachersPageController implements Initializable {
             Platform.runLater(() -> {
                 loading(2, false);
             });
-        });
-        tt.start();
+        }).start();
     }
 
     @FXML

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ISKAMUserPageController">
+   <children>
+      <TabPane layoutX="100.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Hlavní stránka">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox layoutX="53.0" layoutY="69.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                                 <center>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="1096.0" text="Moje konto" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                          </Label>
+                                          <BorderPane prefHeight="103.0" prefWidth="280.0" style="-fx-border-color: gray;">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                             <center>
+                                                <VBox prefHeight="147.0" prefWidth="268.0" BorderPane.alignment="CENTER">
+                                                   <children>
+                                                      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="Stav prostředků:" />
+                                                      <Label fx:id="lblMoneyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="10,-">
+                                                         <font>
+                                                            <Font size="48.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </center>
+                                          </BorderPane>
+                                          <BorderPane prefHeight="117.0" prefWidth="280.0" style="-fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                                             <center>
+                                                <VBox prefHeight="147.0" prefWidth="268.0" BorderPane.alignment="CENTER">
+                                                   <children>
+                                                      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="Moje objednávky pro dnešní den:" />
+                                                      <ListView fx:id="lVTodayOrders" prefHeight="200.0" prefWidth="200.0" />
+                                                   </children>
+                                                </VBox>
+                                             </center>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </BorderPane>
+                                       </children>
+                                    </VBox>
+                                 </center>
+                              </BorderPane>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                                 <center>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="1096.0" text="Dobíjení kreditu">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="Číslo karty:">
+                                             <VBox.margin>
+                                                <Insets left="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtCardNumber">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <Label text="Platnost karty: (zadávejte ve formátu MM/RR)">
+                                             <VBox.margin>
+                                                <Insets left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtExpiration" prefHeight="25.0" prefWidth="108.0">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <Label text="Ověřovací kód ">
+                                             <VBox.margin>
+                                                <Insets left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtCVV" maxHeight="50.0" prefHeight="25.0" prefWidth="116.0">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" />
+                                             </VBox.margin>
+                                          </TextField>
+                                          <Button mnemonicParsing="false" onAction="#btnPayClicked" prefHeight="25.0" prefWidth="288.0" text="Provést platbu">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Button>
+                                       </children>
+                                    </VBox>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Objednávky jídel">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox layoutX="38.0" layoutY="62.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                                 <center>
+                                    <VBox prefHeight="371.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label text="Objednávky jídel">
+                                             <padding>
+                                                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="Požadovaný datum:">
+                                             <VBox.margin>
+                                                <Insets left="15.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <DatePicker fx:id="dPFoodDate">
+                                             <VBox.margin>
+                                                <Insets left="15.0" />
+                                             </VBox.margin>
+                                          </DatePicker>
+                                          <Label text="Dostupná jídla:">
+                                             <VBox.margin>
+                                                <Insets left="15.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <ListView fx:id="lVFoodMenu" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets left="15.0" right="15.0" />
+                                             </VBox.margin>
+                                          </ListView>
+                                          <Button mnemonicParsing="false" onAction="#btnFoodOrderClicked" prefHeight="25.0" prefWidth="592.0" text="Objednat jídlo" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                             </VBox.margin>
+                                          </Button>
+                                       </children>
+                                    </VBox>
+                                 </center>
+                              </BorderPane>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
+                                 <center>
+                                    <VBox prefHeight="371.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label text="Moje objednávky">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </Label>
+                                          <ListView fx:id="lVFoodOrders" prefHeight="241.0" prefWidth="260.0" VBox.vgrow="ALWAYS">
+                                             <VBox.margin>
+                                                <Insets bottom="15.0" left="15.0" right="15.0" />
+                                             </VBox.margin>
+                                          </ListView>
+                                       </children>
+                                    </VBox>
+                                 </center>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </BorderPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

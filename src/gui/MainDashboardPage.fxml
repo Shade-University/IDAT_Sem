@@ -58,7 +58,7 @@
                      </font>
                   </Label>
                   <Pane prefHeight="253.0" prefWidth="328.0" VBox.vgrow="ALWAYS" />
-                  <HBox fx:id="hBoxChangeUser" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onToolboxClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                  <HBox fx:id="hBoxChangeUser" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

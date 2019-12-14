@@ -1,10 +1,7 @@
 
 package model;
 
-/**
- *
- * @author Tomáš Vondra
- */
+
 public class Rating {
 
     private int id;
