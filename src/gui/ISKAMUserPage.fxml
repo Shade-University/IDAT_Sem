@@ -36,7 +36,7 @@
                                                 <Font size="17.0" />
                                              </font>
                                           </Label>
-                                          <BorderPane prefHeight="103.0" prefWidth="280.0" style="-fx-border-color: gray;">
+                                          <BorderPane prefHeight="103.0" prefWidth="998.0" style="-fx-border-color: gray;">
                                              <VBox.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </VBox.margin>
@@ -47,7 +47,7 @@
                                                 <VBox prefHeight="147.0" prefWidth="268.0" BorderPane.alignment="CENTER">
                                                    <children>
                                                       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="Stav prostředků:" />
-                                                      <Label fx:id="lblMoneyState" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="10,-">
+                                                      <Label fx:id="lblBalance" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="280.0" text="10,-">
                                                          <font>
                                                             <Font size="48.0" />
                                                          </font>
@@ -56,7 +56,7 @@
                                                 </VBox>
                                              </center>
                                           </BorderPane>
-                                          <BorderPane prefHeight="117.0" prefWidth="280.0" style="-fx-border-color: gray;" VBox.vgrow="ALWAYS">
+                                          <BorderPane prefHeight="190.0" prefWidth="1338.0" style="-fx-border-color: gray;" VBox.vgrow="ALWAYS">
                                              <center>
                                                 <VBox prefHeight="147.0" prefWidth="268.0" BorderPane.alignment="CENTER">
                                                    <children>
@@ -124,6 +124,16 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" />
                                              </VBox.margin>
                                           </TextField>
+                                          <Label text="Částka:">
+                                             <VBox.margin>
+                                                <Insets left="5.0" right="5.0" top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtMoneyToDeposit" maxHeight="50.0" prefHeight="25.0" prefWidth="116.0">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" />
+                                             </VBox.margin>
+                                          </TextField>
                                           <Button mnemonicParsing="false" onAction="#btnPayClicked" prefHeight="25.0" prefWidth="288.0" text="Provést platbu">
                                              <VBox.margin>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -165,7 +175,7 @@
                                                 <Insets left="15.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <DatePicker fx:id="dPFoodDate">
+                                          <DatePicker fx:id="dPFoodDate" onAction="#dateSearchChanged">
                                              <VBox.margin>
                                                 <Insets left="15.0" />
                                              </VBox.margin>

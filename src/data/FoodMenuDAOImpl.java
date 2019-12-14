@@ -15,10 +15,14 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
 
     private Connection conn;
 
-    @Override
-    public void setConn(Connection conn) {
-        this.conn = conn;
+    public FoodMenuDAOImpl() {
+        try {
+            conn = OracleConnection.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
 
     @Override
     public void createFoodMenu(FoodMenu menu) throws SQLException {
@@ -64,7 +68,7 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
     @Override
     public FoodMenu getFoodMenuByDate(Date date) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM JIDELNI_LISTKY WHERE DATUM = ? ");
+                "SELECT * FROM JIDELNI_LISTKY WHERE to_char(DATUM, 'yyyy-mm-dd') = to_char(?, 'yyyy-mm-dd') ");
         preparedStatement.setDate(1, date);
         ResultSet rs = preparedStatement.executeQuery();
         FoodMenu foodMenu = null;

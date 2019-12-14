@@ -82,6 +82,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return price + " - " + typeOfTransaction;
+        int toInt = (int) price;
+        return "["+ date + "] " + description + " - " + toInt + ",-";
     }
 }

@@ -10,16 +10,22 @@ import model.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OrderDAOImpl implements OrderDAO {
     UserDAO userDAO = new UserDAOImpl();
     ProductDAO productDAO = new ProductDAOImpl();
     private Connection conn;
 
-    @Override
-    public void setConn(Connection conn) {
-        this.conn = conn;
+    public OrderDAOImpl() {
+        try {
+            conn = OracleConnection.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
 
     @Override
     public void createOrder(Order order) throws SQLException {
@@ -29,10 +35,15 @@ public class OrderDAOImpl implements OrderDAO {
         );
         preparedStatement.setInt(1, order.getId());
         preparedStatement.setInt(2, order.getUser().getId());
-        preparedStatement.setInt(3, order.getProduct().getId());
+        if(order.getProduct()!=null){
+            preparedStatement.setInt(3, order.getProduct().getId());
+        } else {
+            preparedStatement.setNull(3,0);
+        }
         preparedStatement.setString(4, order.getTypeOfTransaction().toString());
         preparedStatement.setFloat(5, order.getPrice());
         preparedStatement.setDate(6, order.getDate());
+        preparedStatement.setString(7, order.getDescription());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -50,6 +61,7 @@ public class OrderDAOImpl implements OrderDAO {
         preparedStatement.setString(4, order.getTypeOfTransaction().toString());
         preparedStatement.setFloat(5, order.getPrice());
         preparedStatement.setDate(6, order.getDate());
+        preparedStatement.setString(7, order.getDescription());
         preparedStatement.setInt(1, order.getId());
 
         preparedStatement.executeUpdate();
@@ -121,20 +133,41 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public Order getTodayOrderByUser(User user, Date date) throws SQLException {
+    public Collection<Order>  getTodayOrderByUser(User user, Date date) throws SQLException {
         Collection<Order> collection = new ArrayList<>();
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM TRANSAKCE WHERE DATUM = ? AND ID_UZIVATELE = ?"
+                "SELECT * FROM TRANSAKCE WHERE to_char(DATUM, 'yyyy-mm-dd') = to_char(?, 'yyyy-mm-dd') AND ID_UZIVATELE = ?"
         );
         preparedStatement.setDate(1, date);
         preparedStatement.setInt(2, user.getId());
         ResultSet rs = preparedStatement.executeQuery();
-        Order order = null;
-        if (rs.next())
-            order = getOrder(rs);
+        while (rs.next()) {
+            Order order = getOrder(rs);
+            collection.add(order);
+        }
         preparedStatement.close();
         conn.commit();
-        return order;
+        return collection;
+    }
+
+    @Override
+    public float getAccountBalance(User user) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT " +
+                        "    SUM( CASTKA ) \"castka\"" +
+                        "FROM " +
+                        "    TRANSAKCE\n" +
+                        "WHERE " +
+                        "    ID_UZIVATELE = ?"
+        );
+        preparedStatement.setInt(1, user.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        Float balance = null;
+        if (rs.next())
+            balance = rs.getFloat("castka");
+        preparedStatement.close();
+        conn.commit();
+        return balance;
     }
 
     /**

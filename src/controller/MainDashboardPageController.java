@@ -69,6 +69,7 @@ public class MainDashboardPageController implements Initializable {
     private Tab administrationTab = new Tab();
     private Tab importTab = new Tab();
     private Tab toolboxForTeachers = new Tab();
+    private Tab iskamTAB = new Tab();
 
     @FXML private Tab tabChat;
     @FXML private HBox hBoxToolboxForTeachers;
@@ -166,6 +167,21 @@ public class MainDashboardPageController implements Initializable {
         }
     }
 
+    public void onISKAMClicked(MouseEvent mouseEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ISKAMUserPage.fxml"));
+            Parent ISKAMpage = loader.load();
+
+            ISKAMUserPageController iskamController = loader.getController();
+            iskamController.initData(getLoggedUser());
+
+            iskamTAB.setContent(ISKAMpage);
+            selectTab(iskamTAB);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void selectTab(Tab tab) {
         if (!tabPane.getTabs().contains(tab))
             tabPane.getTabs().add(tab);
@@ -192,6 +208,9 @@ public class MainDashboardPageController implements Initializable {
 
         toolboxForTeachers.setText("Nástroje pro učitele");
         toolboxForTeachers.setClosable(true);
+
+        iskamTAB.setText("ISKAM");
+        iskamTAB.setClosable(true);
 
         EditProfileController.setEditedUser(loggedUser);
             switch (loggedUser.getUserType()){

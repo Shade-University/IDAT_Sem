@@ -66,4 +66,10 @@ public class Product {
         this.type = type;
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        int toInt = (int) price;
+        return  "["+ toInt + ",-] " + name;
+    }
 }

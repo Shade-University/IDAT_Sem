@@ -6,14 +6,21 @@ import model.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductDAOImpl implements ProductDAO {
     Connection conn;
 
-    @Override
-    public void setConn(Connection conn) {
-        this.conn = conn;
+
+    public ProductDAOImpl() {
+        try {
+            conn = OracleConnection.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
 
     @Override
     public void createProduct(Product product) throws SQLException {
@@ -54,16 +61,18 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public Collection<Product> getProductByFoodMenu(FoodMenu menu) throws SQLException {
         Collection<Product> collection = new ArrayList<>();
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM PRODUKTY p " +
-                        "join LISTEK_PRODUKT LP on p.ID_PRODUKTU = LP.ID_PRODUKT" +
-                        " where LP.ID_LISTEK = ?");
+                        "left join LISTEK_PRODUKT LP on p.ID_PRODUKTU = LP.ID_PRODUKT" +
+                        " where LP.ID_LISTEK = ? AND p.SKLADEM > 0");
+        preparedStatement.setInt(1, menu.getId());
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Product product = getProduct(rs);
             collection.add(product);
         }
-        statement.close();
+        preparedStatement.close();
         conn.commit();
         return collection;
 
@@ -105,17 +114,19 @@ public class ProductDAOImpl implements ProductDAO {
                 "SELECT * FROM PRODUKTY WHERE ID_PRODUKTU = ? ");
         preparedStatement.setInt(1, id);
         ResultSet rs = preparedStatement.executeQuery();
-        Product product = null;
-        if (rs.next())
-            product = getProduct(rs);
-
+        if (rs.next()) {
+            Product product = getProduct(rs);
+            preparedStatement.close();
+            conn.commit();
+            return product;
+        }
         preparedStatement.close();
-        conn.commit();
-        return product;
+        return null;
     }
 
     /**
      * Parser ResultSetu na Produkt
+     *
      * @param rs
      * @return produkt
      * @throws SQLException

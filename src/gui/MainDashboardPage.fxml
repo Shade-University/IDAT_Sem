@@ -74,6 +74,24 @@
                         </ComboBox>
                      </children>
                   </HBox>
+                  <HBox fx:id="hBoxISKAMuser" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onISKAMClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
+                     <children>
+                        <Label text="Objednávání jídel" textFill="#7c8184">
+                           <font>
+                              <Font name="Calibri Light" size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
                   <HBox fx:id="hBoxToolboxForTeachers" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onToolboxClicked" prefHeight="40.0" prefWidth="300.0" styleClass="btns">
                      <children>
                         <Label text="Nástroje pro učitele" textFill="#7c8184">
