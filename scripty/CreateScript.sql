@@ -220,49 +220,59 @@ create table konta
 )
 /
 
-create table produkty
+create table PRODUKTY
 (
-    id_produktu  NUMBER        not null
+    ID_PRODUKTU NUMBER not null
         constraint PRODUKT_PK
             primary key,
-    nazev        VARCHAR2(255) not null,
-    popis        VARCHAR2(255) not null,
-    skladem      NUMBER,
-    typ          NUMBER        not null,
-    platnost_dny NUMBER,
-    cena         NUMBER
+    NAZEV VARCHAR2(255) not null,
+    POPIS VARCHAR2(255) not null,
+    SKLADEM NUMBER,
+    TYP VARCHAR2(100),
+    CENA NUMBER
 )
 /
 
-create table transakce
+create table TRANSAKCE
 (
-    id_transakce  NUMBER        not null
+    ID_TRANSAKCE NUMBER not null
         constraint TRANSAKCE_PK
             primary key,
-    id_konta      NUMBER        not null
-        constraint TRANSAKCE_KONTO_ID_KONTO_FK
-            references konta,
-    id_produktu   NUMBER        not null
+    ID_UZIVATELE NUMBER not null
+        constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    ID_PRODUKTU NUMBER
         constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
-            references produkty,
-    typ_transakce NUMBER        not null,
-    castka        FLOAT         not null,
-    datum         DATE          not null,
-    popis         VARCHAR2(255) not null
+            references PRODUKTY,
+    TYP_TRANSAKCE VARCHAR2(100) not null,
+    CASTKA FLOAT not null,
+    DATUM DATE not null,
+    POPIS VARCHAR2(255) not null
 )
 /
 
-create table jidelni_listky
+create table JIDELNI_LISTKY
 (
-    id_listku   NUMBER not null
+    ID_LISTKU NUMBER not null
         constraint JIDELNI_LISTEK_PK
             primary key,
-    id_produktu NUMBER not null
-        constraint JIDELNI_LISTEK_PRODUKT_ID_PRODUKTU_FK
-            references produkty,
-    datum       DATE   not null
+    DATUM DATE not null
 )
 /
+create table LISTEK_PRODUKT
+(
+    ID_PRODUKT NUMBER not null
+        constraint LISTEK_PRODUKT_PRODUKTY_ID_PRODUKTU_FK
+            references PRODUKTY,
+    ID_LISTEK NUMBER not null
+        constraint LISTEK_PRODUKT_JIDELNI_LISTKY_ID_LISTKU_FK
+            references JIDELNI_LISTKY
+)
+/
+create unique index JIDELNI_LISTKY_DATUM_UINDEX
+    on JIDELNI_LISTKY (DATUM)
+/
+
 
 
 /*=============StrukturaDB============*/
@@ -966,10 +976,10 @@ BEGIN
     end if;
 END;
 /
-CREATE OR REPLACE TRIGGER produkty_trigger
-    BEFORE INSERT OR UPDATE
-    ON PRODUKTY
-    FOR EACH ROW
+create or replace trigger PRODUKTY_TRIGGER
+    before insert or update
+    on PRODUKTY
+    for each row
 BEGIN
     if (inserting) then
         SELECT increment_produkty.nextval
