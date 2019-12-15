@@ -1,6 +1,7 @@
 package data;
 
 import model.FoodMenu;
+import model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -31,9 +32,24 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         preparedStatement.setDate(2, menu.getDate());
 
         preparedStatement.executeUpdate();
+        conn.commit();
+        preparedStatement.close();
+        System.out.println("CreateFoodMenu");
+    }
+
+    @Override
+    public void addProductToFoodMenu(Product product, FoodMenu menu) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "INSERT INTO LISTEK_PRODUKT(ID_PRODUKT, ID_LISTEK) "
+                        + "VALUES (?, ?)"
+        );
+        preparedStatement.setInt(1, product.getId());
+        preparedStatement.setInt(2, menu.getId());
+
+        preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("CreateFoodMenu");
+        System.out.println("addProductToFoodMenu");
     }
 
     @Override
@@ -41,12 +57,12 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "UPDATE JIDELNI_LISTKY SET DATUM = ? where ID_LISTKU = ?"
         );
-        preparedStatement.setDate(2, menu.getDate());
-        preparedStatement.setInt(1, menu.getId());
+        preparedStatement.setDate(1, menu.getDate());
+        preparedStatement.setInt(2, menu.getId());
 
         preparedStatement.executeUpdate();
-        preparedStatement.close();
         conn.commit();
+        preparedStatement.close();
         System.out.println("UpdateFoodMenu");
     }
 
@@ -57,10 +73,24 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         );
         preparedStatement.setInt(1, menu.getId());
 
-        preparedStatement.executeUpdate();
+        preparedStatement.executeQuery();
         preparedStatement.close();
         conn.commit();
         System.out.println("DeleteFoodMenu");
+    }
+
+    @Override
+    public void deleteProductFromFoodMenu(Product product, FoodMenu menu) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "DELETE FROM LISTEK_PRODUKT WHERE ID_PRODUKT = ? AND ID_LISTEK = ?"
+        );
+        preparedStatement.setInt(1, product.getId());
+        preparedStatement.setInt(2, menu.getId());
+
+        preparedStatement.executeQuery();
+        preparedStatement.close();
+        conn.commit();
+        System.out.println("deleteProductFromFoodMenu");
     }
 
     @Override

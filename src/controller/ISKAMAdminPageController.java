@@ -150,17 +150,17 @@ public class ISKAMAdminPageController {
 
         //Food menu
         cBFTypeOfOperation.setItems(FXCollections.observableArrayList(DATABASE_OPERATION_TYPE.values()));
-        cBFTypeOfOperation.getSelectionModel().select(1);
+        cBFTypeOfOperation.getSelectionModel().select(0);
         cBFProducts.setItems(FXCollections.observableArrayList(productList));
         cBFProducts.getSelectionModel().select(0);
         lVFoodMenu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
            fillFoodMenu(newValue);
            editedFoodMenu = newValue;
+           cBFTypeOfOperationChanged(null);
         });
 
 
     }
-
 
     @FXML
     void btnTDeleteProductClicked(ActionEvent event) {
@@ -336,7 +336,13 @@ public class ISKAMAdminPageController {
 
     @FXML
     void cBFProductsChanged(ActionEvent event) {
-
+        if(lVFProducts.getItems().contains(cBFProducts.getValue()))
+        {
+          btnFAddProduct.setText("Odebrat");
+        } else
+        {
+            btnFAddProduct.setText("Přidat");
+        }
     }
 
     @FXML
@@ -353,7 +359,7 @@ public class ISKAMAdminPageController {
                     break;
                 case UPDATE:
                     if (editedFoodMenu != null) {
-                        foodMenuDAO.createFoodMenu(
+                        foodMenuDAO.updateFoodMenu(
                                 new FoodMenu(editedFoodMenu.getId(),
                                         Date.valueOf(dPFDate.getValue())
                                 ));
@@ -367,7 +373,7 @@ public class ISKAMAdminPageController {
                     if (editedFoodMenu != null) {
                         foodMenuDAO.deleteFoodMenu(editedFoodMenu);
                         AlertDialog.show("Jídelní lístek byl odebrán.", Alert.AlertType.INFORMATION);
-                        reloadProduct();
+                        reloadFoodMenu();
                     } else {
                         AlertDialog.show("Není zvolen žádný jídelní lístek!", Alert.AlertType.ERROR);
                     }
@@ -390,6 +396,7 @@ public class ISKAMAdminPageController {
             dPFDate.setValue(null);
             lVFProducts.setItems(null);
         }
+        cBFProductsChanged(null);
     }
 
     private void reloadFoodMenu() throws SQLException {
@@ -402,7 +409,23 @@ public class ISKAMAdminPageController {
 
     @FXML
     void btnFAddProductClicked(ActionEvent event) {
-
+        if(lVFProducts.getItems().contains(cBFProducts.getValue()))
+        {
+            try {
+                foodMenuDAO.deleteProductFromFoodMenu(cBFProducts.getValue(), editedFoodMenu);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            System.out.println("obsahuje!");
+        } else
+        {
+            try {
+                foodMenuDAO.addProductToFoodMenu(cBFProducts.getValue(), editedFoodMenu);
+            } catch (SQLException e){
+                AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
+            }
+        }
+        fillFoodMenu(editedFoodMenu);
     }
 
 }

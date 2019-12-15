@@ -84,12 +84,12 @@ public class ProductDAOImpl implements ProductDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "UPDATE PRODUKTY SET NAZEV = ?, POPIS = ?, SKLADEM = ?, TYP = ?, CENA = ? where ID_PRODUKTU = ?"
         );
-        preparedStatement.setString(2, product.getName());
-        preparedStatement.setString(3, product.getDescription());
-        preparedStatement.setInt(4, product.getInStock());
-        preparedStatement.setString(5, product.getType().toString());
-        preparedStatement.setFloat(6, product.getPrice());
-        preparedStatement.setInt(1, product.getId());
+        preparedStatement.setString(1, product.getName());
+        preparedStatement.setString(2, product.getDescription());
+        preparedStatement.setInt(3, product.getInStock());
+        preparedStatement.setString(4, product.getType().toString());
+        preparedStatement.setFloat(5, product.getPrice());
+        preparedStatement.setInt(6, product.getId());
 
         preparedStatement.executeQuery();
         preparedStatement.close();

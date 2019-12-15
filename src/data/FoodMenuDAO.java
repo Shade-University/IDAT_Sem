@@ -1,6 +1,7 @@
 package data;
 
 import model.FoodMenu;
+import model.Product;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -16,6 +17,14 @@ public interface FoodMenuDAO {
     void createFoodMenu(FoodMenu menu) throws SQLException;
 
     /**
+     * Add product to FoodMenu in db
+     * @param product
+     * @param foodMenu
+     * @throws SQLException
+     */
+    void addProductToFoodMenu(Product product, FoodMenu foodMenu) throws SQLException;
+
+    /**
      * Update food menu in db
      * @param menu
      * @throws SQLException
@@ -28,6 +37,14 @@ public interface FoodMenuDAO {
      * @throws SQLException
      */
     void deleteFoodMenu(FoodMenu menu) throws SQLException;
+
+    /**
+     * Remove product from food menu in db
+     * @param product
+     * @param menu
+     * @throws SQLException
+     */
+    public void deleteProductFromFoodMenu(Product product, FoodMenu menu) throws SQLException;
 
     /**
      * Return food menu by date from db
