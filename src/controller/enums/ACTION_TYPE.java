@@ -3,7 +3,8 @@ package controller.enums;
 public enum ACTION_TYPE {
     INSERT("Vložit"),
     UPDATE("Aktualizovat"),
-    DELETE("Smazat");
+    DELETE("Smazat"),
+    DOWNLOAD("Stáhnout");
 
     private String value;
 
