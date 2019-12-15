@@ -280,4 +280,24 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.close();
         System.out.println("RemoveSubject");
     }
+
+    @Override
+    public List<Subject> getSubjectsForGroup(int id_skupina) throws SQLException {
+        List<Subject> subjects = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getPredmetyVeSkupine WHERE id_skupina = ?"
+        );
+        preparedStatement.setInt(1, id_skupina);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while(rs.next()) {
+            Subject subject = getSubject(rs);
+            subjects.add(subject);
+        }
+        preparedStatement.close();
+        System.out.println("GetSubjectsForGroup");
+        return subjects;
+    }
+
 }
