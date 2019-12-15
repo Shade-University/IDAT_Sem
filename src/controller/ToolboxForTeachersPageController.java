@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import model.*;
 
@@ -29,12 +26,16 @@ public class ToolboxForTeachersPageController implements Initializable {
     private SubjectDAO subjectDAO = new SubjectDAOImpl();
     private GroupDAO groupDAO = new GroupDAOImpl();
     private MessageDAO messageDAO = new MessageDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl();
     private Tab EditMessageTab = new Tab();
     private MainDashboardPageController mdpc;
     private User loggedUser;
+    private Group selectedGroup;
 
     @FXML
     private ListView<Message> lVGroupMessages;
+    @FXML
+    private ListView<User> lVMembersOfGroup;
     @FXML
     public ListView<Group> lVGroups;
     @FXML
@@ -47,6 +48,12 @@ public class ToolboxForTeachersPageController implements Initializable {
     private Label lblMessages;
     @FXML
     private Label lblGroups;
+    @FXML
+    private ComboBox<User> cbUsersToGroup;
+    @FXML
+    private Button btnAddUser;
+    @FXML
+    private Label labelMembers;
 
     void initData(User loggedUser, MainDashboardPageController mdpc) {
         this.loggedUser = loggedUser;
@@ -54,7 +61,12 @@ public class ToolboxForTeachersPageController implements Initializable {
         new Thread(() -> {
             try {
                 Collection<Subject> subjects = subjectDAO.getAllSubjectsByTeacher(loggedUser);
-                Platform.runLater(() -> lVMySubjects.setItems(FXCollections.observableArrayList(subjects)));
+                Collection<User> users = userDAO.getAllUsers();
+                Platform.runLater(() -> {
+                    lVMySubjects.setItems(FXCollections.observableArrayList(subjects));
+                    cbUsersToGroup.setItems(FXCollections.observableArrayList(users));
+                    cbUsersToGroup.getSelectionModel().selectFirst();
+                });
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -95,10 +107,23 @@ public class ToolboxForTeachersPageController implements Initializable {
         new Thread(() -> {
             try {
                 if (gp != null) {
+                    selectedGroup = gp;
+                    Collection<User> membersOfGroup = userDAO.getAllUsersFromGroup(gp);
                     Collection<Message> messages = messageDAO.getMessagesForGroupChat(gp);
-                    Platform.runLater(() -> lVGroupMessages.setItems(FXCollections.observableArrayList(messages)));
+                    Platform.runLater(() ->{
+                        lVGroupMessages.setItems(FXCollections.observableArrayList(messages));
+                        lVMembersOfGroup.setItems(FXCollections.observableArrayList(membersOfGroup));
+                        try{
+                            buttonLabel();
+                        }catch (Exception e){
+
+                        }
+                    });
                 } else {
-                    Platform.runLater(() -> lVGroupMessages.setItems(null));
+                    Platform.runLater(() -> {
+                        lVGroupMessages.setItems(null);
+                        lVMembersOfGroup.setItems(null);
+                    });
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -142,17 +167,49 @@ public class ToolboxForTeachersPageController implements Initializable {
                 if (!state) {
                     lblGroups.setText("Skupiny předmětu:");
                 } else {
-                    lblGroups.setText("Skupiny předmětu: (Načítání.)");
+                    lblGroups.setText("Skupiny předmětu: (Načítání...)");
                 }
                 break;
             case 2:
                 if (!state) {
                     lblMessages.setText("Komentáře ve skupině:");
+                    labelMembers.setText("Členové:");
                 } else {
-                    lblMessages.setText("Komentáře ve skupině: (Načítání.)");
+                    lblMessages.setText("Komentáře ve skupině: (Načítání...)");
+                    labelMembers.setText("Členové: (Načítání...)");
                 }
 
 
+        }
+    }
+
+    public void btnAddUserToGroup(ActionEvent event) {
+        try {
+            try {
+                if(lVMembersOfGroup.getItems().contains(cbUsersToGroup.getValue())){
+                    groupDAO.removeUserFromGroup(cbUsersToGroup.getValue(), selectedGroup);
+                } else {
+                    groupDAO.insertUserToGroup(cbUsersToGroup.getValue(), selectedGroup);
+                }
+                reloadMessagesByGroup(selectedGroup);
+            } catch (SQLException e){
+                AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void cbUsersToGroupChanged(ActionEvent event) throws SQLException {
+       buttonLabel();
+    }
+
+    private void buttonLabel(){
+        if(lVMembersOfGroup.getItems().contains(cbUsersToGroup.getValue())){
+            btnAddUser.setText("Odebrat uživatele");
+        } else {
+            btnAddUser.setText("Přidat uživatele");
         }
     }
 }

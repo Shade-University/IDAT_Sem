@@ -139,15 +139,23 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return id == message.id &&
-                rodic == message.rodic &&
-                nazev.equals(message.nazev) &&
-                obsah.equals(message.obsah) &&
-                datum_vytvoreni.equals(message.datum_vytvoreni) &&
-                odesilatel.equals(message.odesilatel) &&
-                prijemce_uzivatel.equals(message.prijemce_uzivatel) &&
-                prijemce_skupina.equals(message.prijemce_skupina) &&
-                soubor.equals(message.soubor);
+        if(message.prijemce_uzivatel !=null) {
+            return id == message.id &&
+                    rodic == message.rodic &&
+                    nazev.equals(message.nazev) &&
+                    obsah.equals(message.obsah) &&
+                    datum_vytvoreni.equals(message.datum_vytvoreni) &&
+                    odesilatel.equals(message.odesilatel) &&
+                    prijemce_uzivatel.equals(message.prijemce_uzivatel);
+        }else{
+            return id == message.id &&
+                    rodic == message.rodic &&
+                    nazev.equals(message.nazev) &&
+                    obsah.equals(message.obsah) &&
+                    datum_vytvoreni.equals(message.datum_vytvoreni) &&
+                    odesilatel.equals(message.odesilatel) &&
+                    prijemce_skupina.equals(message.prijemce_skupina);
+        }
     }
 
     @Override
