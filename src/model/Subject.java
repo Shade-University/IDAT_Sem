@@ -57,10 +57,7 @@ public class Subject {
             return false;
         }
         final Subject other = (Subject) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
+        return this.id == other.id;
     }
 
 

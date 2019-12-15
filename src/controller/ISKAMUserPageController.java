@@ -65,7 +65,7 @@ public class ISKAMUserPageController {
     }
 
     private void getBalance() throws SQLException {
-        lblBalance.setText(Float.toString(orderDAO.getAccountBalance(loggedUser)) + ",-");
+        lblBalance.setText(orderDAO.getAccountBalance(loggedUser) + ",-");
     }
 
     public void initData(User loggedUser) {
