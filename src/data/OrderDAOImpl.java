@@ -53,13 +53,17 @@ public class OrderDAOImpl implements OrderDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "UPDATE TRANSAKCE SET ID_UZIVATELE = ?, ID_PRODUKTU = ?, TYP_TRANSAKCE = ?, CASTKA = ?, DATUM = ?, POPIS = ? where ID_TRANSAKCE = ?"
         );
-        preparedStatement.setInt(2, order.getUser().getId());
-        preparedStatement.setInt(3, order.getProduct().getId());
-        preparedStatement.setString(4, order.getTypeOfTransaction().toString());
-        preparedStatement.setFloat(5, order.getPrice());
-        preparedStatement.setDate(6, order.getDate());
-        preparedStatement.setString(7, order.getDescription());
-        preparedStatement.setInt(1, order.getId());
+        preparedStatement.setInt(1, order.getUser().getId());
+        if(order.getProduct()!=null){
+            preparedStatement.setInt(2, order.getProduct().getId());
+        } else {
+            preparedStatement.setNull(2,0);
+        }
+        preparedStatement.setString(3, order.getTypeOfTransaction().toString());
+        preparedStatement.setFloat(4, order.getPrice());
+        preparedStatement.setDate(5, order.getDate());
+        preparedStatement.setString(6, order.getDescription());
+        preparedStatement.setInt(7, order.getId());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();

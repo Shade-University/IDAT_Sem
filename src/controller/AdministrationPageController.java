@@ -2,17 +2,23 @@ package controller;
 
 import data.*;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import model.*;
 
+import java.beans.EventHandler;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,6 +37,7 @@ public class AdministrationPageController implements Initializable {
     public StackPane stackPaneEditRating;
     public StackPane stackPaneEditMessage;
     public StackPane stackPaneEditFile;
+    public StackPane stackPaneISKAM;
 
     public ListView<File> listViewFile;
 
@@ -46,6 +53,8 @@ public class AdministrationPageController implements Initializable {
     private ListView<Rating> listViewRatings;
     @FXML
     private ListView<Message> listViewMessage;
+    @FXML
+    private Tab tabISKAM;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
@@ -122,6 +131,12 @@ public class AdministrationPageController implements Initializable {
             }
         });
 
+        /*============ISKAM============*/
+        try {
+            loadISKAM();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         /*============Files============*/
         listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
@@ -330,6 +345,20 @@ public class AdministrationPageController implements Initializable {
             toolbox.initDataFromAdministration(msg, this);
             stackPaneEditMessage.getChildren().clear();
             stackPaneEditMessage.getChildren().add(editMessagePane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //ISKAM - admin page
+    private void loadISKAM() throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ISKAMAdminPage.fxml"));
+            Parent iskam = loader.load();
+            ISKAMAdminPageController iskamAPC = loader.getController();
+            iskamAPC.initData();
+            stackPaneISKAM.getChildren().clear();
+            stackPaneISKAM.getChildren().add(iskam);
         } catch (IOException e) {
             e.printStackTrace();
         }

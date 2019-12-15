@@ -8,10 +8,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="468.0" prefWidth="808.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ISKAMAdminPageController">
+<AnchorPane prefHeight="468.0" prefWidth="808.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ISKAMAdminPageController">
    <children>
-      <TabPane layoutX="162.0" layoutY="49.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="495.0" layoutY="192.0" text="Čekejte prosím. Probíhá načítání modulu ISKAM" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <TabPane fx:id="iskamPage" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
           <Tab text="Transakce">
             <content>
@@ -175,9 +175,9 @@
                                     <Label text="Typ operace" GridPane.rowIndex="2" />
                                     <Button mnemonicParsing="false" onAction="#btnFExecuteClicked" prefHeight="25.0" prefWidth="334.0" text="Provést operaci" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
                                     <DatePicker fx:id="dPFDate" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                    <ComboBox fx:id="cBFProducts" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                    <ComboBox fx:id="cBFProducts" onAction="#cBFProductsChanged" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                                     <Button fx:id="btnFAddProduct" mnemonicParsing="false" onAction="#btnFAddProductClicked" prefHeight="25.0" prefWidth="97.0" text="Přidat produkt" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-                                    <ListView fx:id="lVProducts" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
+                                    <ListView fx:id="lVFProducts" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
                                     <Label text="Produkty" GridPane.rowIndex="4" />
                                  </children>
                                  <columnConstraints>

@@ -27,4 +27,9 @@ public class FoodMenu {
         this.id = id;
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return date.toString();
+    }
 }

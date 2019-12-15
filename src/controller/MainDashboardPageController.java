@@ -145,7 +145,10 @@ public class MainDashboardPageController implements Initializable {
 
     public void onAdministrationClicked(MouseEvent mouseEvent) {
         try {
-            administrationTab.setContent(FXMLLoader.load(getClass().getResource("/gui/AdministrationPage.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/AdministrationPage.fxml"));
+            Parent admin = loader.load();
+            AdministrationPageController adminPC = loader.getController();
+            administrationTab.setContent(admin);
             selectTab(administrationTab);
         } catch (IOException e) {
             e.printStackTrace();

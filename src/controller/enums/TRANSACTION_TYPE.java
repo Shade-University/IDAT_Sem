@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TRANSACTION_TYPE {
-    IN("Příchozí"),
-    OUT("Odchozí");
+    IN("Příjem"),
+    OUT("Výdaj");
 
     private String type;
 

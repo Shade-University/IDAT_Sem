@@ -91,7 +91,7 @@ public class ProductDAOImpl implements ProductDAO {
         preparedStatement.setFloat(6, product.getPrice());
         preparedStatement.setInt(1, product.getId());
 
-        preparedStatement.executeUpdate();
+        preparedStatement.executeQuery();
         preparedStatement.close();
         conn.commit();
         System.out.println("UpdateProduct");
@@ -127,7 +127,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     /**
-     * Parser ResultSetu na Produkt
+     * Parser ResultSetu to product
      *
      * @param rs
      * @return produkt

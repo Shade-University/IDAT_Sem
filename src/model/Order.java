@@ -86,13 +86,23 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return id == order.id &&
-                Float.compare(order.price, price) == 0 &&
-                user.equals(order.user) &&
-                product.equals(order.product) &&
-                typeOfTransaction == order.typeOfTransaction &&
-                date.equals(order.date) &&
-                description.equals(order.description);
+        if(product!=null){
+            return id == order.id &&
+                    Float.compare(order.price, price) == 0 &&
+                    user.equals(order.user) &&
+                    product.equals(order.product) &&
+                    typeOfTransaction == order.typeOfTransaction &&
+                    date.equals(order.date) &&
+                    description.equals(order.description);
+        } else {
+            return id == order.id &&
+                    Float.compare(order.price, price) == 0 &&
+                    user.equals(order.user) &&
+                    typeOfTransaction == order.typeOfTransaction &&
+                    date.equals(order.date) &&
+                    description.equals(order.description);
+        }
+
     }
 
     @Override

@@ -22,7 +22,7 @@
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                 <Tab text="Uživatelé">
                      <content>
@@ -257,27 +257,16 @@
                         </HBox>
                      </content>
                   </Tab>
-                  <Tab text="ISKAM">
+                  <Tab fx:id="tabISKAM" text="ISKAM">
                      <content>
-                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-                          <tabs>
-                            <Tab text="Transakce">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                              </content>
-                            </Tab>
-                              <Tab text="Produkty">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                </content>
-                              </Tab>
-                              <Tab text="Jídelní lístek">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                </content>
-                              </Tab>
-                          </tabs>
-                        </TabPane>
+                        <StackPane fx:id="stackPaneISKAM" style="-fx-background-color: #333645;">
+                           <children>
+                              <Label text="Probíhá načítání modulu. Počkejte prosím." textFill="WHITE">
+                                 <font>
+                                    <Font size="29.0" />
+                                 </font>
+                              </Label>
+                           </children></StackPane>
                      </content>
                   </Tab>
               </tabs>
