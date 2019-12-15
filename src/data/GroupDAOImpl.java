@@ -18,6 +18,8 @@ public class GroupDAOImpl implements GroupDAO {
 
     private Connection conn;
 
+    private final SubjectDAO subjectDAO = new SubjectDAOImpl();
+
     public GroupDAOImpl() {
         try {
             conn = OracleConnection.getConnection();
@@ -155,7 +157,7 @@ public class GroupDAOImpl implements GroupDAO {
                 rs.getInt("id_skupina"),
                 rs.getString("nazev_skupina"),
                 rs.getString("popis_skupina"),
-                new ArrayList<Subject>() //TODO SKUPINY
+                subjectDAO.getSubjectsForGroup(rs.getInt("id_skupina"))
         );
         return group;
     } //Metoda rozparsuje výsledek z getgroups a vytvoří skupinu
@@ -167,7 +169,7 @@ public class GroupDAOImpl implements GroupDAO {
                 rs.getString("nazev_skupina"),
                 rs.getString("popis_skupina"),
                 rs.getInt("pocet_skupina"),
-                new ArrayList<Subject>() //TODO SKUPINY
+                subjectDAO.getSubjectsForGroup(rs.getInt("id_skupina"))
         );
         return group;
     } //Metoda rozparsuje výsledek z getGroupWithUserQuantity

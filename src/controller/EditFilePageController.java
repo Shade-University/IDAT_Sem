@@ -12,9 +12,12 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import model.File;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -75,7 +78,7 @@ public class EditFilePageController implements Initializable {
             txtFieldTypeFile.setText(editedFile.getType());
             dateFileUploadedDate.setValue(convertToLocalDate(editedFile.getDate_created()));
             dateFileEditedDate.setValue(convertToLocalDate(editedFile.getDate_updated()));
-            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.UPDATE, ACTION_TYPE.DELETE));
+            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.UPDATE, ACTION_TYPE.DELETE, ACTION_TYPE.DOWNLOAD));
             actionTypeComboBox.getSelectionModel().select(0);
         } else {
             dateFileEditedDate.setValue(LocalDate.now());
@@ -113,6 +116,9 @@ public class EditFilePageController implements Initializable {
                     newFile.setId(editedFile.getId());
                     fileDAO.deleteFile(newFile);
                     break;
+                case DOWNLOAD:
+                    downloadFile(editedFile);
+                    break;
                 default:
                     break;
             }
@@ -120,5 +126,20 @@ public class EditFilePageController implements Initializable {
         } catch (SQLException ex) {
             lblError.setText("Soubor se nepovedlo aktualizovat.\n" + ex.getMessage());
         }
+    }
+
+    private void downloadFile(File editedFile) {
+        try {
+            Path directory = Paths.get("files");
+            if (Files.notExists(directory))
+                Files.createDirectory(directory);
+
+            Path path = Paths.get(directory + "/" + editedFile.getName() + editedFile.getExtension());
+            Files.write(path, editedFile.getData());
+            lblError.setText("Soubor uložen: " + path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

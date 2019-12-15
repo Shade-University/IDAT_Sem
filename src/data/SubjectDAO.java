@@ -133,4 +133,6 @@ public interface SubjectDAO {
      * @throws SQLException
      */
     void insertSubjectsToTeacher(List<Subject> subjects, Teacher teacher) throws SQLException;
+
+    List<Subject> getSubjectsForGroup(int id_skupina) throws SQLException;
 }
