@@ -1,6 +1,10 @@
 package controller;
 
-import data.*;
+import data.GroupDAO;
+import data.GroupDAOImpl;
+import data.UserDAO;
+import data.UserDAOImpl;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,12 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import model.*;
+import model.Group;
+import model.User;
 
-import javax.jws.soap.SOAPBinding;
-import javax.swing.*;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 
@@ -91,15 +95,20 @@ public class EditGroupPageController implements Initializable {
             btnInsert.setVisible(false);
             txtFieldGroupName.setText(editedGroup.getName());
             textAreaGroupDescription.setText(editedGroup.getDescription());
-            try {
-                usersInGroup = FXCollections.observableArrayList(userDAO.getAllUsersFromGroup(editedGroup));
-                comboBoxAddUserToGroup.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-                comboBoxAddUserToGroup.getSelectionModel().select(1);
-                selectionCBChangedAddUserToGroup(null);
-                listViewUsersInGroup.setItems(usersInGroup);
-            } catch (SQLException e) {
-                System.out.println(e.getStackTrace());
-            }
+            new Thread(() -> {
+                try {
+                    usersInGroup = FXCollections.observableArrayList(userDAO.getAllUsersFromGroup(editedGroup));
+                    Collection<User> users = userDAO.getAllUsers();
+                    Platform.runLater(() -> {
+                        comboBoxAddUserToGroup.setItems(FXCollections.observableArrayList(users));
+                        comboBoxAddUserToGroup.getSelectionModel().select(1);
+                        listViewUsersInGroup.setItems(usersInGroup);
+                        selectionCBChangedAddUserToGroup(null);
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         } else {
             transformToCreatePage();
         }

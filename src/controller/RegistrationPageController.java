@@ -1,5 +1,6 @@
 package controller;
 
+import controller.enums.USER_TYPE;
 import data.UserDAO;
 import data.UserDAOImpl;
 import javafx.collections.FXCollections;
@@ -9,7 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import controller.enums.USER_TYPE;
 import model.User;
 
 import java.net.URL;
@@ -35,7 +35,7 @@ public class RegistrationPageController implements Initializable {
     }
 
     public void btnRegisterClicked(ActionEvent actionEvent) {
-        if(!txtFieldPassword.getText().equals(txtFieldPasswordConfirm.getText()))
+        if (!txtFieldPassword.getText().equals(txtFieldPasswordConfirm.getText()))
             return;
 
         User newUser = new User(

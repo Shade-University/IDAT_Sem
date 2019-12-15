@@ -1,5 +1,9 @@
 package data;
 
+import model.Group;
+import model.Subject;
+import model.User;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Blob;
@@ -7,37 +11,100 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import javafx.scene.image.Image;
-import model.Group;
-import model.Subject;
-import model.User;
-
 /**
  * @author user
  */
 public interface UserDAO {
 
-    public Collection<User> getAllUsers() throws SQLException;
+    /**
+     * Get all users from db
+     * @return Collection of user
+     * @throws SQLException
+     */
+    Collection<User> getAllUsers() throws SQLException;
 
-    public Collection<User> getTeachers() throws SQLException;
+    /**
+     * Get all teachers from db
+     * @return Collection of user
+     * @throws SQLException
+     */
+    Collection<User> getTeachers() throws SQLException;
 
-    public Collection<User> getAllUsersFromGroup(Group skupina) throws SQLException;
+    /**
+     * Get all users in group
+     * @param group
+     * @return Collection of user
+     * @throws SQLException
+     */
+    Collection<User> getAllUsersFromGroup(Group group) throws SQLException;
 
-    public Collection<User> getTeachersBySubject(Subject subject) throws SQLException;
+    /**
+     * Get teachers by subject
+     * @param subject
+     * @return Collection of user
+     * @throws SQLException
+     */
+    Collection<User> getTeachersBySubject(Subject subject) throws SQLException;
 
-    public User getUserById(int userID) throws SQLException;
+    /**
+     * Get user by id
+     * @param userID
+     * @return User
+     * @throws SQLException
+     */
+    User getUserById(int userID) throws SQLException;
 
-    public User getUserByLogin(String email, String heslo) throws SQLException;
+    /**
+     * Get user by login
+     * @param email
+     * @param password
+     * @return User
+     * @throws SQLException
+     */
+    User getUserByLogin(String email, String password) throws SQLException;
 
-    public User getUser(ResultSet rs) throws SQLException;
+    /**
+     * Helper method to parse user from result set
+     * @param rs
+     * @return User
+     * @throws SQLException
+     */
+    User getUser(ResultSet rs) throws SQLException;
 
-    public void updateUser(User uzivatel) throws SQLException;
+    /**
+     * Update user in db
+     * @param user
+     * @throws SQLException
+     */
+    void updateUser(User user) throws SQLException;
 
-    public void insertUser(User uzivatel) throws SQLException;
+    /**
+     * Insert user to db
+     * @param user
+     * @throws SQLException
+     */
+    void insertUser(User user) throws SQLException;
 
-    public void deleteUser(User uzivatel) throws SQLException;
+    /**
+     * Delete user from db
+     * @param user
+     * @throws SQLException
+     */
+    void deleteUser(User user) throws SQLException;
 
-    public void updateAvatar(File image, User user) throws SQLException;
+    /**
+     * Update user avatar
+     * @param image
+     * @param user
+     * @throws SQLException
+     */
+    void updateAvatar(File image, User user) throws SQLException;
 
-    public BufferedImage readImage(Blob img) throws SQLException;
+    /**
+     * Read image from blob
+     * @param img
+     * @return BufferedImage
+     * @throws SQLException
+     */
+    BufferedImage readImage(Blob img) throws SQLException;
 }

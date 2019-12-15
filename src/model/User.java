@@ -6,6 +6,7 @@ import data.OracleConnection;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class User {
 
@@ -88,6 +89,11 @@ public class User {
 
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, password, lastName, email, userAvatar, dateCreated, userType);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -99,10 +105,7 @@ public class User {
             return false;
         }
         final User other = (User) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
+        return this.id == other.id;
     }
 
     @Override

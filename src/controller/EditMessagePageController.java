@@ -3,22 +3,18 @@ package controller;
 import controller.enums.RECIPIENT_TYPE;
 import data.*;
 import gui.AlertDialog;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import model.File;
 import model.Group;
 import model.Message;
 import model.User;
 
-import javax.jws.soap.SOAPBinding;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -96,58 +92,69 @@ public class EditMessagePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       // initPane();
+        // initPane();
     }
 
-    public void initDataFromToolBox(Message msg, Tab tab, MainDashboardPageController mdpc, ToolboxForTeachersPageController tftp){
+    public void initDataFromToolBox(Message msg, Tab tab, MainDashboardPageController mdpc, ToolboxForTeachersPageController tftp) {
         this.editedMessage = msg;
         this.tab = tab;
         this.mdpc = mdpc;
         this.tftp = tftp;
         calledFrom = false;
-        Thread t = new Thread(()-> {initPane();});
-        t.run();
+        initPane();
     }
 
-    public void initDataFromAdministration(Message msg, AdministrationPageController apc){
+    public void initDataFromAdministration(Message msg, AdministrationPageController apc) {
         this.editedMessage = msg;
         this.parent = apc;
         calledFrom = true;
-        Thread t = new Thread(()-> {initPane();});
-        t.run();
+        Thread t = new Thread(this::initPane);
+        t.start();
     }
 
-    private void initPane(){
-        try {
-            users = FXCollections.observableArrayList(userDAO.getAllUsers());
-            cBMessageParent.setItems(FXCollections.observableArrayList(messageDAO.getAllMessages()));
-            cBFile.setItems(FXCollections.observableArrayList(fileDAO.getAllFiles()));
-            cBSender.setItems(users);
-            cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
-            if (editedMessage != null) {
-                txtFieldMessageName.setText(editedMessage.getNazev());
-                textAreaMessageBody.setText(editedMessage.getObsah());
-                dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDatum_vytvoreni()));
-                cBSender.setValue(editedMessage.getOdesilatel());
-                if (editedMessage.getPrijemce_uzivatel() == null) {
-                    cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
-                    cBRecipientTypeChanged(null);
-                    cBRecipientUniversal.setValue(editedMessage.getPrijemce_skupina());
-                } else {
-                    cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
-                    cBRecipientTypeChanged(null);
-                    cBRecipientUniversal.setValue(editedMessage.getPrijemce_uzivatel());
-                }
-                cBFile.setValue(editedMessage.getSoubor());
-                cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getRodic()));
+    private void initPane() {
+        new Thread(() -> {
+            try {
+                users = FXCollections.observableArrayList(userDAO.getAllUsers());
+                Collection<Message> messages = messageDAO.getAllMessages();
+                Collection<File> files = fileDAO.getAllFiles();
+                Platform.runLater(() -> {
+                    cBMessageParent.setItems(FXCollections.observableArrayList(messages));
+                    cBFile.setItems(FXCollections.observableArrayList(files));
+                    cBSender.setItems(users);
+
+                    cBSender.setValue(editedMessage.getOdesilatel());
+                    cBFile.setValue(editedMessage.getSoubor());
+                    try {
+                        cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getRodic()));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
+        if (editedMessage != null) {
+            txtFieldMessageName.setText(editedMessage.getNazev());
+            textAreaMessageBody.setText(editedMessage.getObsah());
+            dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDatum_vytvoreni()));
+
+            if (editedMessage.getPrijemce_uzivatel() == null) {
+                cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
+                cBRecipientTypeChanged(null);
+                cBRecipientUniversal.setValue(editedMessage.getPrijemce_skupina());
             } else {
                 cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
                 cBRecipientTypeChanged(null);
-                btnDelete.setVisible(false);
-                btnSave.setText("Vytvořit");
+                cBRecipientUniversal.setValue(editedMessage.getPrijemce_uzivatel());
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
+            cBRecipientTypeChanged(null);
+            btnDelete.setVisible(false);
+            btnSave.setText("Vytvořit");
         }
     }
 
@@ -177,16 +184,16 @@ public class EditMessagePageController implements Initializable {
                 msg.setPrijemce_uzivatel((User) cBRecipientUniversal.getValue());
             }
             if (cBRecipientUniversal.getValue() != null) {
-                if(editedMessage!=null){
+                if (editedMessage != null) {
                     msg.setId(editedMessage.getId());
-                     messageDAO.updateMessage(msg);
+                    messageDAO.updateMessage(msg);
 
                 } else {
-                        messageDAO.insertMessage(msg);
+                    messageDAO.insertMessage(msg);
                 }
-                if(calledFrom){
+                if (calledFrom) {
                     exitPane();
-                }else{
+                } else {
                     exitTab();
                 }
             } else {
@@ -197,7 +204,7 @@ public class EditMessagePageController implements Initializable {
         }
     }
 
-    private void exitTab(){
+    private void exitTab() {
         mdpc.removeTab(tab);
         tftp.reloadMessagesByGroup(tftp.lVGroups.getSelectionModel().getSelectedItem());
     }
@@ -206,9 +213,9 @@ public class EditMessagePageController implements Initializable {
     void btnDeleteClicked(ActionEvent event) {
         try {
             messageDAO.deleteMessage(editedMessage);
-            if(calledFrom){
+            if (calledFrom) {
                 exitPane();
-            }else{
+            } else {
                 exitTab();
             }
         } catch (SQLException e) {
@@ -217,10 +224,18 @@ public class EditMessagePageController implements Initializable {
     }
 
     @FXML
-    void cBRecipientTypeChanged(ActionEvent event) throws SQLException {
-        cBRecipientUniversal.setItems(null);
+    void cBRecipientTypeChanged(ActionEvent event) {
+        cBRecipientUniversal.getItems().clear();
+
         if (cBRecipientType.getValue() == RECIPIENT_TYPE.SKUPINA) {
-            cBRecipientUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+            new Thread(() -> {
+                try {
+                    Collection<Group> groups = groupDAO.getAllGroups();
+                    Platform.runLater(() -> cBRecipientUniversal.setItems(FXCollections.observableArrayList(groups)));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         } else {
             cBRecipientUniversal.setItems(users);
         }

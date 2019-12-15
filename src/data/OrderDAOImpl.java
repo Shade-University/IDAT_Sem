@@ -1,10 +1,7 @@
 package data;
 
-import com.sun.deploy.security.ValidationState;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import controller.enums.TRANSACTION_TYPE;
 import model.Order;
-import model.Product;
 import model.User;
 
 import java.sql.*;
@@ -48,7 +45,7 @@ public class OrderDAOImpl implements OrderDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Order created!");
+        System.out.println("CreateOrder");
     }
 
     @Override
@@ -67,7 +64,7 @@ public class OrderDAOImpl implements OrderDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Order updated");
+        System.out.println("UpdateOrder");
 
     }
 
@@ -78,9 +75,10 @@ public class OrderDAOImpl implements OrderDAO {
         );
         preparedStatement.setInt(1, order.getId());
         preparedStatement.executeUpdate();
+
         preparedStatement.close();
         conn.commit();
-        System.out.println("Order deleted");
+        System.out.println("RemoveOrder");
     }
 
     @Override
@@ -94,7 +92,7 @@ public class OrderDAOImpl implements OrderDAO {
             collection.add(order);
         }
         statement.close();
-        conn.commit();
+        System.out.println("GetAllOrders");
         return collection;
     }
 
@@ -105,13 +103,14 @@ public class OrderDAOImpl implements OrderDAO {
                 "SELECT * FROM TRANSAKCE WHERE ID_UZIVATELE = ?"
         );
         preparedStatement.setInt(1, user.getId());
+
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Order order = getOrder(rs);
             collection.add(order);
         }
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getOrdersByUser");
         return collection;
     }
 
@@ -122,31 +121,34 @@ public class OrderDAOImpl implements OrderDAO {
                 "SELECT * FROM TRANSAKCE WHERE DATUM >= ?"
         );
         preparedStatement.setDate(1, date);
+
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Order order = getOrder(rs);
             collection.add(order);
         }
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getOrdersNewerThan");
         return collection;
     }
 
     @Override
-    public Collection<Order>  getTodayOrderByUser(User user, Date date) throws SQLException {
+    public Collection<Order> getTodayOrderByUser(User user, Date date) throws SQLException {
         Collection<Order> collection = new ArrayList<>();
+
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM TRANSAKCE WHERE to_char(DATUM, 'yyyy-mm-dd') = to_char(?, 'yyyy-mm-dd') AND ID_UZIVATELE = ?"
         );
         preparedStatement.setDate(1, date);
         preparedStatement.setInt(2, user.getId());
+
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Order order = getOrder(rs);
             collection.add(order);
         }
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getTodayOrderByUser");
         return collection;
     }
 
@@ -161,12 +163,13 @@ public class OrderDAOImpl implements OrderDAO {
                         "    ID_UZIVATELE = ?"
         );
         preparedStatement.setInt(1, user.getId());
+
         ResultSet rs = preparedStatement.executeQuery();
         Float balance = null;
         if (rs.next())
             balance = rs.getFloat("castka");
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getAccountBalance");
         return balance;
     }
 

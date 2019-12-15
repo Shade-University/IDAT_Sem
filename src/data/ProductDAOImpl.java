@@ -1,7 +1,8 @@
 package data;
 
-import controller.enums.*;
-import model.*;
+import controller.enums.TRANSACTION_TYPE;
+import model.FoodMenu;
+import model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ProductDAOImpl implements ProductDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Product inserted");
+        System.out.println("CreateProduct");
     }
 
     @Override
@@ -54,7 +55,7 @@ public class ProductDAOImpl implements ProductDAO {
             collection.add(product);
         }
         statement.close();
-        conn.commit();
+        System.out.println("GetAllProducts");
         return collection;
     }
 
@@ -67,15 +68,15 @@ public class ProductDAOImpl implements ProductDAO {
                         "left join LISTEK_PRODUKT LP on p.ID_PRODUKTU = LP.ID_PRODUKT" +
                         " where LP.ID_LISTEK = ? AND p.SKLADEM > 0");
         preparedStatement.setInt(1, menu.getId());
+
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Product product = getProduct(rs);
             collection.add(product);
         }
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getProductByFoodMenu");
         return collection;
-
     }
 
     @Override
@@ -93,7 +94,7 @@ public class ProductDAOImpl implements ProductDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Product updated");
+        System.out.println("UpdateProduct");
     }
 
     @Override
@@ -102,10 +103,11 @@ public class ProductDAOImpl implements ProductDAO {
                 "DELETE FROM PRODUKTY WHERE ID_PRODUKTU = ?"
         );
         preparedStatement.setInt(1, product.getId());
+
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Product deleted");
+        System.out.println("DeleteProduct");
     }
 
     @Override
@@ -113,15 +115,15 @@ public class ProductDAOImpl implements ProductDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM PRODUKTY WHERE ID_PRODUKTU = ? ");
         preparedStatement.setInt(1, id);
+
         ResultSet rs = preparedStatement.executeQuery();
-        if (rs.next()) {
-            Product product = getProduct(rs);
-            preparedStatement.close();
-            conn.commit();
-            return product;
-        }
+        Product product = null;
+        if (rs.next())
+            product = getProduct(rs);
+
+        System.out.println("getProductById");
         preparedStatement.close();
-        return null;
+        return product;
     }
 
     /**

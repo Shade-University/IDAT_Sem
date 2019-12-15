@@ -5,9 +5,6 @@ import data.GroupDAOImpl;
 import data.UserDAO;
 import data.UserDAOImpl;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -16,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
 import model.Group;
 import model.User;
 
@@ -30,6 +26,7 @@ public class GuestViewController implements Initializable {
 
     public TabPane tabPane;
     public TextField txtFieldSearch;
+
     private UserDAO userDAO = new UserDAOImpl();
     private GroupDAO groupDAO = new GroupDAOImpl();
 
@@ -71,7 +68,6 @@ public class GuestViewController implements Initializable {
             else
                 searchGroups(newValue);
         });
-        //txtFieldSearch.requestFocus();
     }
 
     private void prepareTableViewUsers() {

@@ -1,21 +1,15 @@
 package data;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import jdk.nashorn.internal.runtime.Debug;
 import model.Group;
 import model.Rating;
 import model.Subject;
 import model.User;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Tomáš Vondra
@@ -43,8 +37,10 @@ public class GroupDAOImpl implements GroupDAO {
         while (rs.next()) {
             Group group = getGroup(rs);
             collection.add(group);
-        } //Načte všechny existující skupin.
+        }
+
         statement.close();
+        System.out.println("GetAllGroups");
         return collection;
     }
 
@@ -58,8 +54,10 @@ public class GroupDAOImpl implements GroupDAO {
         while (rs.next()) {
             Group group = getGroupWithQuantity(rs);
             collection.add(group);
-        } //Načte všechny existující skupiny s počty členů.
+        }
+
         statement.close();
+        System.out.println("GetAllGroupsWithUserQuantity");
         return collection;
     }
 
@@ -67,45 +65,52 @@ public class GroupDAOImpl implements GroupDAO {
     public Collection<Group> getUserGroups(User user) throws SQLException {
         Collection<Group> collection = new ArrayList<>();
 
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM getSkupinyUzivatele WHERE UZIVATELE_ID_UZIVATEL = " + user.getId());
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getSkupinyUzivatele WHERE UZIVATELE_ID_UZIVATEL = ?"
+        );
+        preparedStatement.setInt(1, user.getId());
 
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Group group = getGroup(rs);
             collection.add(group);
-        } //Vybere všechny skupiny daného uživatele
-        statement.close();
+        }
+
+        preparedStatement.close();
+        System.out.println("GetUsersGroups");
         return collection;
     }
 
     @Override
     public Group getRatedGroup(Rating rt) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM getSkupinaPodleHodnoceni WHERE ID_hodnoceni = " + rt.getId());
-        ResultSet rs = preparedStatement.executeQuery();
+                "SELECT * FROM getSkupinaPodleHodnoceni WHERE ID_hodnoceni = ?");
+        preparedStatement.setInt(1, rt.getId());
 
+        ResultSet rs = preparedStatement.executeQuery();
         Group group = null;
         if (rs.next())
             group =  getGroup(rs);
 
         preparedStatement.close();
+        System.out.println("GetRatedGroup");
         return group;
     }
 
     @Override
     public Group getGroupById(int id) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM GETSKUPINY WHERE ID_SKUPINA = " + id);
-        ResultSet rs = preparedStatement.executeQuery();
+                "SELECT * FROM GETSKUPINY WHERE ID_SKUPINA = ?");
+        preparedStatement.setInt(1, id);
 
-        if (rs.next()) {
-            Group group = getGroup(rs);
-            preparedStatement.close();
-            return group;
-        }
+        ResultSet rs = preparedStatement.executeQuery();
+        Group group = null;
+        if (rs.next())
+            group = getGroup(rs);
+
         preparedStatement.close();
-        return null;
+        System.out.println("GetGroupById");
+        return group;
 
     }
 
@@ -113,15 +118,19 @@ public class GroupDAOImpl implements GroupDAO {
     public Collection<Group> getSubjectGroups(Subject subject) throws SQLException {
         Collection<Group> collection = new ArrayList<>();
 
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM getSkupinyPredmetu WHERE PREDMETY_ID_PREDMET = " + subject.getId());
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getSkupinyPredmetu WHERE PREDMETY_ID_PREDMET = ?"
+        );
+        preparedStatement.setInt(1, subject.getId());
 
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Group group = getGroup(rs);
             collection.add(group);
         }
-        statement.close();
+
+        preparedStatement.close();
+        System.out.println("getSubjectGroups");
         return collection;
     }
 
@@ -133,10 +142,11 @@ public class GroupDAOImpl implements GroupDAO {
         callableStatement.setInt(1, group.getId());
         callableStatement.setString(2, group.getName());
         callableStatement.setString(3, group.getDescription());
+
         callableStatement.executeUpdate();
         callableStatement.close();
         conn.commit();
-        System.out.println("Group updated!");
+        System.out.println("UpdateGroup");
     }
 
     @Override
@@ -174,7 +184,7 @@ public class GroupDAOImpl implements GroupDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         preparedStatement.close();
-        System.out.println("User added to group");
+        System.out.println("InsertUserToGroup");
     }
 
     @Override
@@ -184,10 +194,11 @@ public class GroupDAOImpl implements GroupDAO {
         );
         callableStatement.setInt(1, u.getId());
         callableStatement.setInt(2, s.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("User removed from group");
+        System.out.println("RemoveUserFromGroup");
     }
 
     @Override
@@ -197,10 +208,11 @@ public class GroupDAOImpl implements GroupDAO {
         );
         callableStatement.setString(1, group.getName());
         callableStatement.setString(2, group.getDescription());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Group added.");
+        System.out.println("InsertGroup");
     }
 
     @Override
@@ -208,12 +220,12 @@ public class GroupDAOImpl implements GroupDAO {
         CallableStatement callableStatement = conn.prepareCall(
                 "call delete_skupina(?)"
         );
-        System.out.println(group.getId());
         callableStatement.setInt(1, group.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Group deleted");
+        System.out.println("RemoveGroup");
     }
 
 }

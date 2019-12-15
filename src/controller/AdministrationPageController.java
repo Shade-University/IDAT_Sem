@@ -1,36 +1,23 @@
 package controller;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import data.*;
-import gui.AlertDialog;
-import gui.Main;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import model.*;
-
-import javax.activation.FileDataSource;
 
 /**
  * FXML Controller class
@@ -77,7 +64,7 @@ public class AdministrationPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         refreshAll();
-            /*============USERS============*/
+        /*============USERS============*/
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 EditUserController.setEditedUser(newValue);
@@ -88,45 +75,45 @@ public class AdministrationPageController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            });
+        });
 
-            /*============GROUPS============*/
-            listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    loadGroupPane(newValue);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        /*============GROUPS============*/
+        listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadGroupPane(newValue);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-            /*============FieldsOfStudy============*/
-            listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    loadFieldOfStudyPane(newValue);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        /*============FieldsOfStudy============*/
+        listViewFieldsOfStudy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadFieldOfStudyPane(newValue);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-            /*============Subjects============*/
-            listViewSubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    loadSubject(newValue);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        /*============Subjects============*/
+        listViewSubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadSubject(newValue);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-            /*============Rating============*/
-            listViewRatings.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    loadRating(newValue);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        /*============Rating============*/
+        listViewRatings.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadRating(newValue);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-            /*============Message============*/
+        /*============Message============*/
         listViewMessage.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 loadMessage(newValue);
@@ -135,7 +122,7 @@ public class AdministrationPageController implements Initializable {
             }
         });
 
-            /*============Files============*/
+        /*============Files============*/
         listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 EditFilePageController.setEditedFile(newValue);
@@ -158,6 +145,7 @@ public class AdministrationPageController implements Initializable {
         refreshRating();
         refreshMessage();
     }
+
     private void refreshUsers() {
         listViewUsers.getItems().clear();
         new Thread(() -> {
@@ -235,6 +223,7 @@ public class AdministrationPageController implements Initializable {
             }
         }).start();
     }
+
     public void refreshMessage() {
         listViewMessage.getItems().clear();
         new Thread(() -> {
@@ -258,6 +247,7 @@ public class AdministrationPageController implements Initializable {
         stackPaneEditUser.getChildren().clear();
         stackPaneEditUser.getChildren().add(parent);
     }
+
     public void onClickAddGroup(MouseEvent mouseEvent) {
         try {
             loadGroupPane(null);

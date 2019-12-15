@@ -1,19 +1,18 @@
 package data;
 
+import controller.enums.USER_TYPE;
+import model.*;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
 import java.io.File;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import controller.enums.USER_TYPE;
-import model.*;
-import model.Group;
-
-import javax.imageio.ImageIO;
 
 /**
  * @author Tomáš Vondra
@@ -21,6 +20,7 @@ import javax.imageio.ImageIO;
 public class UserDAOImpl implements UserDAO {
 
     private Connection conn;
+    private final SubjectDAO subjectDAO = new SubjectDAOImpl();
 
     public UserDAOImpl() {
         try {
@@ -32,10 +32,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Collection<User> getAllUsers() throws SQLException {
-
         Collection<User> collection = new ArrayList<>();
 
-        System.out.println();
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM getUzivatele");
@@ -45,6 +43,7 @@ public class UserDAOImpl implements UserDAO {
             collection.add(user);
         }
         statement.close();
+        System.out.println("GetAllUsers");
         return collection;
     }
 
@@ -55,17 +54,19 @@ public class UserDAOImpl implements UserDAO {
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM GETUCITELE");
+
         while (rs.next()) {
             User user = getUser(rs);
             collection.add(user);
         }
         statement.close();
+        System.out.println("GetTeachers");
+
         return collection;
     }
 
     @Override
     public User getUserByLogin(String email, String password) throws SQLException {
-
         //Hash password
         CallableStatement callableStatement = conn.prepareCall(
                 "{ ? = call fnc_zahashuj_uzivatele(?,?) }"
@@ -73,6 +74,7 @@ public class UserDAOImpl implements UserDAO {
         callableStatement.registerOutParameter(1, Types.VARCHAR);
         callableStatement.setString(2, email);
         callableStatement.setString(3, password);
+
         callableStatement.executeQuery();
         String hashedPassword = callableStatement.getString(1);
 
@@ -80,14 +82,15 @@ public class UserDAOImpl implements UserDAO {
                 "SELECT * FROM getUzivatele WHERE email=? AND heslo=?");
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, hashedPassword);
-        ResultSet rs = preparedStatement.executeQuery();
 
+        ResultSet rs = preparedStatement.executeQuery();
         User user = null;
         if (rs.next())
             user = getUser(rs);
 
         callableStatement.close();
         preparedStatement.close();
+        System.out.println("GetUserByLogin");
         return user;
     }
 
@@ -96,29 +99,32 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM getUzivatele WHERE ID_UZIVATEL = ?");
         preparedStatement.setInt(1, userID);
-        ResultSet rs = preparedStatement.executeQuery();
 
+        ResultSet rs = preparedStatement.executeQuery();
         User user = null;
         if (rs.next())
             user = getUser(rs);
         preparedStatement.close();
+        System.out.println("GetUserById");
         return user;
     }
 
     @Override
     public Collection<User> getAllUsersFromGroup(Group group) throws SQLException {
-
         Collection<User> collection = new ArrayList<>();
 
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM getUzivateleVeSkupine g WHERE g.id_skupina = " + group.getId());
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getUzivateleVeSkupine g WHERE g.id_skupina = ?"
+        );
+        preparedStatement.setInt(1, group.getId());
 
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
+        preparedStatement.close();
+        System.out.println("GetAllUsersFromGroup");
         return collection;
     }
 
@@ -126,15 +132,18 @@ public class UserDAOImpl implements UserDAO {
     public Collection<User> getTeachersBySubject(Subject subject) throws SQLException {
         Collection<User> collection = new ArrayList<>();
 
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM getUciteleSPredmetem g WHERE g.id_predmet = " + subject.getId());
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM getUciteleSPredmetem g WHERE g.id_predmet = ?"
+        );
+        preparedStatement.setInt(1, subject.getId());
 
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             User user = getUser(rs);
             collection.add(user);
         }
-        statement.close();
+        preparedStatement.close();
+        System.out.println("GetTeachersBySubject");
         return collection;
     }
 
@@ -173,7 +182,7 @@ public class UserDAOImpl implements UserDAO {
                 );
                 break;
             case TEACHER:
-                user = new Teacher(new ArrayList<>(),
+                user = new Teacher(getSubjects(rs.getInt("id_uzivatel")),
                         rs.getString("katedra"),
                         rs.getInt("id_uzivatel"),
                         rs.getString("jmeno"),
@@ -188,6 +197,29 @@ public class UserDAOImpl implements UserDAO {
         }
         return user;
     } //Metoda rozparsuje a vytvoří uživatele
+
+    private List<Subject> getSubjects(int id_uzivatel) {
+        List<Subject> collection = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT * FROM getVyucovanePredmety " +
+                            "where id_uzivatel = ?"
+            );
+            preparedStatement.setInt(1, id_uzivatel);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Subject subject = subjectDAO.getSubject(rs);
+                collection.add(subject);
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("getSubjects");
+        return collection;
+    }
 
     @Override
     public BufferedImage readImage(Blob img) throws SQLException {
@@ -222,14 +254,14 @@ public class UserDAOImpl implements UserDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         preparedStatement.close();
-        System.out.println("User updated");
+        System.out.println("UpdateUser");
     }
 
     @Override
     public void insertUser(User user) throws SQLException {
 
         if (user instanceof Teacher) {
-            //insertUcitel((Teacher) user);
+            insertUcitel((Teacher) user);
         } else if (user instanceof Student) {
             insertStudent((Student) user);
         } else {
@@ -242,25 +274,28 @@ public class UserDAOImpl implements UserDAO {
             user.setId(rs.getInt("id"));
         }
         statement.close();
+        System.out.println("InsertUser");
     }
 
-   /* private void insertUcitel(Teacher TEACHER) throws SQLException {
+    private void insertUcitel(Teacher teacher) throws SQLException {
         CallableStatement preparedStatement = conn.prepareCall(
                 "CALL insert_ucitel"
                         + "(?, ?, ?, ?, ?, ?, ?)"
         );
-        preparedStatement.setString(1, TEACHER.getFirstName());
-        preparedStatement.setString(2, TEACHER.getLastName());
-        preparedStatement.setString(3, TEACHER.getEmail());
-        preparedStatement.setString(4, TEACHER.getPassword());
-        preparedStatement.setDate(5, TEACHER.getDateCreated());
-        preparedStatement.setString(6, TEACHER.getInstitute());
-        preparedStatement.setInt(7, TEACHER.getVyucujici_Predmet().getId());
+        preparedStatement.setString(1, teacher.getFirstName());
+        preparedStatement.setString(2, teacher.getLastName());
+        preparedStatement.setString(3, teacher.getEmail());
+        preparedStatement.setString(4, teacher.getPassword());
+        preparedStatement.setDate(5, teacher.getDateCreated());
+        preparedStatement.setString(6, teacher.getInstitute());
 
         preparedStatement.execute();
         conn.commit();
+        preparedStatement.close();
+
+        subjectDAO.insertSubjectsToTeacher(teacher.getSubjects(), teacher);
         System.out.println("Teacher inserted");
-    } */
+    }
 
     private void insertStudent(Student student) throws SQLException {
         CallableStatement preparedStatement = conn.prepareCall(

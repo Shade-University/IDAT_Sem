@@ -1,22 +1,26 @@
 package controller;
 
-import data.*;
+import data.MessageDAO;
+import data.MessageDAOImpl;
+import data.UserDAO;
+import data.UserDAOImpl;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import model.Group;
 import model.Message;
 import model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ChatWindowPageController implements Initializable {
 
@@ -35,37 +39,44 @@ public class ChatWindowPageController implements Initializable {
 
     public void setChatGroup(Group group) {
         chattedGroup = group;
-        try {
-            Collection<User> users = userDao.getAllUsersFromGroup(group);
-            setChatUsers(new ArrayList<>(users));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            try {
+                Collection<User> users = userDao.getAllUsersFromGroup(group);
+                Platform.runLater(() -> setChatUsers(new ArrayList<>(users)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    private void refreshMessages(){
+    private void refreshMessages() {
         txtAreaMessages.clear();
-        Collection<Message> messages = new ArrayList<>();
 
-        if(chattedGroup != null) {
-            try {
-                messages = messageDAO.getMessagesForGroupChat(chattedGroup);
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+        new Thread(() -> {
+            Collection<Message> messages = new ArrayList<>();
+            if (chattedGroup != null) {
+                try {
+                    messages = messageDAO.getMessagesForGroupChat(chattedGroup);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    messages = messageDAO.getMessagesForChatBetween(MainDashboardPageController.getLoggedUser(), listViewUsers.getItems().get(0));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            try {
-                messages = messageDAO.getMessagesForChatBetween(MainDashboardPageController.getLoggedUser(), listViewUsers.getItems().get(0));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        for (Message m : messages) {
-            txtAreaMessages.appendText(createMessageFormat(m));
-        }
+            Collection<Message> finalMessages = messages;
+            Platform.runLater(() -> {
+                for (Message m : finalMessages) {
+                    txtAreaMessages.appendText(createMessageFormat(m));
+                }
+            });
+        }).start();
     }
+
     private String createMessageFormat(Message m) {
         return m.getDatum_vytvoreni().toString() + ":\t" + m.toString() + "\n";
     }
@@ -77,8 +88,8 @@ public class ChatWindowPageController implements Initializable {
 
     public void btnSendClicked(MouseEvent mouseEvent) {
         Message message = null;
-        if(chattedGroup == null) {
-             message = new Message(
+        if (chattedGroup == null) {
+            message = new Message(
                     "Uživatelská zpráva",
                     txtFieldNewMessage.getText(),
                     MainDashboardPageController.getLoggedUser(),

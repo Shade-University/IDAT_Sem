@@ -1,30 +1,80 @@
 package data;
 
+import model.Group;
+import model.Message;
+import model.User;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import model.Group;
-import model.User;
-import model.Message;
-
 public interface MessageDAO {
 
-    public void createMessage(Message message) throws SQLException;
+    /**
+     * Create message in db
+     * @param message
+     * @throws SQLException
+     */
+    void createMessage(Message message) throws SQLException;
 
-    public void insertMessage(Message message) throws SQLException;
+    /**
+     * Insert message to db
+     * @param message
+     * @throws SQLException
+     */
+    void insertMessage(Message message) throws SQLException;
 
-    public Collection<Message> getAllMessages() throws SQLException;
+    /**
+     * Update message in db
+     * @param message
+     * @throws SQLException
+     */
+    void updateMessage(Message message) throws SQLException;
 
-    public Message getMessageById(int id) throws SQLException;
+    /**
+     * Delete message from db
+     * @param message
+     * @throws SQLException
+     */
+    void deleteMessage(Message message) throws SQLException;
 
-    public Message getMessage(ResultSet rs) throws SQLException;
+    /**
+     * Get collection of all messages from db
+     * @return Collection of messages
+     * @throws SQLException
+     */
+    Collection<Message> getAllMessages() throws SQLException;
 
-    public void updateMessage(Message message) throws SQLException;
+    /**
+     * Get message by id
+     * @param id
+     * @return Message
+     * @throws SQLException
+     */
+    Message getMessageById(int id) throws SQLException;
 
-    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) throws SQLException;
+    /**
+     * Helper method to parse message from result set
+     * @param rs
+     * @return Message
+     * @throws SQLException
+     */
+    Message getMessage(ResultSet rs) throws SQLException;
 
-    public Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException;
+    /**
+     * Get messages between two users
+     * @param user1
+     * @param user2
+     * @return Collection of messages
+     * @throws SQLException
+     */
+    Collection<Message> getMessagesForChatBetween(User user1, User user2) throws SQLException;
 
-    public void deleteMessage(Message message) throws SQLException;
+    /**
+     * Get messages in group
+     * @param skupina
+     * @return Collection of messages
+     * @throws SQLException
+     */
+    Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException;
 }
