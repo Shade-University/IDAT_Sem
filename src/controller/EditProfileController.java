@@ -4,6 +4,7 @@ import controller.enums.INSTITUTE;
 import controller.enums.USER_TYPE;
 import controller.enums.YEAR_STUDY;
 import data.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import model.*;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class EditProfileController implements Initializable {
@@ -38,28 +40,28 @@ public class EditProfileController implements Initializable {
     private ComboBox<INSTITUTE> instituteComboBox = new ComboBox<>();
     private ListView<Subject> subjectListView = new ListView<>();
 
-    public static void setEditedUser(User user) {editedUser = user;}
-    public static User getEditedUser() {return editedUser;}
+    public static void setEditedUser(User user) {
+        editedUser = user;
+    }
+
+    public static User getEditedUser() {
+        return editedUser;
+    }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initData();
 
-        if(editedUser instanceof Student) {
-            try {
-                initStudent();
-            } catch (SQLException e){
-                System.out.println(e);
-            }
-        }
-        else if(editedUser instanceof Teacher) {
+        if (editedUser instanceof Student) {
+            initStudent();
+        } else if (editedUser instanceof Teacher) {
             initTeacher();
         }
     }
 
     private void initData() {
-        if(editedUser != null ) {
+        if (editedUser != null) {
             txtFieldFirstName.setText(editedUser.getFirstName());
             txtFieldLastName.setText(editedUser.getLastName());
             txtFieldEmail.setText(editedUser.getEmail());
@@ -73,35 +75,46 @@ public class EditProfileController implements Initializable {
 
         subjectListView.setPrefHeight(200);
         subjectListView.setPrefWidth(200);
-        ObservableList<Subject> allSubjects = null;
-        try {
-            allSubjects = FXCollections.observableArrayList(subjectDAO.getAllSubjects());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        subjectListView.setItems(allSubjects);
+        new Thread(() -> {
+            try {
+                Collection<Subject> allSubjects = subjectDAO.getAllSubjects();
+                Platform.runLater(() -> subjectListView.setItems(FXCollections.observableArrayList(allSubjects)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
         subjectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        gridPane.add(instituteComboBox,2, 6);
-        gridPane.add(subjectListView,5, 0, 1,7);
+        gridPane.add(instituteComboBox, 2, 6);
+        gridPane.add(subjectListView, 5, 0, 1, 7);
     }
 
-    private void initStudent() throws SQLException {
-        ObservableList<Field> allFields = FXCollections.observableArrayList(fieldOfStudyDAO.getAllFields());
-        fieldComboBox.setItems(allFields);
-        fieldComboBox.getSelectionModel().select(0);
+    private void initStudent() {
+        new Thread(() -> {
+            try {
+                Collection<Field> allFields = fieldOfStudyDAO.getAllFields();
+                Platform.runLater(() -> {
+                    fieldComboBox.setItems(FXCollections.observableArrayList(allFields));
+                    fieldComboBox.getSelectionModel().select(0);
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
         ObservableList<YEAR_STUDY> year_studies = FXCollections.observableArrayList(YEAR_STUDY.values());
         yearStudyComboBox.setItems(year_studies);
         yearStudyComboBox.getSelectionModel().select(0);
 
-        gridPane.add(fieldComboBox,2,6);
-        gridPane.add(yearStudyComboBox,0,6);
+        gridPane.add(fieldComboBox, 2, 6);
+        gridPane.add(yearStudyComboBox, 0, 6);
     }
 
 
     public void btnUpdateClicked(ActionEvent actionEvent) {
         User updateUser = null;
-        if(editedUser instanceof Student){
+        if (editedUser instanceof Student) {
             updateUser = new Student(
                     fieldComboBox.getValue(),
                     yearStudyComboBox.getValue().getValue(),
@@ -111,8 +124,7 @@ public class EditProfileController implements Initializable {
                     txtFieldPassword.getText(),
                     editedUser.getUserAvatar()
             );
-        }
-        else if(editedUser instanceof Teacher){
+        } else if (editedUser instanceof Teacher) {
             updateUser = new Teacher(
                     subjectListView.getSelectionModel().getSelectedItems(),
                     instituteComboBox.getValue().getValue(),
@@ -122,8 +134,7 @@ public class EditProfileController implements Initializable {
                     txtFieldPassword.getText(),
                     editedUser.getUserAvatar()
             );
-        }
-        else {
+        } else {
             updateUser = new User(
                     txtFieldFirstName.getText(),
                     txtFieldLastName.getText(),

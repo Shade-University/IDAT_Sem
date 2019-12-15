@@ -410,7 +410,7 @@ begin
                    '2. roèník', 1);
 end;
 begin
-    INSERT_UCITEL('ucitel', 'ucitel', 'ucitel', 'ucitel', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'),
+    insert_ucitel('ucitel', 'ucitel', 'ucitel', 'ucitel', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'),
                   'FEI');
 end;
 
@@ -640,6 +640,22 @@ begin
     INSERT_PREDMET_UCITEL(15, 18);
     INSERT_PREDMET_UCITEL(15, 19);
     INSERT_PREDMET_UCITEL(15, 20);
+end;
+
+/*OBOR_PREDMET*/
+
+begin
+    INSERT_OBOR_PREDMET(1,1);
+    INSERT_OBOR_PREDMET(1,2);
+    INSERT_OBOR_PREDMET(1,3);
+    INSERT_OBOR_PREDMET(1,4);
+    INSERT_OBOR_PREDMET(1,5);
+    INSERT_OBOR_PREDMET(1,6);
+    INSERT_OBOR_PREDMET(2,7);
+    INSERT_OBOR_PREDMET(2,8);
+    INSERT_OBOR_PREDMET(2,9);
+    INSERT_OBOR_PREDMET(2,10);
+    INSERT_OBOR_PREDMET(2,11);
 end;
 
 

@@ -5,6 +5,7 @@ import controller.enums.INSTITUTE;
 import controller.enums.USER_TYPE;
 import controller.enums.YEAR_STUDY;
 import data.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import model.*;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 
@@ -27,17 +29,9 @@ public class EditUserController implements Initializable {
     public TextField txtFieldLastName;
     public TextField txtFieldFirstName;
     public GridPane gridPane;
-    public ListView<User> listViewUsers;
-
-
-    private static User editedUser;
     public ComboBox<ACTION_TYPE> actionTypeComboBox;
 
-    private ComboBox<Field> fieldComboBox = new ComboBox<>();
-    private ComboBox<YEAR_STUDY> yearStudyComboBox = new ComboBox<>();
-
-    private ComboBox<INSTITUTE> instituteComboBox = new ComboBox<>();
-    private ListView<Subject> subjectListView = new ListView<>();
+    private static User editedUser;
 
     public static void setEditedUser(User user) {
         editedUser = user;
@@ -46,6 +40,12 @@ public class EditUserController implements Initializable {
     public static User getEditedUser() {
         return editedUser;
     }
+
+    private ComboBox<Field> fieldComboBox = new ComboBox<>();
+    private ComboBox<YEAR_STUDY> yearStudyComboBox = new ComboBox<>();
+
+    private ComboBox<INSTITUTE> instituteComboBox = new ComboBox<>();
+    private ListView<Subject> subjectListView = new ListView<>();
 
     private final FieldOfStudyDAO fieldOfStudyDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
@@ -123,32 +123,32 @@ public class EditUserController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initData();
-
-        if (editedUser instanceof Student) {
-            try {
+        try {
+            if (editedUser instanceof Student) {
                 initStudent();
-            } catch (SQLException e)
-            {
-                System.out.println(e);
+            } else if (editedUser instanceof Teacher) {
+                initTeacher();
             }
-        } else if (editedUser instanceof Teacher) {
-            initTeacher();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    private void initTeacher() {
+    private void initTeacher() throws SQLException {
         instituteComboBox.setItems(FXCollections.observableArrayList(INSTITUTE.values()));
         instituteComboBox.getSelectionModel().select(0);
 
         subjectListView.setPrefHeight(200);
         subjectListView.setPrefWidth(200);
-        ObservableList<Subject> allSubjects = null;
-        try {
-            allSubjects = FXCollections.observableArrayList(subjectDAO.getAllSubjects());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        subjectListView.setItems(allSubjects);
+        new Thread(() -> {
+            try {
+                Collection<Subject> allSubjects = subjectDAO.getAllSubjects();
+                Platform.runLater(() -> subjectListView.setItems(FXCollections.observableArrayList(allSubjects)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
         subjectListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         gridPane.add(instituteComboBox, 2, 6);
@@ -156,8 +156,14 @@ public class EditUserController implements Initializable {
     }
 
     private void initStudent() throws SQLException {
-        ObservableList<Field> allFields = FXCollections.observableArrayList(fieldOfStudyDAO.getAllFields());
-        fieldComboBox.setItems(allFields);
+        new Thread(() -> {
+            try {
+                Collection<Field> allFields = fieldOfStudyDAO.getAllFields();
+                Platform.runLater(() -> fieldComboBox.setItems(FXCollections.observableArrayList(allFields)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
         fieldComboBox.getSelectionModel().select(0);
         ObservableList<YEAR_STUDY> year_studies = FXCollections.observableArrayList(YEAR_STUDY.values());
         yearStudyComboBox.setItems(year_studies);

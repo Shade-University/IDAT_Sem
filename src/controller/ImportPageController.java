@@ -6,27 +6,28 @@ import data.FieldOfStudyDAOImpl;
 import data.SubjectDAO;
 import data.SubjectDAOImpl;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.Field;
 import model.Subject;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ImportPageController implements Initializable {
     public TextArea txtAreaLog;
@@ -87,10 +88,12 @@ public class ImportPageController implements Initializable {
 
         JSONObject json = getJsonFromWebPage(txtFieldImport.getText());
 
-        if (comboBoxImport.getValue() == IMPORT_OPTION.SUBJECTS)
-            importSubjects(json);
-        else
-            importFields(json);
+        new Thread(() -> {
+            if (comboBoxImport.getValue() == IMPORT_OPTION.SUBJECTS)
+                importSubjects(json);
+            else
+                importFields(json);
+        }).start();
     }
 
 

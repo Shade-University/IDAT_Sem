@@ -14,11 +14,11 @@ public class Subject {
         this.id = id;
         this.name = name;
         this.description = description;
-    }
+    } //Konstruktor pro načítání
 
     public Subject(String name, String description) {
         this(-1, name, description);
-    }
+    } //Konstruktor pro vytváření
 
     public int getId() {
         return id;

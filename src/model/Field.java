@@ -61,7 +61,6 @@ public class Field {
 
     @Override
     public String toString() {
-        //return getName();
         return getNazev();
     }
 

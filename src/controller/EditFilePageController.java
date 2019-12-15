@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import model.File;
-import sun.nio.ch.IOUtil;
 
 import java.io.IOException;
 import java.net.URL;
@@ -118,7 +117,7 @@ public class EditFilePageController implements Initializable {
                     break;
             }
             lblError.setText("Soubor se povedlo aktualizovat.");
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             lblError.setText("Soubor se nepovedlo aktualizovat.\n" + ex.getMessage());
         }
     }

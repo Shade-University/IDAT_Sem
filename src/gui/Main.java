@@ -1,15 +1,16 @@
 package gui;
 
 import data.OracleConnection;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
 
 /**
  *
@@ -32,7 +33,7 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Nelze se připojit k databázi");
             alert.showAndWait();
             return;
-        } //Pravděpodobně bysme měli vyhazovat vyjímky při vytváření DAO, ale tam jsem nechal jen zalogování
+        }
         primaryStage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
         Scene scene = new Scene(root);

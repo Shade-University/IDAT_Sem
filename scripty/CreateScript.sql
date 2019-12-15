@@ -572,17 +572,6 @@ BEGIN
 END;
 /
 /*=======Pohledy=====*/
-CREATE OR REPLACE VIEW getObory AS
-SELECT o.id_obor    "id_obor",
-       o.nazev      "nazev_obor",
-       o.popis      "popis_obor",
-       p.id_predmet "id_predmet",
-       p.nazev      "nazev_predmet",
-       p.popis      "popis_predmet"
-from OBOR_PREDMET ob
-         JOIN STUDIJNI_OBORY o ON o.id_obor = ob.studijni_obor_id_obor
-         JOIN PREDMETY p on ob.predmet_id_predmet = p.id_predmet;
-
 CREATE OR REPLACE VIEW getOborySPredmetem AS
 SELECT o.id_obor,
        o.nazev,

@@ -1,10 +1,11 @@
 package data;
 
+import model.Group;
+import model.Rating;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import model.Rating;
-import model.Group;
 
 /**
  *
@@ -12,15 +13,47 @@ import model.Group;
  */
 public interface RatingDAO {
 
-    public Collection<Rating> getAllRatings() throws SQLException;
+    /**
+     * Get all ratings from db
+     * @return Collection of rating
+     * @throws SQLException
+     */
+    Collection<Rating> getAllRatings() throws SQLException;
 
-    public void createRating(Rating hodnoceni) throws SQLException;
+    /**
+     * Create rating in db
+     * @param rating
+     * @throws SQLException
+     */
+    void createRating(Rating rating) throws SQLException;
 
-    public void updateRating(Rating hodnoceni) throws SQLException;
+    /**
+     * Update rating in db
+     * @param rating
+     * @throws SQLException
+     */
+    void updateRating(Rating rating) throws SQLException;
 
-    public double getAverageRating(Group skupina) throws SQLException;
+    /**
+     * Return average rating for group
+     * @param group
+     * @return double
+     * @throws SQLException
+     */
+    double getAverageRating(Group group) throws SQLException;
 
-    public Rating getRating(ResultSet rs) throws SQLException;
+    /**
+     * Helper method for parse rating from result set
+     * @param rs
+     * @return Rating
+     * @throws SQLException
+     */
+    Rating getRating(ResultSet rs) throws SQLException;
 
-    public void deleteRating(Rating rt) throws SQLException;
+    /**
+     * Delete rating from db
+     * @param rt
+     * @throws SQLException
+     */
+    void deleteRating(Rating rt) throws SQLException;
 }

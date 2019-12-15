@@ -1,13 +1,13 @@
 package data;
 
+import model.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import model.*;
 
 /**
  *
@@ -33,10 +33,11 @@ public class SubjectDAOImpl implements SubjectDAO {
                 "SELECT * FROM PREDMETY");
 
         while (rs.next()) {
-            Subject predmet = getPredmet(rs);
+            Subject predmet = getSubject(rs);
             collection.add(predmet);
         }
         statement.close();
+        System.out.println("GetAllSubjects");
         return collection;
     }
 
@@ -49,40 +50,64 @@ public class SubjectDAOImpl implements SubjectDAO {
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
-            Subject predmet = getPredmet(rs);
+            Subject predmet = getSubject(rs);
             collection.add(predmet);
         }
         preparedStatement.close();
+        System.out.println("GetAllSubjectsByTeacher");
         return collection;
     }
 
     @Override
-    public Collection<Subject> getSubjectsForField(Field obor) throws SQLException {
+    public Collection<Subject> getSubjectsForField(Field field) throws SQLException {
         Collection<Subject> collection = new ArrayList<>();
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM OBOR_PREDMET op\n"
                         + "JOIN PREDMETY p ON p.id_predmet = op.predmet_id_predmet\n"
                         + "WHERE op.studijni_obor_id_obor = ?"
         );
-        preparedStatement.setInt(1, obor.getId());
+        preparedStatement.setInt(1, field.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
-            Subject p = getPredmet(rs);
+            Subject p = getSubject(rs);
             collection.add(p);
         }
         preparedStatement.close();
+        System.out.println("GetSujectsForField");
         return collection;
     }
 
-    private Subject getPredmet(ResultSet rs) throws SQLException {
-        Subject predmet = new Subject(
+    public Subject getSubject(ResultSet rs) throws SQLException {
+        Subject subject = new Subject(
                 rs.getInt("id_predmet"),
                 rs.getString("nazev"),
                 rs.getString("popis")
         );
 
-        return predmet;
+        return subject;
+    }
+
+    @Override
+    public void insertSubjectsToTeacher(List<Subject> subjects, Teacher teacher) throws SQLException {
+        try {
+
+            for (Subject subject : subjects) {
+                PreparedStatement preparedStatement = conn.prepareStatement(
+                        "INSERT INTO UCITELE_PREDMETY(ucitele_id_ucitel, predmet_id_predmet)"
+                                + "VALUES (?, ?)"
+                );
+                preparedStatement.setInt(1, teacher.getId());
+                preparedStatement.setInt(2, subject.getId());
+
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+                conn.commit();
+                System.out.println("insertSubjectsToTeacher");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -95,25 +120,25 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.executeQuery();
         callableStatement.close();
         conn.commit();
-        System.out.println("Subject created.");
+        System.out.println("InsertSubject");
     }
 
     @Override
-    public void insertSubjectsToField(List<Subject> predmety, Field obor) {
+    public void insertSubjectToField(List<Subject> subjects, Field field) {
         try {
 
-            for (int i = 0; i < predmety.size(); i++) {
+            for (Subject subject : subjects) {
                 PreparedStatement preparedStatement = conn.prepareStatement(
                         "INSERT INTO OBOR_PREDMET(studijni_obor_id_obor, predmet_id_predmet)"
-                        + "VALUES (?, ?)"
+                                + "VALUES (?, ?)"
                 );
-                preparedStatement.setInt(1, obor.getId());
-                preparedStatement.setInt(2, predmety.get(i).getId());
+                preparedStatement.setInt(1, field.getId());
+                preparedStatement.setInt(2, subject.getId());
 
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
                 conn.commit();
-                System.out.println("Subject added to field");
+                System.out.println("InsertSubjectsToField");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,16 +146,17 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public void insertSubjectsToField(Subject subject, Field fieldOfStudy) throws SQLException {
+    public void insertSubjectToField(Subject subject, Field fieldOfStudy) throws SQLException {
         CallableStatement callableStatement = conn.prepareCall(
                 "call insert_obor_predmet(?,?)"
         );
         callableStatement.setInt(1, fieldOfStudy.getId());
         callableStatement.setInt(2, subject.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject added to Field");
+        System.out.println("InsertSubjectsToField");
     }
 
     @Override
@@ -140,10 +166,11 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, teacher.getId());
         callableStatement.setInt(2, subject.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Teacher added to subject");
+        System.out.println("InsertTeacherToSubject");
     }
 
     @Override
@@ -153,10 +180,11 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, group.getId());
         callableStatement.setInt(2, subject.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject added to group.");
+        System.out.println("insertSubjectToGroup");
     }
 
     @Override
@@ -167,31 +195,31 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setInt(1, subject.getId());
         callableStatement.setString(2, subject.getName());
         callableStatement.setString(3, subject.getDescription());
+
         callableStatement.executeUpdate();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject updated!");
+        System.out.println("UpdateSubject");
     }
 
     @Override
-    public void removeSubjectsFromField(List<Subject> predmety, Field obor) {
+    public void removeSubjectsFromField(List<Subject> subjects, Field field) {
         try {
 
-            for (int i = 0; i < predmety.size(); i++) {
+            for (Subject subject : subjects) {
                 PreparedStatement preparedStatement = conn.prepareStatement(
                         "DELETE FROM OBOR_PREDMET "
                                 + "WHERE predmet_id_predmet = ? AND "
                                 + "studijni_obor_id_obor = ?"
                 );
-                preparedStatement.setInt(1, predmety.get(i).getId());
-                preparedStatement.setInt(2, obor.getId());
-                preparedStatement.setInt(1, predmety.get(i).getId());
-                
-                
+                preparedStatement.setInt(1, subject.getId());
+                preparedStatement.setInt(2, field.getId());
+                preparedStatement.setInt(1, subject.getId());
+
                 preparedStatement.executeQuery();
                 conn.commit();
                 preparedStatement.close();
-                System.out.println("Subject deleted from field");
+                System.out.println("RemoveSujectsFromField");
             }
         } catch (SQLException ex) {
             Logger.getLogger(SubjectDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,10 +233,11 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, fieldOfStudy.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject removed from field of study.");
+        System.out.println("RemoveSubjectsFromField");
     }
 
     @Override
@@ -218,10 +247,11 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, teacher.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject removed from field of study.");
+        System.out.println("RemoveTeacherFromSubject");
     }
 
     @Override
@@ -231,10 +261,11 @@ public class SubjectDAOImpl implements SubjectDAO {
         );
         callableStatement.setInt(1, subject.getId());
         callableStatement.setInt(2, group.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject removed from field of study.");
+        System.out.println("RemoveSubjectFromGroup");
     }
 
     @Override
@@ -243,9 +274,10 @@ public class SubjectDAOImpl implements SubjectDAO {
                 "call delete_predmet(?)"
         );
         callableStatement.setInt(1, subject.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Subject deleted!");
+        System.out.println("RemoveSubject");
     }
 }

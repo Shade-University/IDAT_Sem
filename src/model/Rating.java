@@ -12,7 +12,7 @@ public class Rating {
     
     public Rating(int hodnota_hodnoceni, String popis, User hodnotici_Uzivatel, Group hodnocena_skupina) {
         this(-1, hodnota_hodnoceni, popis, hodnotici_Uzivatel, hodnocena_skupina);
-    }
+    } //Konstruktor pro vytváření
 
     public Rating(int id, int hodnota_hodnoceni, String popis, User hodnotici_Uzivatel, Group hodnocena_skupina) {
         this.id = id;
@@ -20,7 +20,7 @@ public class Rating {
         this.popis = popis;
         this.hodnoticiUzivatel = hodnotici_Uzivatel;
         this.hodnoticiSkupina = hodnocena_skupina;
-    }
+    } //Konstruktor pro načítání
 
     public int getId() {
         return id;

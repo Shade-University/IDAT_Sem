@@ -1,22 +1,46 @@
 package data;
 
 import model.FoodMenu;
-import model.Product;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Collection;
 
 public interface FoodMenuDAO {
 
-    public void createFoodMenu(FoodMenu menu) throws SQLException;
+    /**
+     * Create food menu in db
+     * @param menu
+     * @throws SQLException
+     */
+    void createFoodMenu(FoodMenu menu) throws SQLException;
 
-    public void updateFoodMenu(FoodMenu menu) throws SQLException;
+    /**
+     * Update food menu in db
+     * @param menu
+     * @throws SQLException
+     */
+    void updateFoodMenu(FoodMenu menu) throws SQLException;
 
-    public void deleteFoodMenu(FoodMenu menu) throws SQLException;
+    /**
+     * Delete food menu from db
+     * @param menu
+     * @throws SQLException
+     */
+    void deleteFoodMenu(FoodMenu menu) throws SQLException;
 
-    public FoodMenu getFoodMenuByDate(Date date) throws SQLException;
+    /**
+     * Return food menu by date from db
+     * @param date
+     * @return FoodMenu
+     * @throws SQLException
+     */
+    FoodMenu getFoodMenuByDate(Date date) throws SQLException;
 
-    public Collection<FoodMenu> getAllFoodMenu() throws SQLException;
+    /**
+     * Return all food menus from db
+     * @return Collection of food menu
+     * @throws SQLException
+     */
+    Collection<FoodMenu> getAllFoodMenu() throws SQLException;
 }

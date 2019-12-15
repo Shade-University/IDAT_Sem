@@ -18,7 +18,7 @@ public class MainPageController implements Initializable {
     public StackPane mainStackPane;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb)  {
+    public void initialize(URL url, ResourceBundle rb) {
         onHomeClicked(null);
     }
 
@@ -51,14 +51,11 @@ public class MainPageController implements Initializable {
     }
 
     private void switchMainPaneScene(String fxmlLocation) {
-        try
-        {
+        try {
             Parent parent = FXMLLoader.load(getClass().getResource(fxmlLocation));
             mainStackPane.getChildren().clear();
             mainStackPane.getChildren().add(parent);
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 

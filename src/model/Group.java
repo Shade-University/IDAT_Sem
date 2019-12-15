@@ -16,14 +16,14 @@ public class Group {
 
     public Group(String name, String description, List<Subject> subjects) {
         this(-1, name, description, subjects);
-    }
+    } //Konstruktor pro vytváření
 
     public Group(int id, String name, String description, List<Subject> subjects) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.subjects = subjects;
-    }
+    } //Konsturktor pro načítání s kvantitou
 
     public Group(int id, String name, String description, int quantity, List<Subject> subjects) {
         this.id = id;
@@ -31,7 +31,7 @@ public class Group {
         this.description = description;
         this.quantity = quantity;
         this.subjects = subjects;
-    }
+    } //Konstruktor pro načítání
 
     public int getId() {
         return id;

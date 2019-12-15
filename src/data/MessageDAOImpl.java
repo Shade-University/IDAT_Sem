@@ -1,15 +1,14 @@
 package data;
 
+import model.Group;
+import model.Message;
+import model.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import model.File;
-import model.Group;
-import model.User;
-import model.Message;
 
 /**
  * @author Tomáš Vondra
@@ -31,25 +30,25 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     public Message getMessageById(int id) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM ZPRAVY WHERE ID_ZPRAVA=" + id);
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM ZPRAVY WHERE ID_ZPRAVA= ?"
+        );
+        preparedStatement.setInt(1, id);
 
-        while (rs.next()) {
-            Message ms = getMessage(rs);
-            statement.close();
-            conn.commit();
-            return ms;
-        }
-        statement.close();
+        ResultSet rs = preparedStatement.executeQuery();
+        Message message = null;
+        if (rs.next())
+            message = getMessage(rs);
+
+        preparedStatement.close();
         conn.commit();
-        return null;
+        System.out.println("GetMessageById");
+        return message;
 
     }
 
     @Override
     public Message getMessage(ResultSet rs) throws SQLException {
-        Message msg = null;
         Message newMessage = new Message(
                 rs.getInt("id_zprava"),
                 rs.getString("nazev"),
@@ -75,8 +74,9 @@ public class MessageDAOImpl implements MessageDAO {
         while (rs.next()) {
             collection.add(getMessage(rs));
         }
-        conn.commit();
+
         statement.close();
+        System.out.println("GetAllMessages");
         return collection;
     }
 
@@ -110,8 +110,8 @@ public class MessageDAOImpl implements MessageDAO {
         }
 
         preparedStatement.executeUpdate();
-        System.out.println("Message inseted");
         conn.commit();
+        System.out.println("InsertMessage");
         preparedStatement.close();
     }
 
@@ -135,21 +135,21 @@ public class MessageDAOImpl implements MessageDAO {
         } //Načte buď příjemce skupinu nebo uživatele
 
         preparedStatement.executeUpdate();
-        System.out.println("Message created");
         conn.commit();
+        System.out.println("Message created");
         preparedStatement.close();
     }
 
     @Override
-    public Collection<Message> getMessagesForChatBetween(User uzivatel1, User uzivatel2) throws SQLException {
+    public Collection<Message> getMessagesForChatBetween(User user1, User uzivatel2) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM ZPRAVY z WHERE (z.id_uzivatel_odesilatel = ? OR z.id_uzivatel_PRIJEMCE = ?)\n"
                         + "AND (z.id_uzivatel_odesilatel = ? OR z.id_uzivatel_prijemce = ?) "
                         + "ORDER BY z.datum_vytvoreni");
-        preparedStatement.setInt(1, uzivatel1.getId());
-        preparedStatement.setInt(2, uzivatel1.getId());
+        preparedStatement.setInt(1, user1.getId());
+        preparedStatement.setInt(2, user1.getId());
         preparedStatement.setInt(3, uzivatel2.getId());
         preparedStatement.setInt(4, uzivatel2.getId());
 
@@ -157,11 +157,11 @@ public class MessageDAOImpl implements MessageDAO {
         //Načte zprávy kde je příjemce buď uživatel1 nebo 2 nebo je odesílatel uživatel1 nebo 2
         while (rs.next()) {
             Message zprava;
-            if (rs.getInt("id_uzivatel_odesilatel") == uzivatel1.getId()) {
+            if (rs.getInt("id_uzivatel_odesilatel") == user1.getId()) {
                 zprava = new Message(
                         rs.getString("nazev"),
                         rs.getString("telo"),
-                        uzivatel1,
+                        user1,
                         uzivatel2,
                         null,
                         rs.getDate("datum_vytvoreni")
@@ -171,15 +171,16 @@ public class MessageDAOImpl implements MessageDAO {
                         rs.getString("nazev"),
                         rs.getString("telo"),
                         uzivatel2,
-                        uzivatel1,
+                        user1,
                         null,
                         rs.getDate("datum_vytvoreni")
                 );
             } //Pokud je uživatel1 příjemce, vytvoř tuto
             collection.add(zprava);
         } //Načte zprávy mezi dvouma uživatelama
-        conn.commit();
+
         preparedStatement.close();
+        System.out.println("GetMessagesForChatBetween");
         return collection;
     }
 
@@ -193,12 +194,10 @@ public class MessageDAOImpl implements MessageDAO {
                         "where ID_SKUPINA_PRIJEMCE = ?\n" +
                         "order by z.DATUM_VYTVORENI"
         );
-
         preparedStatement.setInt(1, skupina.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
-
             Message zprava = new Message(
                     rs.getInt("id_zprava"),
                     rs.getString("nazev"),
@@ -211,7 +210,7 @@ public class MessageDAOImpl implements MessageDAO {
             collection.add(zprava);
         }
         preparedStatement.close();
-        conn.commit();
+        System.out.println("getMessagesForGroupChat");
         return collection;
     }
 
@@ -225,6 +224,7 @@ public class MessageDAOImpl implements MessageDAO {
         callableStatement.setString(3, message.getObsah());
         callableStatement.setDate(4, message.getDatum_vytvoreni());
         callableStatement.setInt(5, message.getOdesilatel().getId());
+
         if (message.getPrijemce_uzivatel() != null) {
             callableStatement.setInt(6, message.getPrijemce_uzivatel().getId());
         } else {
@@ -248,7 +248,7 @@ public class MessageDAOImpl implements MessageDAO {
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Message updated!");
+        System.out.println("UpdateMessage");
     }
 
     @Override
@@ -257,44 +257,10 @@ public class MessageDAOImpl implements MessageDAO {
                 "call delete_zprava(?)"
         );
         callableStatement.setInt(1, message.getId());
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();
-        System.out.println("Message deleted!");
+        System.out.println("DeleteMessage");
     }
-
-    //    private User getUser(ResultSet rs) throws SQLException {
-//        User uzivatel;
-//        if (rs.getString("uzivatel_typ").equals("STUDENT")) {
-//            uzivatel = new Student(
-//                    new Field(
-//                            rs.getInt("id_obor"),
-//                            rs.getString("nazev_obor"),
-//                            rs.getString("popis_obor")
-//                    ),
-//                    rs.getString("rok_studia"),
-//                    rs.getInt("id_uzivatel"),
-//                    rs.getString("jmeno"),
-//                    rs.getString("prijmeni"),
-//                    rs.getString("email"),
-//                    rs.getDate("datum_vytvoreni")
-//            );
-//        } else {
-//            uzivatel = new Teacher(
-//                    new Subject(
-//                            rs.getInt("id_vyucujici_predmet"),
-//                            rs.getString("nazev_vyucujici_predmet"),
-//                            rs.getString("popis_vyucujici_predmet")
-//                    ),
-//                    rs.getString("katedra"),
-//                    rs.getInt("id_uzivatel"),
-//                    rs.getString("jmeno"),
-//                    rs.getString("prijmeni"),
-//                    rs.getString("email"),
-//                    rs.getDate("datum_vytvoreni")
-//            );
-//        }
-//        return uzivatel;
-//
-//    }
 }

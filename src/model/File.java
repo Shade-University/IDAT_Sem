@@ -1,6 +1,8 @@
 package model;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class File {
 
@@ -20,10 +22,11 @@ public class File {
         this.data = data;
         this.date_created = date_created;
         this.date_updated = date_updated;
-    }
+    } //Konstruktor pro načítání
+
     public File(String name, String extension, String type, byte[] data, Date date_created, Date date_updated) {
         this(-1, name, extension, type, data, date_created, date_updated);
-    }
+    } //Konstruktor pro vytváření
 
     public String getType() {
         return type;
@@ -79,6 +82,27 @@ public class File {
 
     public void setDate_updated(Date date_updated) {
         this.date_updated = date_updated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        File file = (File) o;
+        return id.equals(file.id) &&
+                name.equals(file.name) &&
+                extension.equals(file.extension) &&
+                type.equals(file.type) &&
+                Arrays.equals(data, file.data) &&
+                date_created.equals(file.date_created) &&
+                date_updated.equals(file.date_updated);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, extension, type, date_created, date_updated);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package data;
 
-import controller.enums.TRANSACTION_TYPE;
 import model.FoodMenu;
-import model.Group;
-import model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Food menu inserted");
+        System.out.println("CreateFoodMenu");
     }
 
     @Override
@@ -50,7 +47,7 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Food menu updated");
+        System.out.println("UpdateFoodMenu");
     }
 
     @Override
@@ -59,10 +56,11 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
                 "DELETE FROM JIDELNI_LISTKY WHERE ID_LISTKU = ?"
         );
         preparedStatement.setInt(1, menu.getId());
+
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("Food menu deleted");
+        System.out.println("DeleteFoodMenu");
     }
 
     @Override
@@ -70,19 +68,21 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM JIDELNI_LISTKY WHERE to_char(DATUM, 'yyyy-mm-dd') = to_char(?, 'yyyy-mm-dd') ");
         preparedStatement.setDate(1, date);
+
         ResultSet rs = preparedStatement.executeQuery();
         FoodMenu foodMenu = null;
         if (rs.next())
             foodMenu = getFoodMenu(rs);
 
         preparedStatement.close();
-        conn.commit();
+        System.out.println("GetFoodMenuByDate");
         return foodMenu;
     }
 
     @Override
     public Collection<FoodMenu> getAllFoodMenu() throws SQLException {
         Collection<FoodMenu> collection = new ArrayList<>();
+
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM JIDELNI_LISTKY");
@@ -91,7 +91,7 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
             collection.add(foodMenu);
         }
         statement.close();
-        conn.commit();
+        System.out.println("GetAllFoodMenu");
         return collection;
     }
 

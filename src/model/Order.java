@@ -3,6 +3,7 @@ package model;
 import controller.enums.TRANSACTION_TYPE;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Order {
     private int id;
@@ -79,6 +80,25 @@ public class Order {
     }
 
     private String description;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id &&
+                Float.compare(order.price, price) == 0 &&
+                user.equals(order.user) &&
+                product.equals(order.product) &&
+                typeOfTransaction == order.typeOfTransaction &&
+                date.equals(order.date) &&
+                description.equals(order.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, product, typeOfTransaction, price, date, description);
+    }
 
     @Override
     public String toString() {

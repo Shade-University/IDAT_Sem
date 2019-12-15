@@ -1,7 +1,6 @@
 package data;
 
 import model.File;
-import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class FileDAOImpl implements FileDAO {
         preparedStatement.executeUpdate();
         preparedStatement.close();
         conn.commit();
-        System.out.println("File inserted");
+        System.out.println("InsertFile");
     }
 
     @Override
@@ -51,24 +50,27 @@ public class FileDAOImpl implements FileDAO {
             File file = getFile(rs);
             collection.add(file);
         }
-        System.out.println("file data loaded");
+
+        System.out.println("GetAllFiles");
         statement.close();
-        conn.commit();
         return collection;
     }
 
     @Override
     public File getFileById(int id) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-                "SELECT * FROM soubory WHERE ID_SOUBORU="+id);
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM soubory WHERE ID_SOUBORU = ?"
+        );
+        preparedStatement.setInt(1, id);
+        ResultSet rs = preparedStatement.executeQuery();
 
-        while (rs.next()) {
-            conn.commit();
-            return getFile(rs);
+        File file = null;
+        if (rs.next()) {
+            file = getFile(rs);
         }
-        statement.close();
-        return null;
+        preparedStatement.close();
+        System.out.println("GetFileById");
+        return file;
     }
 
     @Override
@@ -103,7 +105,7 @@ public class FileDAOImpl implements FileDAO {
         preparedStatement.executeUpdate();
         conn.commit();
         preparedStatement.close();
-        System.out.println("File edited updated");
+        System.out.println("UpdateFile");
     }
 
     @Override
@@ -112,9 +114,10 @@ public class FileDAOImpl implements FileDAO {
                 "DELETE FROM SOUBORY WHERE id_souboru=?"
         );
         preparedStatement.setInt(1, editedFile.getId());
+
         preparedStatement.executeQuery();
         conn.commit();
         preparedStatement.close();
-        System.out.println("File deleted");
+        System.out.println("DeleteFile");
     }
 }

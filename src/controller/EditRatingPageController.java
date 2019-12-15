@@ -3,6 +3,7 @@ package controller;
 import controller.enums.RATING_GRADE;
 import data.*;
 import gui.AlertDialog;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,10 +12,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import model.*;
+import model.Group;
+import model.Rating;
+import model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class EditRatingPageController implements Initializable {
@@ -52,22 +56,28 @@ public class EditRatingPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            cBRatedGroup.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-            cBRating.setItems(FXCollections.observableArrayList(RATING_GRADE.values()));
-            cBRatingUser.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-            if (editedRating != null) {
-                cBRatedGroup.setValue(editedRating.getHodnoticiSkupina());
-                cBRating.setValue(RATING_GRADE.convertToRATING_GRADE(editedRating));
-                cBRatingUser.setValue(editedRating.getHodnoticiUzivatel());
-            } else {
-                cBRatedGroup.getSelectionModel().select(0);
-                cBRating.getSelectionModel().select(0);
-                cBRatingUser.getSelectionModel().select(0);
+        new Thread(() -> {
+            try {
+                Collection<Group> groups = groupDAO.getAllGroups();
+                Collection<User> users = userDAO.getAllUsers();
+                Platform.runLater(() -> {
+                    cBRatedGroup.setItems(FXCollections.observableArrayList(groups));
+                    cBRatingUser.setItems(FXCollections.observableArrayList(users));
+                    if (editedRating != null) {
+                        cBRating.setValue(RATING_GRADE.convertToRATING_GRADE(editedRating));
+                        cBRatedGroup.setValue(editedRating.getHodnoticiSkupina());
+                        cBRatingUser.setValue(editedRating.getHodnoticiUzivatel());
+                    } else {
+                        cBRatedGroup.getSelectionModel().select(0);
+                        cBRating.getSelectionModel().select(0);
+                        cBRatingUser.getSelectionModel().select(0);
+                    }
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        }).start();
+        cBRating.setItems(FXCollections.observableArrayList(RATING_GRADE.values()));
     }
 
     /**
@@ -84,8 +94,8 @@ public class EditRatingPageController implements Initializable {
     @FXML
     void btnSave(ActionEvent event) {
         try {
-            Rating result = new Rating(RATING_GRADE.getPoints(cBRating.getValue()),cBRating.getValue().toString(),cBRatingUser.getValue(), cBRatedGroup.getValue());
-            if(editedRating!=null){
+            Rating result = new Rating(RATING_GRADE.getPoints(cBRating.getValue()), cBRating.getValue().toString(), cBRatingUser.getValue(), cBRatedGroup.getValue());
+            if (editedRating != null) {
                 result.setId(editedRating.getId());
                 ratingDAO.updateRating(result);
                 AlertDialog.show("Hodnocení bylo úspěšně upraveno.", Alert.AlertType.INFORMATION);
@@ -94,7 +104,7 @@ public class EditRatingPageController implements Initializable {
                 AlertDialog.show("Hodnocení bylo úspěšně vytvořeno.", Alert.AlertType.INFORMATION);
             }
             exitPane();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
     }
@@ -105,7 +115,7 @@ public class EditRatingPageController implements Initializable {
             ratingDAO.deleteRating(editedRating);
             AlertDialog.show("Hodnocení bylo vymazáno.", Alert.AlertType.INFORMATION);
             exitPane();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
     }

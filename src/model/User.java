@@ -6,6 +6,7 @@ import data.OracleConnection;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class User {
 
@@ -86,6 +87,11 @@ public class User {
         return userType;
     }
 
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, password, lastName, email, userAvatar, dateCreated, userType);
+    }
 
     @Override
     public boolean equals(Object obj) {

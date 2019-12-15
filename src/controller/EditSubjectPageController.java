@@ -1,17 +1,19 @@
 package controller;
 
 import data.*;
+import gui.AlertDialog;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import model.*;
-import gui.*;
+import model.Field;
+import model.Group;
+import model.Subject;
+import model.User;
 
-import javax.jws.soap.SOAPBinding;
-import javax.lang.model.type.ErrorType;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -121,26 +123,33 @@ public class EditSubjectPageController implements Initializable {
      * @throws SQLException
      */
     private void loadDataToUniversal() throws SQLException {
-        switch (comboBoxSubjectsUniversal.getValue()) {
-            case TEACHER:
-                usersInSubject = FXCollections.observableArrayList(userDAO.getTeachersBySubject(editedSubject));
-                listViewSubjectUniversal.setItems(FXCollections.observableArrayList(usersInSubject));
-                comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(userDAO.getTeachers()));
-                break;
-            case FIELD:
-                fieldInSubject = FXCollections.observableArrayList(fieldDAO.getFieldsBySubjects(editedSubject));
-                listViewSubjectUniversal.setItems(FXCollections.observableArrayList(fieldInSubject));
-                comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
-                break;
-            case GROUP:
-                groupsInSubject = FXCollections.observableArrayList(groupDAO.getSubjectGroups(editedSubject));
-                listViewSubjectUniversal.setItems(FXCollections.observableArrayList(groupsInSubject));
-                comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
-                break;
-        }
-        comboBoxAddSubjectToUniversal.getSelectionModel().select(0);
-        cbUniversalChanged(null);
-
+        new Thread(() -> {
+            try {
+                switch (comboBoxSubjectsUniversal.getValue()) {
+                    case TEACHER:
+                        usersInSubject = FXCollections.observableArrayList(userDAO.getTeachersBySubject(editedSubject));
+                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(usersInSubject));
+                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(userDAO.getTeachers()));
+                        break;
+                    case FIELD:
+                        fieldInSubject = FXCollections.observableArrayList(fieldDAO.getFieldsBySubject(editedSubject));
+                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(fieldInSubject));
+                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+                        break;
+                    case GROUP:
+                        groupsInSubject = FXCollections.observableArrayList(groupDAO.getSubjectGroups(editedSubject));
+                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(groupsInSubject));
+                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+                        break;
+                }
+                Platform.runLater(() -> {
+                    comboBoxAddSubjectToUniversal.getSelectionModel().select(0);
+                    cbUniversalChanged(null);
+                });
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
     }
 
 
@@ -176,8 +185,7 @@ public class EditSubjectPageController implements Initializable {
     private boolean isMemberOf() {
         switch (comboBoxSubjectsUniversal.getValue()) {
             case TEACHER:
-                return usersInSubject.contains(
-                        comboBoxAddSubjectToUniversal.getValue());
+                return usersInSubject.contains(comboBoxAddSubjectToUniversal.getValue());
             case FIELD:
                 return fieldInSubject.contains(comboBoxAddSubjectToUniversal.getValue());
             case GROUP:
@@ -259,7 +267,7 @@ public class EditSubjectPageController implements Initializable {
                         subjectDAO.insertTeacherToSubject(editedSubject, (User) comboBoxAddSubjectToUniversal.getValue());
                         break;
                     case FIELD:
-                        subjectDAO.insertSubjectsToField(editedSubject, (Field) comboBoxAddSubjectToUniversal.getValue());
+                        subjectDAO.insertSubjectToField(editedSubject, (Field) comboBoxAddSubjectToUniversal.getValue());
                         break;
                     case GROUP:
                         subjectDAO.insertSubjectToGroup(editedSubject, (Group) comboBoxAddSubjectToUniversal.getValue());

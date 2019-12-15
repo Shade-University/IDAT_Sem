@@ -1,12 +1,13 @@
 package data;
 
+import model.Group;
+import model.Rating;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Rating;
-import model.Group;
 
 /**
  *
@@ -40,39 +41,41 @@ public class RatingDAOImpl implements RatingDAO {
             collection.add(hodnoceni);
         }
         statement.close();
+        System.out.println("getAllRatings");
         return collection;
     }
 
     @Override
-    public void createRating(Rating hodnoceni) throws SQLException {
+    public void createRating(Rating rating) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)"
                         + "VALUES(?,?,?,?)");
-        preparedStatement.setInt(1, hodnoceni.getHodnota());
-        preparedStatement.setString(2, hodnoceni.getPopis());
-        preparedStatement.setInt(3, hodnoceni.getHodnoticiUzivatel().getId());
-        preparedStatement.setInt(4, hodnoceni.getHodnoticiSkupina().getId());
+        preparedStatement.setInt(1, rating.getHodnota());
+        preparedStatement.setString(2, rating.getPopis());
+        preparedStatement.setInt(3, rating.getHodnoticiUzivatel().getId());
+        preparedStatement.setInt(4, rating.getHodnoticiSkupina().getId());
 
         preparedStatement.executeUpdate();
-        System.out.println("Rating created");
-            conn.commit();
-            preparedStatement.close();
+        conn.commit();
+        System.out.println("CreateRating");
+        preparedStatement.close();
     }
 
     @Override
-    public void updateRating(Rating hodnoceni) throws SQLException {
+    public void updateRating(Rating rating) throws SQLException {
         CallableStatement callableStatement = conn.prepareCall(
                 "call update_hodnoceni(?,?,?,?,?)"
         );
-        callableStatement.setInt(1, hodnoceni.getId());
-        callableStatement.setInt(2, hodnoceni.getHodnota());
-        callableStatement.setString(3, hodnoceni.getPopis());
-        callableStatement.setInt(4, hodnoceni.getHodnoticiUzivatel().getId());
-        callableStatement.setInt(5, hodnoceni.getHodnoticiSkupina().getId());
+        callableStatement.setInt(1, rating.getId());
+        callableStatement.setInt(2, rating.getHodnota());
+        callableStatement.setString(3, rating.getPopis());
+        callableStatement.setInt(4, rating.getHodnoticiUzivatel().getId());
+        callableStatement.setInt(5, rating.getHodnoticiSkupina().getId());
+
         callableStatement.executeQuery();
         callableStatement.close();
         conn.commit();
-        System.out.println("Rating has been updated.");
+        System.out.println("UpdateRating");
     }
 
     @Override
@@ -88,18 +91,17 @@ public class RatingDAOImpl implements RatingDAO {
     }
 
     @Override
-    public double getAverageRating(Group skupina) throws SQLException {
+    public double getAverageRating(Group group) throws SQLException {
         Statement statement = conn.createStatement();
 
-//            ResultSet rs = stmt.executeQuery(
-//                    "SELECT (SUM(hodnota_hodnoceni) / COUNT(*)) AS AVERAGE FROM getRatings");
         ResultSet rs = statement.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
-                + "WHERE id_skupina = " + skupina.getId());
-        double output = -1;
-        if (rs.next()) {
+                + "WHERE id_skupina = " + group.getId());
+        Double output = null;
+        if (rs.next())
             output = rs.getDouble("AVERAGE");
-        }
+
         statement.close();
+        System.out.println("GetAverageRating");
         return output;
     }
 
@@ -109,9 +111,10 @@ public class RatingDAOImpl implements RatingDAO {
                 "call delete_hodnoceni(?)"
         );
         callableStatement.setInt(1, rt.getId());
+
         callableStatement.executeQuery();
         callableStatement.close();
         conn.commit();
-        System.out.println("Rating has been deleted.");
+        System.out.println("DeleteRating");
     }
 }
