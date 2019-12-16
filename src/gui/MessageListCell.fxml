@@ -18,14 +18,10 @@
                   <Insets left="5.0" top="15.0" />
                </HBox.margin>
             </Text>
-            <TextArea fx:id="tAMessage" editable="false" prefColumnCount="1" prefHeight="40.0" prefRowCount="1" prefWidth="32.0" style="-fx-background-color: #00C6FF; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-               </HBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </TextArea>
+            <TextFlow fx:id="tAMessage" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets top="15.0" />
+               </padding></TextFlow>
          </children>
       </HBox>
    </children>

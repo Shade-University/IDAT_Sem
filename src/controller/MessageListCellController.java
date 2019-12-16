@@ -2,19 +2,23 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import model.File;
 import model.Message;
 import model.User;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class MessageListCellController extends ListCell<Message> {
@@ -23,7 +27,7 @@ public class MessageListCellController extends ListCell<Message> {
     private Text lblName;
 
     @FXML
-    private TextArea tAMessage;
+    private TextFlow tAMessage;
 
     @FXML
     private AnchorPane anchorPane;
@@ -55,11 +59,34 @@ public class MessageListCellController extends ListCell<Message> {
             }
 
             try {
-                String space = new String(new char[message.getLevel()*10]).replace('\0', ' ');
-                lblName.setText(space + message.getOdesilatel().getFirstName() + " " + message.getOdesilatel().getLastName());
-                tAMessage.setText(message.getObsah());
-            } catch (Exception e){
+                tAMessage.getChildren().clear();
+                String space = new String(new char[(message.getLevel() * 10) - 10]).replace('\0', ' ');
+                lblName.setText(space + message.getOdesilatel().getFirstName() + " " + message.getOdesilatel().getLastName() + " => ");
+                Text text = new Text(message.getObsah());
+                text.setFill(Color.BLUE);
 
+                tAMessage.getChildren().add(text);
+                if (message.getSoubor() != null) {
+                    File file = message.getSoubor();
+
+                    Hyperlink link = new Hyperlink((message.getSoubor().getName() + message.getSoubor().getExtension()));
+                    link.setOnAction(event -> {
+                        try {
+                            Path directory = Paths.get("files");
+                            if (Files.notExists(directory))
+                                Files.createDirectory(directory);
+
+                            Path path = Paths.get(directory + "/" + file.getName() + file.getExtension());
+                            Files.write(path, file.getData());
+                            new Alert(Alert.AlertType.INFORMATION, "Soubor stažen: " + path.toString()).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    tAMessage.getChildren().add(link);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
 
             setText(null);

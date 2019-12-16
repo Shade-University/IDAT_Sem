@@ -134,8 +134,8 @@ public class MessageDAOImpl implements MessageDAO {
     public void createMessage(Message message) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "INSERT INTO ZPRAVY(nazev, telo, datum_vytvoreni, "
-                        + "id_uzivatel_odesilatel, id_skupina_prijemce, id_uzivatel_prijemce, ID_RODIC) "
-                        + "VALUES (?,?,?,?,?,?,?)");
+                        + "id_uzivatel_odesilatel, id_skupina_prijemce, id_uzivatel_prijemce, ID_RODIC, ID_SOUBORU) "
+                        + "VALUES (?,?,?,?,?,?,?,?)");
         preparedStatement.setString(1, message.getNazev());
         preparedStatement.setString(2, message.getObsah());
         preparedStatement.setDate(3, message.getDatum_vytvoreni());
@@ -153,6 +153,12 @@ public class MessageDAOImpl implements MessageDAO {
             preparedStatement.setNull(7, Types.INTEGER);
         } else {
             preparedStatement.setInt(7, message.getRodic());
+        }
+
+        if (message.getSoubor() == null) {
+            preparedStatement.setNull(8, Types.INTEGER);
+        } else {
+            preparedStatement.setInt(8, message.getSoubor().getId());
         }
 
         preparedStatement.executeUpdate();

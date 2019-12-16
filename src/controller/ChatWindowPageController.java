@@ -13,18 +13,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Group;
 import model.Message;
 import model.Rating;
 import model.User;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
+import java.sql.Date;
 
 public class ChatWindowPageController implements Initializable {
 
@@ -36,15 +41,19 @@ public class ChatWindowPageController implements Initializable {
     public VBox boxRating;
     public ComboBox<RATING_GRADE> cBRatingOfGroup;
     public CheckBox checkBox;
+    public Button btnFileAdd;
 
     private MessageDAO messageDAO = new MessageDAOImpl();
     private RatingDAO ratingDAO = new RatingDAOImpl();
     private UserDAO userDao = new UserDAOImpl();
+    private FileDAO fileDao = new FileDAOImpl();
+
     private Group chatedGroup;
     private Message selectedMessage;
     private Rating groupRating;
 
-    ObservableList<Message> messages;
+    private ObservableList<Message> messages;
+    private model.File attachedFile;
 
     public void setChatUsers(List<User> users) {
         if (chatedGroup == null) {
@@ -158,10 +167,26 @@ public class ChatWindowPageController implements Initializable {
                     chatedGroup
             );
         }
+        message.setLevel(1);
 
-        if (checkBox.isSelected() && !checkBox.isDisabled())
+        if(attachedFile != null) {
+            try {
+                int id = fileDao.insertFile(attachedFile);
+                attachedFile.setId(id);
+                message.setSoubor(attachedFile);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (checkBox.isSelected() && !checkBox.isDisabled()) {
             message.setRodic(selectedMessage);
             message.setLevel(selectedMessage.getLevel() + 1);
+            messages.add(messages.indexOf(selectedMessage) + 1, message);
+        } else {
+            messages.add(message);
+        }
+
         try {
             messageDAO.createMessage(message);
             txtFieldNewMessage.setText("");
@@ -169,7 +194,37 @@ public class ChatWindowPageController implements Initializable {
             e.printStackTrace();
         }
 
-        messages.add(messages.indexOf(selectedMessage) + 1, message);
         lVMessages.refresh();
+    }
+
+    public void btnFileAddClicked(ActionEvent actionEvent) {
+        FileChooser chooser = new FileChooser();
+
+        File selectedFile = chooser.showOpenDialog(Main.primaryStage);
+
+        if (selectedFile != null) {
+            try {
+                attachedFile = convertToModelFile(selectedFile);
+                btnFileAdd.setText(attachedFile.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private model.File convertToModelFile(File selectedFile) throws IOException {
+        String fullName = selectedFile.getName();
+        String extension = fullName.substring(fullName.lastIndexOf('.'), fullName.length());
+        String name = fullName.substring(0, fullName.lastIndexOf('.'));
+        byte[] content = Files.readAllBytes(Paths.get(selectedFile.getAbsolutePath()));
+
+        return new model.File(
+                name,
+                extension,
+                "Soubor ve zprávě",
+                content,
+                java.sql.Date.valueOf(LocalDate.now()),
+                java.sql.Date.valueOf(LocalDate.now())
+        );
     }
 }

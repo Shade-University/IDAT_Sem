@@ -20,7 +20,7 @@ public class FileDAOImpl implements FileDAO {
         }
     }
     @Override
-    public void insertFile(File file) throws SQLException {
+    public int insertFile(File file) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "INSERT INTO SOUBORY(nazev_souboru, typ_souboru, pripona, data, upraveno, nahrano) "
                         + "VALUES (?, ?, ?, ?, ?, ?)"
@@ -36,6 +36,7 @@ public class FileDAOImpl implements FileDAO {
         preparedStatement.close();
         conn.commit();
         System.out.println("InsertFile");
+        return getIdInsertedRecord();
     }
 
     @Override
@@ -119,5 +120,16 @@ public class FileDAOImpl implements FileDAO {
         conn.commit();
         preparedStatement.close();
         System.out.println("DeleteFile");
+    }
+
+    private int getIdInsertedRecord() throws SQLException {
+        PreparedStatement ps = conn
+                .prepareStatement("select increment_soubory.currval from dual");
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return (int) rs.getLong(1);
+        }
+        return -1;
     }
 }

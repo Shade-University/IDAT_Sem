@@ -13,7 +13,7 @@ public interface FileDAO {
      * @param file
      * @throws SQLException
      */
-    void insertFile(File file) throws SQLException;
+    int insertFile(File file) throws SQLException;
 
     /**
      * Get all files from db
