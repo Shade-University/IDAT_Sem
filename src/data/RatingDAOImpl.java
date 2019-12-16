@@ -94,7 +94,7 @@ public class RatingDAOImpl implements RatingDAO {
     @Override
     public Rating getRatingByUserAndGroup(User user, Group group) throws SQLException {
         PreparedStatement preparedStatement = conn.prepareStatement(
-                "select * from HODNOCENI where ID_UZIVATEL = ? AND ID_SKUPINA = ?"
+                "select * from GETHODNOCENI where ID_UZIVATEL = ? AND ID_SKUPINA = ?"
         );
         preparedStatement.setInt(1, user.getId());
         preparedStatement.setInt(2, group.getId());

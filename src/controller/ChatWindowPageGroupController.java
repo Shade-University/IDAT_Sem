@@ -50,12 +50,6 @@ public class ChatWindowPageGroupController implements Initializable {
         new Thread(() -> {
             try {
                 Collection<User> users = userDao.getAllUsersFromGroup(group);
-                Rating rt = ratingDAO.getRatingByUserAndGroup(MainDashboardPageController.getLoggedUser(),chatedGroup);
-                if(rt!=null){
-                    cBRatingOfGroup.setValue(RATING_GRADE.convertToRATING_GRADE(rt));
-                } else {
-                    cBRatingOfGroup.setValue(null);
-                }
                 Platform.runLater(() -> setChatUsers(new ArrayList<>(users)));
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -106,6 +100,7 @@ public class ChatWindowPageGroupController implements Initializable {
             if (chatedGroup != null) {
                 try {
                     list = FXCollections.observableArrayList(messageDAO.getMessagesForGroupChatWithLevel(chatedGroup));
+                     groupRating = ratingDAO.getRatingByUserAndGroup(MainDashboardPageController.getLoggedUser(),chatedGroup);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -114,6 +109,12 @@ public class ChatWindowPageGroupController implements Initializable {
             }
             ObservableList<Message> finalList = list;
             Platform.runLater(() -> {
+                if(groupRating!=null){
+                    if(RATING_GRADE.convertToRATING_GRADE(groupRating)!=null){}
+                    cBRatingOfGroup.setValue(RATING_GRADE.convertToRATING_GRADE(groupRating));
+                } else {
+                    cBRatingOfGroup.setValue(null);
+                }
                 if (finalList != null) {
                     lVMessages.setItems(null);
                     lVMessages.setItems(finalList);
