@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutY="-36.0" prefHeight="50.0" prefWidth="322.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text fx:id="lblName" strokeType="OUTSIDE" strokeWidth="0.0" text="Try" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="5.0" top="15.0" />
+               </HBox.margin>
+            </Text>
+            <TextArea fx:id="tAMessage" editable="false" prefColumnCount="1" prefHeight="40.0" prefRowCount="1" prefWidth="32.0" style="-fx-background-color: #00C6FF; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </HBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </TextArea>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

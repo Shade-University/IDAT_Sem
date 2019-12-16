@@ -62,6 +62,14 @@ public interface MessageDAO {
     Message getMessage(ResultSet rs) throws SQLException;
 
     /**
+     * Helper method to parse message from result set (LEVEL EDITION)
+     * @param rs
+     * @return Message
+     * @throws SQLException
+     */
+    Message getMessageWithLevel(ResultSet rs) throws SQLException;
+
+    /**
      * Get messages between two users
      * @param user1
      * @param user2
@@ -77,4 +85,12 @@ public interface MessageDAO {
      * @throws SQLException
      */
     Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException;
+
+    /**
+     * Get messages in group with level
+     * @param skupina
+     * @return Collection of messages
+     * @throws SQLException
+     */
+     Collection<Message> getMessagesForGroupChatWithLevel(Group skupina) throws SQLException;
 }

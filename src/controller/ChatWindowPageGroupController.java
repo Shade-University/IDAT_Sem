@@ -6,6 +6,8 @@ import data.UserDAO;
 import data.UserDAOImpl;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -24,9 +26,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ChatWindowPageController implements Initializable {
+public class ChatWindowPageGroupController implements Initializable {
 
-    public TextArea txtAreaMessages;
+    @FXML
+    public ListView<Message> lVMessages;
     public ListView<User> listViewUsers;
     public TextField txtFieldNewMessage;
 
@@ -52,30 +55,34 @@ public class ChatWindowPageController implements Initializable {
     }
 
     private void refreshMessages() {
-        txtAreaMessages.clear();
-
-
+        lVMessages.setItems(null);
 
 
         new Thread(() -> {
-            Collection<Message> messages = new ArrayList<>();
+            ObservableList<Message> list = null;
             if (chattedGroup != null) {
                 try {
-                    messages = messageDAO.getMessagesForGroupChat(chattedGroup);
+                    list = FXCollections.observableArrayList(messageDAO.getMessagesForGroupChatWithLevel(chattedGroup));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             } else {
-                try {
-                    messages = messageDAO.getMessagesForChatBetween(MainDashboardPageController.getLoggedUser(), listViewUsers.getItems().get(0));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+              System.out.println("CHYBA");
             }
-            Collection<Message> finalMessages = messages;
+            ObservableList<Message> finalList = list;
             Platform.runLater(() -> {
-                for (Message m : finalMessages) {
-                    txtAreaMessages.appendText(createMessageFormat(m));
+                if (finalList != null) {
+                    lVMessages.setItems(finalList);
+                    lVMessages.setMouseTransparent(true);
+                    lVMessages.setFocusTraversable(false);
+                    lVMessages.setCellFactory(new Callback<ListView<Message>,
+                                                      ListCell<Message>>() {
+                                                  @Override
+                                                  public ListCell<Message> call(ListView<Message> list) {
+                                                      return new MessageListCellController();
+                                                  }
+                                              }
+                    );
                 }
             });
         }).start();

@@ -22,6 +22,7 @@ public class Message {
     private Group prijemce_skupina;
 
     private int rodic;
+    private int level;
     private File soubor;
 
     public Message(String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina) {
@@ -54,9 +55,23 @@ public class Message {
         this.prijemce_skupina = prijemce_skupina;
         this.rodic = rodic;
         this.soubor = soubor;
+    } //Konstruktor pro načítání s rodičem
+
+    public Message(int id, String nazev, String obsah, User odesilatel, User prijemce_uzivatel, Group prijemce_skupina, Date datum_vytvoreni, int rodic, File soubor, int level) {
+        this.id = id;
+        this.nazev = nazev;
+        this.obsah = obsah;
+        this.datum_vytvoreni = datum_vytvoreni;
+        this.odesilatel = odesilatel;
+        this.prijemce_uzivatel = prijemce_uzivatel;
+        this.prijemce_skupina = prijemce_skupina;
+        this.rodic = rodic;
+        this.soubor = soubor;
+        this.level = level;
     } //Konstruktor pro načítání se zanořením
 
-    public Message(){}
+    public Message() {
+    }
 
     public int getId() {
         return id;
@@ -68,6 +83,14 @@ public class Message {
 
     public String getObsah() {
         return obsah;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public Date getDatum_vytvoreni() {
@@ -139,7 +162,7 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        if(message.prijemce_uzivatel !=null) {
+        if (message.prijemce_uzivatel != null) {
             return id == message.id &&
                     rodic == message.rodic &&
                     nazev.equals(message.nazev) &&
@@ -147,7 +170,7 @@ public class Message {
                     datum_vytvoreni.equals(message.datum_vytvoreni) &&
                     odesilatel.equals(message.odesilatel) &&
                     prijemce_uzivatel.equals(message.prijemce_uzivatel);
-        }else{
+        } else {
             return id == message.id &&
                     rodic == message.rodic &&
                     nazev.equals(message.nazev) &&

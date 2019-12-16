@@ -783,7 +783,7 @@ SELECT nazev,
        level as Uroven
 FROM ZPRAVY
 CONNECT BY ID_RODIC = PRIOR ID_ZPRAVA
-START WITH ID_RODIC IS NULL;
+START WITH ID_RODIC IS NULL ORDER BY datum_vytvoreni;
 
 
 /*=======Pohledy=====*/

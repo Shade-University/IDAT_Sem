@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="544.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatWindowPageGroupController">
+   <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <bottom>
+            <HBox prefHeight="65.0" prefWidth="767.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="txtFieldNewMessage" prefHeight="87.0" prefWidth="577.0" HBox.hgrow="ALWAYS" />
+                  <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#btnSendClicked" prefHeight="64.0" prefWidth="200.0" text="Odeslat" />
+               </children>
+            </HBox>
+         </bottom>
+         <right>
+            <ListView fx:id="listViewUsers" prefHeight="479.0" prefWidth="195.0" BorderPane.alignment="CENTER" />
+         </right>
+         <center>
+            <ListView fx:id="lVMessages" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

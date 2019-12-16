@@ -285,7 +285,7 @@ public class MainDashboardPageController implements Initializable {
     }
 
     private void openChatWith(Group group) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPageGroup.fxml"));
         Tab chatTab = new Tab("Chat: " + group.getName());
         try {
             chatTab.setContent(loader.load());
@@ -293,11 +293,12 @@ public class MainDashboardPageController implements Initializable {
             e.printStackTrace();
         }
 
-        ChatWindowPageController chatWindowPageController = loader.getController();
-        chatWindowPageController.setChatGroup(group);
+        ChatWindowPageGroupController chatWindowPageGroupController = loader.getController();
+        chatWindowPageGroupController.setChatGroup(group);
 
         selectTab(chatTab);
     }
+
 
     public void onImportClicked(MouseEvent mouseEvent) {
         try {

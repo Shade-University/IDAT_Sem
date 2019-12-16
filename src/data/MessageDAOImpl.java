@@ -64,6 +64,23 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    public Message getMessageWithLevel(ResultSet rs) throws SQLException {
+        Message newMessage = new Message(
+                rs.getInt("id_zprava"),
+                rs.getString("nazev"),
+                rs.getString("telo"),
+                userDAO.getUserById(rs.getInt("id_uzivatel_odesilatel")),
+                null,
+                groupDAO.getGroupById(rs.getInt("id_skupina_prijemce")),
+                rs.getDate("datum_vytvoreni"),
+                rs.getInt("id_rodic"),
+                fileDAO.getFileById(rs.getInt("id_souboru")),
+                rs.getInt("Uroven")
+        );
+        return newMessage;
+    }
+
+    @Override
     public Collection<Message> getAllMessages() throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
@@ -211,6 +228,26 @@ public class MessageDAOImpl implements MessageDAO {
         }
         preparedStatement.close();
         System.out.println("getMessagesForGroupChat");
+        return collection;
+    }
+
+    @Override
+    public Collection<Message> getMessagesForGroupChatWithLevel(Group skupina) throws SQLException {
+        Collection<Message> collection = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM GETZPRAVYHIERARCHICKY z\n" +
+                        "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
+                        "where ID_SKUPINA_PRIJEMCE = ?"
+        );
+        preparedStatement.setInt(1, skupina.getId());
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            collection.add(getMessageWithLevel(rs));
+        }
+        preparedStatement.close();
+        System.out.println("getMessagesForGroupChatWithLevel");
         return collection;
     }
 
