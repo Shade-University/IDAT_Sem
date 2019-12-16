@@ -2,6 +2,7 @@ package data;
 
 import model.Group;
 import model.Rating;
+import model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,6 +50,14 @@ public interface RatingDAO {
      * @throws SQLException
      */
     Rating getRating(ResultSet rs) throws SQLException;
+
+    /**
+     * Get rating by user
+     * @param user
+     * @return Rating
+     * @throws SQLException
+     */
+    Rating getRatingByUserAndGroup(User user, Group group) throws SQLException;
 
     /**
      * Delete rating from db

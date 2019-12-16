@@ -5,8 +5,8 @@ package model;
 public class Rating {
 
     private int id;
-    private final int hodnota;
-    private final String popis;
+    private int hodnota;
+    private String popis;
     private final User hodnoticiUzivatel;
     private final Group hodnoticiSkupina;
     
@@ -35,6 +35,10 @@ public class Rating {
     }
 
     public void setId(int id){this.id = id;}
+
+    public void setHodnota(int hodnota) { this.hodnota = hodnota; }
+
+    public void setPopis(String popis) { this.popis = popis; }
 
     public User getHodnoticiUzivatel() {
         return hodnoticiUzivatel;

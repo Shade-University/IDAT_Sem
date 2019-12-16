@@ -2,6 +2,7 @@ package data;
 
 import model.Group;
 import model.Rating;
+import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,6 +89,21 @@ public class RatingDAOImpl implements RatingDAO {
                 groupDAO.getGroup(rs)
         );
         return hodnoceni;
+    }
+
+    @Override
+    public Rating getRatingByUserAndGroup(User user, Group group) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "select * from HODNOCENI where ID_UZIVATEL = ? AND ID_SKUPINA = ?"
+        );
+        preparedStatement.setInt(1, user.getId());
+        preparedStatement.setInt(2, group.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next())
+           return getRating(rs);
+        preparedStatement.close();
+        System.out.println("getRatingByUserAndGroup");
+        return null;
     }
 
     @Override

@@ -32,12 +32,35 @@
                </children>
             </HBox>
          </bottom>
-         <right>
-            <ListView fx:id="listViewUsers" prefHeight="479.0" prefWidth="195.0" BorderPane.alignment="CENTER" />
-         </right>
          <center>
             <ListView fx:id="lVMessages" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
+         <right>
+            <VBox prefHeight="200.0" prefWidth="195.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="boxRating" prefHeight="97.0" prefWidth="195.0">
+                     <children>
+                        <Label text="Hodnocení skupiny">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cBRatingOfGroup" prefHeight="25.0" prefWidth="188.0">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label text="Členové skupiny">
+                           <VBox.margin>
+                              <Insets left="5.0" top="15.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <ListView fx:id="listViewUsers" prefHeight="376.0" prefWidth="195.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </right>
       </BorderPane>
    </children>
 </AnchorPane>
