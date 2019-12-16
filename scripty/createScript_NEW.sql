@@ -34,18 +34,18 @@ create sequence INCREMENT_JIDELNI_LISTKY
 
 create table PREDMETY
 (
-	ID_PREDMET NUMBER not null
-		constraint PREDMET_PK
-			primary key,
-	NAZEV VARCHAR2(50) not null,
-	POPIS VARCHAR2(250)
+    ID_PREDMET NUMBER       not null
+        constraint PREDMET_PK
+            primary key,
+    NAZEV      VARCHAR2(50) not null,
+    POPIS      VARCHAR2(250)
 )
 /
 
 create or replace trigger PREDMETY_TRIGGER
-	before insert or update
-	on PREDMETY
-	for each row
+    before insert or update
+    on PREDMETY
+    for each row
 BEGIN
 
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
@@ -62,18 +62,18 @@ END;
 
 create table SKUPINY
 (
-	ID_SKUPINA NUMBER not null
-		constraint SKUPINA_PK
-			primary key,
-	NAZEV VARCHAR2(50) not null,
-	POPIS VARCHAR2(250)
+    ID_SKUPINA NUMBER       not null
+        constraint SKUPINA_PK
+            primary key,
+    NAZEV      VARCHAR2(50) not null,
+    POPIS      VARCHAR2(250)
 )
 /
 
 create or replace trigger SKUPINY_TRIGGER
-	before insert or update
-	on SKUPINY
-	for each row
+    before insert or update
+    on SKUPINY
+    for each row
 BEGIN
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
         raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znaků');
@@ -89,29 +89,29 @@ END;
 
 create table STUDIJNI_OBORY
 (
-	ID_OBOR NUMBER not null
-		constraint STUDIJNI_OBOR_PK
-			primary key,
-	NAZEV VARCHAR2(50) not null,
-	POPIS VARCHAR2(250)
+    ID_OBOR NUMBER       not null
+        constraint STUDIJNI_OBOR_PK
+            primary key,
+    NAZEV   VARCHAR2(50) not null,
+    POPIS   VARCHAR2(250)
 )
 /
 
 create table OBOR_PREDMET
 (
-	STUDIJNI_OBOR_ID_OBOR NUMBER not null
-		constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_FK
-			references STUDIJNI_OBORY,
-	PREDMET_ID_PREDMET NUMBER not null
-		constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_FK
-			references PREDMETY
+    STUDIJNI_OBOR_ID_OBOR NUMBER not null
+        constraint OBOR_PREDMET_STUDIJNI_OBORY_ID_OBOR_FK
+            references STUDIJNI_OBORY,
+    PREDMET_ID_PREDMET    NUMBER not null
+        constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_FK
+            references PREDMETY
 )
 /
 
 create or replace trigger OBORY_TRIGGER
-	before insert or update
-	on STUDIJNI_OBORY
-	for each row
+    before insert or update
+    on STUDIJNI_OBORY
+    for each row
 BEGIN
     if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
         raise_application_error(-20002, 'Název musí být v rozsahu 3 až 50 znaků');
@@ -127,39 +127,39 @@ END;
 
 create table UZIVATELE
 (
-	ID_UZIVATEL NUMBER not null
-		constraint UZIVATEL_PK
-			primary key,
-	JMENO VARCHAR2(50) not null,
-	PRIJMENI VARCHAR2(50) not null,
-	EMAIL VARCHAR2(50) not null,
-	HESLO VARCHAR2(50) not null,
-	DATUM_VYTVORENI DATE not null,
-	UZIVATEL_TYP VARCHAR2(50),
-	AVATAR BLOB
+    ID_UZIVATEL     NUMBER       not null
+        constraint UZIVATEL_PK
+            primary key,
+    JMENO           VARCHAR2(50) not null,
+    PRIJMENI        VARCHAR2(50) not null,
+    EMAIL           VARCHAR2(50) not null,
+    HESLO           VARCHAR2(50) not null,
+    DATUM_VYTVORENI DATE         not null,
+    UZIVATEL_TYP    VARCHAR2(50),
+    AVATAR          BLOB
 )
 /
 
 create table HODNOCENI
 (
-	ID_HODNOCENI NUMBER not null
-		constraint HODNOCENI_PK
-			primary key,
-	HODNOTA_HODNOCENI NUMBER not null,
-	POPIS VARCHAR2(100),
-	ID_UZIVATEL NUMBER not null
-		constraint UZIVATEL_HODNOCENI
-			references UZIVATELE,
-	ID_SKUPINA NUMBER not null
-		constraint HODNOCENI_SKUPINA
-			references SKUPINY
+    ID_HODNOCENI      NUMBER not null
+        constraint HODNOCENI_PK
+            primary key,
+    HODNOTA_HODNOCENI NUMBER not null,
+    POPIS             VARCHAR2(100),
+    ID_UZIVATEL       NUMBER not null
+        constraint UZIVATEL_HODNOCENI
+            references UZIVATELE,
+    ID_SKUPINA        NUMBER not null
+        constraint HODNOCENI_SKUPINA
+            references SKUPINY
 )
 /
 
 create or replace trigger HODNOCENI_TRIGGER
-	before insert or update
-	on HODNOCENI
-	for each row
+    before insert or update
+    on HODNOCENI
+    for each row
 BEGIN
     IF (:NEW.hodnota_hodnoceni < 1 OR :NEW.hodnota_hodnoceni > 5) then
         raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 1-5');
@@ -175,44 +175,44 @@ END;
 
 create table STUDENTI
 (
-	ID_UZIVATEL NUMBER not null
-		constraint STUDENT_PK
-			primary key
-		constraint UZIVATEL_STUDENT
-			references UZIVATELE,
-	ROK_STUDIA VARCHAR2(50) not null,
-	ID_OBOR NUMBER not null
-		constraint STUDENT_OBOR
-			references STUDIJNI_OBORY
+    ID_UZIVATEL NUMBER       not null
+        constraint STUDENT_PK
+            primary key
+        constraint UZIVATEL_STUDENT
+            references UZIVATELE,
+    ROK_STUDIA  VARCHAR2(50) not null,
+    ID_OBOR     NUMBER       not null
+        constraint STUDENT_OBOR
+            references STUDIJNI_OBORY
 )
 /
 
 create table UCITELE
 (
-	ID_UZIVATEL NUMBER not null
-		constraint UCITEL_PK
-			primary key
-		constraint UZIVATEL_UCITEL
-			references UZIVATELE,
-	KATEDRA VARCHAR2(50) not null
+    ID_UZIVATEL NUMBER       not null
+        constraint UCITEL_PK
+            primary key
+        constraint UZIVATEL_UCITEL
+            references UZIVATELE,
+    KATEDRA     VARCHAR2(50) not null
 )
 /
 
 create table UCITELE_PREDMETY
 (
-	UCITELE_ID_UCITEL NUMBER
-		constraint UCITELE_PREDMETY_UCITELE_ID_UZIVATEL_FK
-			references UCITELE,
-	PREDMET_ID_PREDMET NUMBER
-		constraint UCITELE_PREDMETY_PREDMETY_ID_PREDMET_FK
-			references PREDMETY
+    UCITELE_ID_UCITEL  NUMBER
+        constraint UCITELE_PREDMETY_UCITELE_ID_UZIVATEL_FK
+            references UCITELE,
+    PREDMET_ID_PREDMET NUMBER
+        constraint UCITELE_PREDMETY_PREDMETY_ID_PREDMET_FK
+            references PREDMETY
 )
 /
 
 create or replace trigger UZIVATELE_TRIGGER
-	before insert or update
-	on UZIVATELE
-	for each row
+    before insert or update
+    on UZIVATELE
+    for each row
 BEGIN
     if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
         raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znaků');
@@ -236,71 +236,71 @@ END;
 
 create table ZPRAVY_BACKUP
 (
-	ID_ZPRAVA NUMBER not null
-		constraint ZPRAVA_BACKUP_PK
-			primary key,
-	NAZEV VARCHAR2(50) not null,
-	TELO VARCHAR2(250) not null,
-	DATUM_VYTVORENI DATE not null,
-	ID_UZIVATEL_ODESILATEL NUMBER not null,
-	ID_UZIVATEL_PRIJEMCE NUMBER,
-	ID_SKUPINA_PRIJEMCE NUMBER
+    ID_ZPRAVA              NUMBER        not null
+        constraint ZPRAVA_BACKUP_PK
+            primary key,
+    NAZEV                  VARCHAR2(50)  not null,
+    TELO                   VARCHAR2(250) not null,
+    DATUM_VYTVORENI        DATE          not null,
+    ID_UZIVATEL_ODESILATEL NUMBER        not null,
+    ID_UZIVATEL_PRIJEMCE   NUMBER,
+    ID_SKUPINA_PRIJEMCE    NUMBER
 )
 /
 
 create table SKUPINY_PREDMETY
 (
-	SKUPINY_ID_SKUPINA NUMBER not null
-		constraint SKUPINY_PREDMETY_SKUPINY_ID_SKUPINA_FK
-			references SKUPINY,
-	PREDMETY_ID_PREDMET NUMBER not null
-		constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_FK
-			references PREDMETY
+    SKUPINY_ID_SKUPINA  NUMBER not null
+        constraint SKUPINY_PREDMETY_SKUPINY_ID_SKUPINA_FK
+            references SKUPINY,
+    PREDMETY_ID_PREDMET NUMBER not null
+        constraint SKUPINY_PREDMETY_PREDMETY_ID_PREDMET_FK
+            references PREDMETY
 )
 /
 
 create table SOUBORY
 (
-	ID_SOUBORU NUMBER not null
-		constraint SOUBORY_PK
-			primary key,
-	NAZEV_SOUBORU VARCHAR2(255) not null,
-	TYP_SOUBORU VARCHAR2(255) not null,
-	PRIPONA VARCHAR2(255) not null,
-	DATA BLOB not null,
-	UPRAVENO DATE not null,
-	NAHRANO DATE not null
+    ID_SOUBORU    NUMBER        not null
+        constraint SOUBORY_PK
+            primary key,
+    NAZEV_SOUBORU VARCHAR2(255) not null,
+    TYP_SOUBORU   VARCHAR2(255) not null,
+    PRIPONA       VARCHAR2(255) not null,
+    DATA          BLOB          not null,
+    UPRAVENO      DATE          not null,
+    NAHRANO       DATE          not null
 )
 /
 
 create table ZPRAVY
 (
-	ID_ZPRAVA NUMBER not null
-		constraint ZPRAVA_PK
-			primary key,
-	NAZEV VARCHAR2(50) not null,
-	TELO VARCHAR2(250) not null,
-	DATUM_VYTVORENI DATE not null,
-	ID_UZIVATEL_ODESILATEL NUMBER not null
-		constraint ODESILATEL_ZPRAVA
-			references UZIVATELE,
-	ID_UZIVATEL_PRIJEMCE NUMBER
-		constraint PRIJEMCE_ZPRAVA
-			references UZIVATELE,
-	ID_SKUPINA_PRIJEMCE NUMBER
-		constraint PRIJEMCE_SKUPINA
-			references SKUPINY,
-	ID_RODIC NUMBER,
-	ID_SOUBORU NUMBER
-		constraint ZPRAVY_SOUBORY_ID_SOUBORU_FK
-			references SOUBORY
+    ID_ZPRAVA              NUMBER        not null
+        constraint ZPRAVA_PK
+            primary key,
+    NAZEV                  VARCHAR2(50)  not null,
+    TELO                   VARCHAR2(250) not null,
+    DATUM_VYTVORENI        DATE          not null,
+    ID_UZIVATEL_ODESILATEL NUMBER        not null
+        constraint ODESILATEL_ZPRAVA
+            references UZIVATELE,
+    ID_UZIVATEL_PRIJEMCE   NUMBER
+        constraint PRIJEMCE_ZPRAVA
+            references UZIVATELE,
+    ID_SKUPINA_PRIJEMCE    NUMBER
+        constraint PRIJEMCE_SKUPINA
+            references SKUPINY,
+    ID_RODIC               NUMBER,
+    ID_SOUBORU             NUMBER
+        constraint ZPRAVY_SOUBORY_ID_SOUBORU_FK
+            references SOUBORY
 )
 /
 
 create or replace trigger ZPRAVY_TRIGGER
-	before insert or update or delete
-	on ZPRAVY
-	for each row
+    before insert or update or delete
+    on ZPRAVY
+    for each row
 BEGIN
     if (deleting) then
         INSERT INTO ZPRAVY_BACKUP(id_zprava, nazev, telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce,
@@ -326,9 +326,9 @@ END;
 /
 
 create or replace trigger SOUBORY_TRIGGER
-	before insert or update
-	on SOUBORY
-	for each row
+    before insert or update
+    on SOUBORY
+    for each row
 BEGIN
     if (updating) then
         :new.upraveno := sysdate;
@@ -345,34 +345,34 @@ END;
 
 create table UZIVATELE_SKUPINY
 (
-	UZIVATELE_ID_UZIVATEL NUMBER not null
-		constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
-			references UZIVATELE,
-	SKUPINY_ID_SKUPINA NUMBER not null
-		constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
-			references SKUPINY,
-	constraint UZIVATELE_SKUPINY_PK
-		unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
+    UZIVATELE_ID_UZIVATEL NUMBER not null
+        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    SKUPINY_ID_SKUPINA    NUMBER not null
+        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
+            references SKUPINY,
+    constraint UZIVATELE_SKUPINY_PK
+        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
 )
 /
 
 create table PRODUKTY
 (
-	ID_PRODUKTU NUMBER not null
-		constraint PRODUKT_PK
-			primary key,
-	NAZEV VARCHAR2(255) not null,
-	POPIS VARCHAR2(255) not null,
-	SKLADEM NUMBER,
-	TYP VARCHAR2(100),
-	CENA NUMBER
+    ID_PRODUKTU NUMBER        not null
+        constraint PRODUKT_PK
+            primary key,
+    NAZEV       VARCHAR2(255) not null,
+    POPIS       VARCHAR2(255) not null,
+    SKLADEM     NUMBER,
+    TYP         VARCHAR2(100),
+    CENA        NUMBER
 )
 /
 
 create or replace trigger PRODUKTY_TRIGGER
-	before insert or update
-	on PRODUKTY
-	for each row
+    before insert or update
+    on PRODUKTY
+    for each row
 BEGIN
     if (inserting) then
         SELECT increment_produkty.nextval
@@ -384,26 +384,26 @@ END;
 
 create table TRANSAKCE
 (
-	ID_TRANSAKCE NUMBER not null
-		constraint TRANSAKCE_PK
-			primary key,
-	ID_UZIVATELE NUMBER not null
-		constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
-			references UZIVATELE,
-	ID_PRODUKTU NUMBER
-		constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
-			references PRODUKTY,
-	TYP_TRANSAKCE VARCHAR2(100) not null,
-	CASTKA FLOAT not null,
-	DATUM DATE not null,
-	POPIS VARCHAR2(255) not null
+    ID_TRANSAKCE  NUMBER        not null
+        constraint TRANSAKCE_PK
+            primary key,
+    ID_UZIVATELE  NUMBER        not null
+        constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    ID_PRODUKTU   NUMBER
+        constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
+            references PRODUKTY,
+    TYP_TRANSAKCE VARCHAR2(100) not null,
+    CASTKA        FLOAT         not null,
+    DATUM         DATE          not null,
+    POPIS         VARCHAR2(255) not null
 )
 /
 
 create or replace trigger TRANSAKCE_TRIGGER
-	before insert or update
-	on TRANSAKCE
-	for each row
+    before insert or update
+    on TRANSAKCE
+    for each row
 BEGIN
     if (inserting) then
         SELECT increment_transakce.nextval
@@ -415,21 +415,21 @@ END;
 
 create table JIDELNI_LISTKY
 (
-	ID_LISTKU NUMBER not null
-		constraint JIDELNI_LISTEK_PK
-			primary key,
-	DATUM DATE not null
+    ID_LISTKU NUMBER not null
+        constraint JIDELNI_LISTEK_PK
+            primary key,
+    DATUM     DATE   not null
 )
 /
 
 create unique index JIDELNI_LISTKY_DATUM_UINDEX
-	on JIDELNI_LISTKY (DATUM)
+    on JIDELNI_LISTKY (DATUM)
 /
 
 create or replace trigger JIDELNI_LISTKY_TRIGGER
-	before insert or update
-	on JIDELNI_LISTKY
-	for each row
+    before insert or update
+    on JIDELNI_LISTKY
+    for each row
 BEGIN
     if (inserting) then
         SELECT increment_jidelni_listky.nextval
@@ -441,14 +441,14 @@ END;
 
 create table LISTEK_PRODUKT
 (
-	ID_PRODUKT NUMBER not null
-		constraint LISTEK_PRODUKT_PRODUKTY_ID_PRODUKTU_FK
-			references PRODUKTY
-				on delete cascade,
-	ID_LISTEK NUMBER not null
-		constraint LISTEK_PRODUKT_JIDELNI_LISTKY_ID_LISTKU_FK
-			references JIDELNI_LISTKY
-				on delete cascade
+    ID_PRODUKT NUMBER not null
+        constraint LISTEK_PRODUKT_PRODUKTY_ID_PRODUKTU_FK
+            references PRODUKTY
+                on delete cascade,
+    ID_LISTEK  NUMBER not null
+        constraint LISTEK_PRODUKT_JIDELNI_LISTKY_ID_LISTKU_FK
+            references JIDELNI_LISTKY
+                on delete cascade
 )
 /
 
@@ -546,8 +546,22 @@ create or replace view GETHODNOCENI as
 SELECT h.id_hodnoceni,
        h.hodnota_hodnoceni,
        h.popis,
-       u."ID_UZIVATEL",u."JMENO",u."PRIJMENI",u."HESLO",u."EMAIL",u."DATUM_VYTVORENI",u."UZIVATEL_TYP",u."AVATAR",u."ROK_STUDIA",u."ID_OBOR",u."nazev_obor",u."popis_obor",u."KATEDRA",
-       g."ID_SKUPINA",g."nazev_skupina",g."popis_skupina"
+       u."ID_UZIVATEL",
+       u."JMENO",
+       u."PRIJMENI",
+       u."HESLO",
+       u."EMAIL",
+       u."DATUM_VYTVORENI",
+       u."UZIVATEL_TYP",
+       u."AVATAR",
+       u."ROK_STUDIA",
+       u."ID_OBOR",
+       u."nazev_obor",
+       u."popis_obor",
+       u."KATEDRA",
+       g."ID_SKUPINA",
+       g."nazev_skupina",
+       g."popis_skupina"
 FROM HODNOCENI h
          JOIN (select * from getUzivatele) u ON u.id_uzivatel = h.id_uzivatel
          JOIN (select * from getSkupiny) g ON g.id_skupina = h.id_skupina
@@ -643,19 +657,19 @@ FROM SKUPINY_PREDMETY
 /
 
 create or replace view GETUZIVATELODESILATEL as
-SELECT u.id_uzivatel "id_odesilatel",
-       u.jmeno "jmeno_odesilatel",
-       u.prijmeni "prijmeni_odesilatel",
-       u.heslo "heslo_odesilatel",
-       u.email "email_odesilatel",
+SELECT u.id_uzivatel     "id_odesilatel",
+       u.jmeno           "jmeno_odesilatel",
+       u.prijmeni        "prijmeni_odesilatel",
+       u.heslo           "heslo_odesilatel",
+       u.email           "email_odesilatel",
        u.datum_vytvoreni "datum_vytvoreni_odesilatel",
-       u.uzivatel_typ "uzivatel_typ_odesilatel",
-       u.avatar "avatar_odesilatel",
-       s.rok_studia "rok_studia_odesilatel",
-       so.id_obor "id_obor_odesilatel",
-       so.nazev "nazev_obor_odesilatel",
-       so.popis "popis_obor_odesilatel",
-       uc.katedra "katedra_odesilatel"
+       u.uzivatel_typ    "uzivatel_typ_odesilatel",
+       u.avatar          "avatar_odesilatel",
+       s.rok_studia      "rok_studia_odesilatel",
+       so.id_obor        "id_obor_odesilatel",
+       so.nazev          "nazev_obor_odesilatel",
+       so.popis          "popis_obor_odesilatel",
+       uc.katedra        "katedra_odesilatel"
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel
@@ -663,19 +677,19 @@ FROM UZIVATELE u
 /
 
 create or replace view GETUZIVATELPRIJEMCE as
-SELECT u.id_uzivatel "id_prijemce",
-       u.jmeno "jmeno_prijemce",
-       u.prijmeni "prijmeni_prijemce",
-       u.heslo "heslo_prijemce",
-       u.email "email_prijemce",
+SELECT u.id_uzivatel     "id_prijemce",
+       u.jmeno           "jmeno_prijemce",
+       u.prijmeni        "prijmeni_prijemce",
+       u.heslo           "heslo_prijemce",
+       u.email           "email_prijemce",
        u.datum_vytvoreni "datum_vytvoreni_prijemce",
-       u.uzivatel_typ "uzivatel_typ_prijemce",
-       u.avatar "avatar_prijemce",
-       s.rok_studia "rok_studia_prijemce",
-       so.id_obor "id_obor_prijemce",
-       so.nazev "nazev_obor_prijemce",
-       so.popis "popis_obor_prijemce",
-       uc.katedra "katedra_prijemce"
+       u.uzivatel_typ    "uzivatel_typ_prijemce",
+       u.avatar          "avatar_prijemce",
+       s.rok_studia      "rok_studia_prijemce",
+       so.id_obor        "id_obor_prijemce",
+       so.nazev          "nazev_obor_prijemce",
+       so.popis          "popis_obor_prijemce",
+       uc.katedra        "katedra_prijemce"
 FROM UZIVATELE u
          LEFT JOIN STUDENTI s ON u.id_uzivatel = s.id_uzivatel
          LEFT JOIN UCITELE uc on u.id_uzivatel = uc.id_uzivatel
@@ -975,29 +989,42 @@ BEGIN
 END;
 /
 
-create or replace PROCEDURE update_hodnoceni(id_hodnoceni_in in INTEGER, hodnoceni_in in INTEGER, popis_in in VARCHAR2, id_uzivatel_in in INTEGER,
+create or replace PROCEDURE update_hodnoceni(id_hodnoceni_in in INTEGER, hodnoceni_in in INTEGER, popis_in in VARCHAR2,
+                                             id_uzivatel_in in INTEGER,
                                              id_skupina_in in INTEGER)
     IS
 BEGIN
-    UPDATE hodnoceni h SET h.hodnota_hodnoceni = hodnoceni_in, h.popis = popis_in, h.id_uzivatel = id_uzivatel_in, h.id_skupina = id_skupina_in WHERE h.id_hodnoceni = id_hodnoceni_in;
+    UPDATE hodnoceni h
+    SET h.hodnota_hodnoceni = hodnoceni_in,
+        h.popis             = popis_in,
+        h.id_uzivatel       = id_uzivatel_in,
+        h.id_skupina        = id_skupina_in
+    WHERE h.id_hodnoceni = id_hodnoceni_in;
 END;
 /
 
 create or replace PROCEDURE update_zprava(id_in integer, nazev_in in VARCHAR2, obsah_in in VARCHAR2, datum_in date,
-                                            id_odesilatel_in integer, id_prijemce_uzivatel_in integer, id_prijemce_skupina_in integer,
+                                          id_odesilatel_in integer, id_prijemce_uzivatel_in integer,
+                                          id_prijemce_skupina_in integer,
                                           id_rodic_in integer, id_soubor_in integer)
     IS
 BEGIN
     UPDATE ZPRAVY z
-    SET z.nazev                = nazev_in,
-        z.telo                 = obsah_in,
-        z.datum_vytvoreni      = datum_in,
+    SET z.nazev                  = nazev_in,
+        z.telo                   = obsah_in,
+        z.datum_vytvoreni        = datum_in,
         z.id_uzivatel_odesilatel = id_odesilatel_in,
-        z.id_uzivatel_prijemce = id_prijemce_uzivatel_in,
-        z.id_skupina_prijemce  = id_prijemce_skupina_in,
-        z.id_rodic             = id_rodic_in,
-        z.id_souboru           = id_soubor_in
+        z.id_uzivatel_prijemce   = id_prijemce_uzivatel_in,
+        z.id_skupina_prijemce    = id_prijemce_skupina_in,
+        z.id_rodic               = id_rodic_in,
+        z.id_souboru             = id_soubor_in
     WHERE z.id_zprava = id_in;
 END;
 /
 
+create or replace PROCEDURE getLikes(id_msg integer)
+    IS
+BEGIN
+    select COUNT(*) FROM OBLIBENE_ZPRAVY where ID_ZPRAVA = id_msg;
+END;
+/

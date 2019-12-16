@@ -10,9 +10,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Tomáš Vondra
- */
+
 public class MessageDAOImpl implements MessageDAO {
 
     private Connection conn;
