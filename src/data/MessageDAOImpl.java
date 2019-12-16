@@ -164,7 +164,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
-    public Collection<Message> getMessagesForChatBetween(User user1, User uzivatel2) throws SQLException {
+    public Collection<Message> getMessagesForChatBetween(User user1, User user2) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
         PreparedStatement preparedStatement = conn.prepareStatement(
@@ -173,8 +173,8 @@ public class MessageDAOImpl implements MessageDAO {
                         + "ORDER BY z.datum_vytvoreni");
         preparedStatement.setInt(1, user1.getId());
         preparedStatement.setInt(2, user1.getId());
-        preparedStatement.setInt(3, uzivatel2.getId());
-        preparedStatement.setInt(4, uzivatel2.getId());
+        preparedStatement.setInt(3, user2.getId());
+        preparedStatement.setInt(4, user2.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
         //Načte zprávy kde je příjemce buď uživatel1 nebo 2 nebo je odesílatel uživatel1 nebo 2
@@ -185,7 +185,7 @@ public class MessageDAOImpl implements MessageDAO {
                         rs.getString("nazev"),
                         rs.getString("telo"),
                         user1,
-                        uzivatel2,
+                        user2,
                         null,
                         rs.getDate("datum_vytvoreni")
                 ); //pokud je uživatel1 odesilatel, vytvoř tuto zprávu
@@ -193,7 +193,7 @@ public class MessageDAOImpl implements MessageDAO {
                 zprava = new Message(
                         rs.getString("nazev"),
                         rs.getString("telo"),
-                        uzivatel2,
+                        user2,
                         user1,
                         null,
                         rs.getDate("datum_vytvoreni")
@@ -208,7 +208,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
-    public Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException {
+    public Collection<Message> getMessagesForGroupChat(Group group) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
         PreparedStatement preparedStatement = conn.prepareStatement(
@@ -217,7 +217,7 @@ public class MessageDAOImpl implements MessageDAO {
                         "where ID_SKUPINA_PRIJEMCE = ?\n" +
                         "order by z.DATUM_VYTVORENI"
         );
-        preparedStatement.setInt(1, skupina.getId());
+        preparedStatement.setInt(1, group.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
@@ -227,7 +227,7 @@ public class MessageDAOImpl implements MessageDAO {
                     rs.getString("telo"),
                     userDAO.getUser(rs),
                     null,
-                    skupina,
+                    group,
                     rs.getDate("datum_vytvoreni")
             );
             collection.add(zprava);
@@ -238,7 +238,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
-    public Collection<Message> getMessagesForGroupChatWithLevel(Group skupina) throws SQLException {
+    public Collection<Message> getMessagesForGroupChatWithLevel(Group group) throws SQLException {
         Collection<Message> collection = new ArrayList<>();
 
         PreparedStatement preparedStatement = conn.prepareStatement(
@@ -246,7 +246,7 @@ public class MessageDAOImpl implements MessageDAO {
                         "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
                         "where ID_SKUPINA_PRIJEMCE = ?"
         );
-        preparedStatement.setInt(1, skupina.getId());
+        preparedStatement.setInt(1, group.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
@@ -254,6 +254,30 @@ public class MessageDAOImpl implements MessageDAO {
         }
         preparedStatement.close();
         System.out.println("getMessagesForGroupChatWithLevel");
+        return collection;
+    }
+
+    @Override
+    public Collection<Message> getMessagesForChatBetweenWithLevel(User user1, User user2) throws SQLException {
+        Collection<Message> collection = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM GETZPRAVYHIERARCHICKY z\n" +
+                        "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
+                        "WHERE (id_uzivatel_odesilatel = ? OR id_uzivatel_PRIJEMCE = ?)\n"
+                        + "AND (id_uzivatel_odesilatel = ? OR id_uzivatel_prijemce = ?)"
+        );
+        preparedStatement.setInt(1, user1.getId());
+        preparedStatement.setInt(2, user2.getId());
+        preparedStatement.setInt(3, user2.getId());
+        preparedStatement.setInt(4, user2.getId());
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            collection.add(getMessageWithLevel(rs));
+        }
+        preparedStatement.close();
+        System.out.println("getMessagesForChatBetweenWithLevel");
         return collection;
     }
 

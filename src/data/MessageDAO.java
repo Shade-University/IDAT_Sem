@@ -87,10 +87,20 @@ public interface MessageDAO {
     Collection<Message> getMessagesForGroupChat(Group skupina) throws SQLException;
 
     /**
-     * Get messages in group with level
+     * Get messages in group with hierarchy level
      * @param skupina
      * @return Collection of messages
      * @throws SQLException
      */
      Collection<Message> getMessagesForGroupChatWithLevel(Group skupina) throws SQLException;
+
+
+    /**
+     * Get messages between two users with hierarchy level
+     * @param user1
+     * @param user2
+     * @return
+     * @throws SQLException
+     */
+    Collection<Message> getMessagesForChatBetweenWithLevel(User user1, User user2) throws SQLException;
 }

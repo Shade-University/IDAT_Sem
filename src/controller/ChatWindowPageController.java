@@ -1,20 +1,22 @@
 package controller;
 
-import data.MessageDAO;
-import data.MessageDAOImpl;
-import data.UserDAO;
-import data.UserDAOImpl;
+import controller.enums.RATING_GRADE;
+import data.*;
+import gui.AlertDialog;
+import gui.Main;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.Group;
 import model.Message;
+import model.Rating;
 import model.User;
 
 import java.net.URL;
@@ -26,21 +28,35 @@ import java.util.ResourceBundle;
 
 public class ChatWindowPageController implements Initializable {
 
-    public TextArea txtAreaMessages;
+    @FXML
+    public ListView<Message> lVMessages;
     public ListView<User> listViewUsers;
     public TextField txtFieldNewMessage;
+    public VBox parentRating;
+    public VBox boxRating;
+    public ComboBox<RATING_GRADE> cBRatingOfGroup;
+    public CheckBox checkBox;
 
     private MessageDAO messageDAO = new MessageDAOImpl();
+    private RatingDAO ratingDAO = new RatingDAOImpl();
     private UserDAO userDao = new UserDAOImpl();
-    private Group chattedGroup;
+    private Group chatedGroup;
+    private Message selectedMessage;
+    private Rating groupRating;
+
+    ObservableList<Message> messages;
 
     public void setChatUsers(List<User> users) {
+        if (chatedGroup == null) {
+            parentRating.getChildren().remove(boxRating);
+        }
+
         this.listViewUsers.setItems(FXCollections.observableArrayList(users));
         refreshMessages();
     }
 
     public void setChatGroup(Group group) {
-        chattedGroup = group;
+        chatedGroup = group;
         new Thread(() -> {
             try {
                 Collection<User> users = userDao.getAllUsersFromGroup(group);
@@ -51,48 +67,81 @@ public class ChatWindowPageController implements Initializable {
         }).start();
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        lVMessages.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                checkBox.setDisable(false);
+                checkBox.setSelected(true);
+                selectedMessage = newValue;
+            }
+        });
+
+        cBRatingOfGroup.setItems(FXCollections.observableArrayList(RATING_GRADE.values()));
+
+        cBRatingOfGroup.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                try {
+                    if (groupRating != null) {
+                        groupRating.setHodnota(RATING_GRADE.getPoints(cBRatingOfGroup.getValue()));
+                        groupRating.setPopis(cBRatingOfGroup.getValue().toString());
+                        ratingDAO.updateRating(groupRating);
+                    } else {
+                        groupRating = new Rating(-1,
+                                RATING_GRADE.getPoints(cBRatingOfGroup.getValue()),
+                                cBRatingOfGroup.getValue().toString(),
+                                MainDashboardPageController.getLoggedUser(),
+                                chatedGroup);
+                        ratingDAO.createRating(groupRating);
+                    }
+                } catch (SQLException e) {
+                    AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
     private void refreshMessages() {
-        txtAreaMessages.clear();
-
-
-
+        checkBox.setDisable(true);
+        checkBox.setSelected(false);
 
         new Thread(() -> {
-            Collection<Message> messages = new ArrayList<>();
-            if (chattedGroup != null) {
+            if (chatedGroup != null) {
                 try {
-                    messages = messageDAO.getMessagesForGroupChat(chattedGroup);
+                    messages = FXCollections.observableArrayList(messageDAO.getMessagesForGroupChatWithLevel(chatedGroup));
+                    groupRating = ratingDAO.getRatingByUserAndGroup(MainDashboardPageController.getLoggedUser(), chatedGroup);
+
+                    Platform.runLater(() -> {
+                        if (groupRating != null) {
+                            cBRatingOfGroup.setValue(RATING_GRADE.convertToRATING_GRADE(groupRating));
+                        } else {
+                            cBRatingOfGroup.setValue(null);
+                        }
+                        lVMessages.setItems(messages);
+                        lVMessages.setCellFactory(list1 -> new MessageListCellController());
+                    });
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             } else {
                 try {
-                    messages = messageDAO.getMessagesForChatBetween(MainDashboardPageController.getLoggedUser(), listViewUsers.getItems().get(0));
+                    messages = FXCollections.observableArrayList(
+                            messageDAO.getMessagesForChatBetweenWithLevel(MainDashboardPageController.getLoggedUser(), listViewUsers.getItems().get(0)));
+                    Platform.runLater(() -> {
+                        lVMessages.setItems(messages);
+                        lVMessages.setCellFactory(list1 -> new MessageListCellController());
+                    });
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            Collection<Message> finalMessages = messages;
-            Platform.runLater(() -> {
-                for (Message m : finalMessages) {
-                    txtAreaMessages.appendText(createMessageFormat(m));
-                }
-            });
         }).start();
-    }
-
-    private String createMessageFormat(Message m) {
-        return m.getDatum_vytvoreni().toString() + ":\t" + m.toString() + "\n";
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     public void btnSendClicked(MouseEvent mouseEvent) {
         Message message = null;
-        if (chattedGroup == null) {
+
+        if (chatedGroup == null) {
             message = new Message(
                     "Uživatelská zpráva",
                     txtFieldNewMessage.getText(),
@@ -106,16 +155,21 @@ public class ChatWindowPageController implements Initializable {
                     txtFieldNewMessage.getText(),
                     MainDashboardPageController.getLoggedUser(),
                     null,
-                    chattedGroup
+                    chatedGroup
             );
         }
 
+        if (checkBox.isSelected() && !checkBox.isDisabled())
+            message.setRodic(selectedMessage);
+            message.setLevel(selectedMessage.getLevel() + 1);
         try {
             messageDAO.createMessage(message);
+            txtFieldNewMessage.setText("");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        refreshMessages();
+        messages.add(messages.indexOf(selectedMessage) + 1, message);
+        lVMessages.refresh();
     }
 }

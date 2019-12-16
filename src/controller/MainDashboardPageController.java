@@ -1,6 +1,5 @@
 package controller;
 
-import controller.enums.USER_TYPE;
 import data.GroupDAOImpl;
 import data.MessageDAO;
 import data.MessageDAOImpl;
@@ -8,7 +7,6 @@ import data.UserDAOImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -19,11 +17,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -285,7 +281,7 @@ public class MainDashboardPageController implements Initializable {
     }
 
     private void openChatWith(Group group) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPageGroup.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
         Tab chatTab = new Tab("Chat: " + group.getName());
         try {
             chatTab.setContent(loader.load());
@@ -293,8 +289,8 @@ public class MainDashboardPageController implements Initializable {
             e.printStackTrace();
         }
 
-        ChatWindowPageGroupController chatWindowPageGroupController = loader.getController();
-        chatWindowPageGroupController.setChatGroup(group);
+        ChatWindowPageController chatWindowPageController = loader.getController();
+        chatWindowPageController.setChatGroup(group);
 
         selectTab(chatTab);
     }
