@@ -7,12 +7,10 @@ import data.UserDAOImpl;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import model.Group;
@@ -32,10 +30,12 @@ public class ChatWindowPageGroupController implements Initializable {
     public ListView<Message> lVMessages;
     public ListView<User> listViewUsers;
     public TextField txtFieldNewMessage;
+    public CheckBox checkBox;
 
     private MessageDAO messageDAO = new MessageDAOImpl();
     private UserDAO userDao = new UserDAOImpl();
     private Group chattedGroup;
+    private Message selectedMessage;
 
     public void setChatUsers(List<User> users) {
         this.listViewUsers.setItems(FXCollections.observableArrayList(users));
@@ -54,10 +54,21 @@ public class ChatWindowPageGroupController implements Initializable {
         }).start();
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        lVMessages.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                checkBox.setDisable(false);
+                checkBox.setSelected(true);
+                selectedMessage = newValue;
+            }
+        });
+
+    }
+
     private void refreshMessages() {
-        lVMessages.setItems(null);
-
-
+        checkBox.setDisable(true);
+        checkBox.setSelected(false);
         new Thread(() -> {
             ObservableList<Message> list = null;
             if (chattedGroup != null) {
@@ -72,9 +83,8 @@ public class ChatWindowPageGroupController implements Initializable {
             ObservableList<Message> finalList = list;
             Platform.runLater(() -> {
                 if (finalList != null) {
+                    lVMessages.setItems(null);
                     lVMessages.setItems(finalList);
-                    lVMessages.setMouseTransparent(true);
-                    lVMessages.setFocusTraversable(false);
                     lVMessages.setCellFactory(new Callback<ListView<Message>,
                                                       ListCell<Message>>() {
                                                   @Override
@@ -88,37 +98,19 @@ public class ChatWindowPageGroupController implements Initializable {
         }).start();
     }
 
-    private String createMessageFormat(Message m) {
-        return m.getDatum_vytvoreni().toString() + ":\t" + m.toString() + "\n";
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
     public void btnSendClicked(MouseEvent mouseEvent) {
-        Message message = null;
-        if (chattedGroup == null) {
-            message = new Message(
-                    "Uživatelská zpráva",
-                    txtFieldNewMessage.getText(),
-                    MainDashboardPageController.getLoggedUser(),
-                    listViewUsers.getItems().get(0),
-                    null
-            );
-        } else {
-            message = new Message(
+        Message message = new Message(
                     "Skupinová zpráva",
                     txtFieldNewMessage.getText(),
                     MainDashboardPageController.getLoggedUser(),
                     null,
                     chattedGroup
             );
-        }
-
+        if(checkBox.isSelected()&&!checkBox.isDisabled())
+             message.setRodic(selectedMessage);
         try {
             messageDAO.createMessage(message);
+            txtFieldNewMessage.setText("");
         } catch (SQLException e) {
             e.printStackTrace();
         }
