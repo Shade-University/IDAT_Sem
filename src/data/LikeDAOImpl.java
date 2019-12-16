@@ -5,6 +5,8 @@ import model.Message;
 import model.Rating;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,5 +75,22 @@ public class LikeDAOImpl implements LikeDAO{
         conn.commit();
         System.out.println("getLikeCount");
         return 0;
+    }
+
+    @Override
+    public Collection<Like> getAllLikes() throws SQLException {
+        Collection<Like> collection = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM OBLIBENE_ZPRAVY");
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()){
+            Like like = getLike(rs);
+            collection.add(like);
+        }
+        preparedStatement.close();
+        conn.commit();
+        System.out.println("getAllLikes");
+        return collection;
     }
 }
