@@ -5,6 +5,7 @@ import controller.enums.DATABASE_OPERATION_TYPE;
 import controller.enums.TRANSACTION_TYPE;
 import data.*;
 import gui.AlertDialog;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import model.Order;
 import model.Product;
 import model.User;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -120,16 +122,26 @@ public class ISKAMAdminPageController {
     }
 
     private void loadData() throws SQLException {
-        transactionList = FXCollections.observableArrayList(orderDAO.getAllOrders());
-        foodMenuList = FXCollections.observableArrayList(foodMenuDAO.getAllFoodMenu());
-        productList = FXCollections.observableArrayList(productDAO.getAllProducts());
-        lvOrders.setItems(transactionList);
-        lVProducts.setItems(productList);
-        lVFoodMenu.setItems(foodMenuList);
+        new Thread(() -> {
+            try {
+                transactionList = FXCollections.observableArrayList(orderDAO.getAllOrders());
+                foodMenuList = FXCollections.observableArrayList(foodMenuDAO.getAllFoodMenu());
+                productList = FXCollections.observableArrayList(productDAO.getAllProducts());
+                ObservableList<User> users = FXCollections.observableArrayList(userDAO.getAllUsers());
+                Platform.runLater(() -> {
+                    lvOrders.setItems(transactionList);
+                    lVProducts.setItems(productList);
+                    lVFoodMenu.setItems(foodMenuList);
+                    cBTUser.setItems(FXCollections.observableArrayList(users));
+                    cBTProduct.setItems(productList);
+                    cBFProducts.setItems(productList);
+                });
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         //Transaction
-        cBTUser.setItems(FXCollections.observableArrayList(userDAO.getAllUsers()));
-        cBTProduct.setItems(productList);
         cBTTransactionType.setItems(FXCollections.observableArrayList(TRANSACTION_TYPE.values()));
         cBTOperationType.setItems(FXCollections.observableArrayList(DATABASE_OPERATION_TYPE.values()));
         cBTOperationType.getSelectionModel().select(1);
@@ -137,7 +149,6 @@ public class ISKAMAdminPageController {
             fillTransakcePane(newValue);
             editedOrder = newValue;
         });
-
 
         //Products
         cbPTypeOfTransaction.setItems(FXCollections.observableArrayList(TRANSACTION_TYPE.values()));
@@ -151,7 +162,7 @@ public class ISKAMAdminPageController {
         //Food menu
         cBFTypeOfOperation.setItems(FXCollections.observableArrayList(DATABASE_OPERATION_TYPE.values()));
         cBFTypeOfOperation.getSelectionModel().select(0);
-        cBFProducts.setItems(FXCollections.observableArrayList(productList));
+
         cBFProducts.getSelectionModel().select(0);
         lVFoodMenu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
            fillFoodMenu(newValue);
@@ -177,7 +188,7 @@ public class ISKAMAdminPageController {
                                     cBTUser.getValue(),
                                     cBTProduct.getValue(),
                                     cBTTransactionType.getValue(),
-                                    Float.valueOf(tFTPrice.getText()),
+                                    Float.parseFloat(tFTPrice.getText()),
                                     Date.valueOf(dPTDate.getValue()),
                                     tATDescription.getText()
                             ));
@@ -191,7 +202,7 @@ public class ISKAMAdminPageController {
                                         cBTUser.getValue(),
                                         cBTProduct.getValue(),
                                         cBTTransactionType.getValue(),
-                                        Float.valueOf(tFTPrice.getText()),
+                                        Float.parseFloat(tFTPrice.getText()),
                                         Date.valueOf(dPTDate.getValue()),
                                         tATDescription.getText()
                                 ));
@@ -238,8 +249,14 @@ public class ISKAMAdminPageController {
     private void reloadTransakce() throws SQLException {
         editedOrder = null;
         fillTransakcePane(null);
-        transactionList = FXCollections.observableArrayList(orderDAO.getAllOrders());
-        lvOrders.setItems(transactionList);
+        new Thread(() -> {
+            try {
+                transactionList = FXCollections.observableArrayList(orderDAO.getAllOrders());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> lvOrders.setItems(transactionList));
+        }).start();
     }
 
     @FXML
@@ -251,9 +268,9 @@ public class ISKAMAdminPageController {
                             new Product(-1,
                                     tFPName.getText(),
                                     tAPDescription.getText(),
-                                    Integer.valueOf(tFPInStock.getText()),
+                                    Integer.parseInt(tFPInStock.getText()),
                                     cbPTypeOfTransaction.getValue(),
-                                    Float.valueOf(tAPPrice.getText())
+                                    Float.parseFloat(tAPPrice.getText())
                             ));
                     reloadProduct();
                     AlertDialog.show("Produkt byl přidán.", Alert.AlertType.INFORMATION);
@@ -264,9 +281,9 @@ public class ISKAMAdminPageController {
                                 new Product(editedProduct.getId(),
                                         tFPName.getText(),
                                         tAPDescription.getText(),
-                                        Integer.valueOf(tFPInStock.getText()),
+                                        Integer.parseInt(tFPInStock.getText()),
                                         cbPTypeOfTransaction.getValue(),
-                                        Float.valueOf(tAPPrice.getText())
+                                        Float.parseFloat(tAPPrice.getText())
                                 ));
                         reloadProduct();
                         AlertDialog.show("Produkt byl upraven.", Alert.AlertType.INFORMATION);
@@ -308,10 +325,18 @@ public class ISKAMAdminPageController {
     private void reloadProduct() throws SQLException {
         editedProduct = null;
         fillProductPane(null);
-        productList = FXCollections.observableArrayList(productDAO.getAllProducts());
-        lVProducts.setItems(productList);
-        cBTProduct.setItems(productList);
-        cBFProducts.setItems(productList);
+        new Thread(() -> {
+            try {
+                productList = FXCollections.observableArrayList(productDAO.getAllProducts());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                lVProducts.setItems(productList);
+                cBTProduct.setItems(productList);
+                cBFProducts.setItems(productList);
+            });
+        }).start();
     }
 
 
@@ -387,16 +412,23 @@ public class ISKAMAdminPageController {
     private void fillFoodMenu(FoodMenu newValue) {
         if (newValue != null) {
             dPFDate.setValue(convertToLocalDate(newValue.getDate()));
-            try {
-                lVFProducts.setItems(FXCollections.observableArrayList(productDAO.getProductByFoodMenu(newValue)));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
+            new Thread(() -> {
+
+                try {
+                    ObservableList<Product> products = FXCollections.observableArrayList(productDAO.getProductByFoodMenu(newValue));
+                    Platform.runLater(() ->  {
+                        lVFProducts.setItems(products);
+                        cBFProductsChanged(null);
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         } else {
             dPFDate.setValue(null);
             lVFProducts.setItems(null);
         }
-        cBFProductsChanged(null);
     }
 
     private void reloadFoodMenu() throws SQLException {
