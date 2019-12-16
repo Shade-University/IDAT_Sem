@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.Group;
 import model.Message;
@@ -30,6 +31,8 @@ public class ChatWindowPageGroupController implements Initializable {
     public ListView<Message> lVMessages;
     public ListView<User> listViewUsers;
     public TextField txtFieldNewMessage;
+    public VBox parentRating;
+    public VBox boxRating;
     public ComboBox<RATING_GRADE> cBRatingOfGroup;
     public CheckBox checkBox;
 
@@ -93,6 +96,9 @@ public class ChatWindowPageGroupController implements Initializable {
     }
 
     private void refreshMessages() {
+        if(chatedGroup==null){
+            parentRating.getChildren().remove(boxRating);
+        }
         checkBox.setDisable(true);
         checkBox.setSelected(false);
         new Thread(() -> {

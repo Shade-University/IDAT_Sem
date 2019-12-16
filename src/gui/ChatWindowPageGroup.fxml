@@ -36,7 +36,7 @@
             <ListView fx:id="lVMessages" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <right>
-            <VBox prefHeight="200.0" prefWidth="195.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="parentRating" prefHeight="200.0" prefWidth="195.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox fx:id="boxRating" prefHeight="97.0" prefWidth="195.0">
                      <children>
