@@ -586,41 +586,41 @@ INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)
 VALUES (1, 'Špatné', 10, 5);
 
 /*=====produkty====*/
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (1, 'peèená kuøecí stehenní ètvrtka na slaninì, rýže
 ', 'Hlavní jídlo', 8, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (2, 'vepøový steak z krkovice, slanina, sáz. vejce, hranolky
 ', 'Hlavní jídlo', 9, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (3, 'peèené vepøové koleno', 'Hlavní jídlo', 7, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (4, 'smaž. kuøecí kapsa se sýrem a šunkou, bramborová kaše', 'Hlavní jídlo', 6, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (5, '3ks domácí vdolky s povidly a šlehaèkou', 'Hlavní jídlo', 5, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (6, 'míchaný salát s cibulkou', 'Hlavní jídlo', 11, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (7, 'listový salát s cherry rajèaty, grilované tofu, toasty', 'Hlavní jídlo', 12, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (8, 'Thajské kuøecí curry s jasmínovou rýží', 'Hlavní jídlo', 9, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (9, '1ks domácí vdolek s povidly a šlehaèkou', 'Hlavní jídlo', 16, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (10, 'Moravský vrabec se špenátem a bramborovými špalíèky', 'Hlavní jídlo', 10, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (11, 'Gnocchi al quattro formaggi', 'Hlavní jídlo', 10, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (12, 'Wrap s hovìzím vyzrálým flank steakem z Namibie', 'Hlavní jídlo', 17, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (13, 'Chilli con carne s dušenou bylinkovou rýží', 'Hlavní jídlo', 11, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (14, 'Panna cotta s malinovou omáèkou', 'Hlavní jídlo', 5, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (15, 'Vepøové žebírka, hoøèice, køen, chléb', 'Hlavní jídlo', 3, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (16, 'Quesadilla s hovìzím masem', 'Hlavní jídlo', 8, 1, 1, null);
-insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP, PLATNOST_DNY, CENA)
+insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (17, 'Burgr s hovìzím masem, cuketou s èedarem', 'Hlavní jídlo', 9, 1, 1, null);
 
 

@@ -12,7 +12,7 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="279.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Instalační služba - průvodce prvním spuštěním aplikace">
+            <Label text="Nastavení připojení k databazi">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -86,7 +86,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Button mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="297.0" text="Uložit a otestovat připojení" VBox.vgrow="ALWAYS">
+                              <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="1177.0" text="Uložit a otestovat připojení" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>
@@ -96,45 +96,6 @@
                      </top>
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </BorderPane>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
-                     <top>
-                        <VBox fx:id="toolsPane" prefHeight="352.0" prefWidth="292.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label text="Inicializace databáze">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label fx:id="lblState" text="..." textFill="#ff7b00">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#btnCreateDB" prefHeight="43.0" prefWidth="2276.0" text="Vytvořit tabulky" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#btnInsertDB" prefHeight="43.0" prefWidth="812.0" text="Vložit demo data" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#btnDeleteDB" prefHeight="43.0" prefWidth="1657.0" text="Vymazat databázi" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets />
-                           </BorderPane.margin>
-                        </VBox>
-                     </top>
-                     <HBox.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </BorderPane>
                </children>

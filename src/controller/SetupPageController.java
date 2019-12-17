@@ -1,22 +1,31 @@
 package controller;
 
+import data.DatabaseInitDAO;
+import data.DatabaseInitDAOImpl;
+import data.FieldOfStudyDAOImpl;
+import data.OracleConnection;
+import gui.AlertDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 import model.Configuration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class SetupPageController implements Initializable {
 
-    private ConfigurationHandler ch;
+    private ConfigurationHandler ch = new ConfigurationHandler();
 
     @FXML
     private TextField tFPort;
@@ -34,20 +43,14 @@ public class SetupPageController implements Initializable {
     private PasswordField tFPassword;
 
     @FXML
-    private VBox toolsPane;
-
-    @FXML
     private TextField tFSID;
 
     @FXML
-    private Label lblState;
+    private Button btnSave;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ch = new ConfigurationHandler();
-        Configuration conf = new Configuration("t","t","t",123, "t","t");
         try {
-            ch.setPropValues(conf);
             Configuration config = ch.getPropValues();
             tFUserName.setText(config.getUSERNAME());
             tFPassword.setText(config.getPASSWORD());
@@ -62,21 +65,31 @@ public class SetupPageController implements Initializable {
 
     @FXML
     void btnSaveClicked(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnCreateDB(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnInsertDB(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnDeleteDB(ActionEvent event) {
+        try{
+            Configuration config = new Configuration(
+                    tFUserName.getText(),
+                    tFPassword.getText(),
+                    tFAddress.getText(),
+                    Integer.valueOf(tFPort.getText()),
+                    tFDBMS.getText(),
+                    tFSID.getText()
+            );
+            ch.setPropValues(config);
+        } catch (IOException e){
+            System.out.println(e);
+        }
+        try {
+            Connection conn = OracleConnection.testConnection();
+                    if(conn!=null){
+                        AlertDialog.show("Připojení bylo úspěšné. Teď prosím ručně naimportujte SQL scripty pro inicializaci, a poté spuste aplikaci znovu.", Alert.AlertType.INFORMATION);
+                        Stage stage = (Stage) btnSave.getScene().getWindow();
+                        stage.close();
+                    }else{
+                        AlertDialog.show("Připojení k databázi se nezdařilo.", Alert.AlertType.ERROR);
+                    }
+        } catch (SQLException ex) {
+            AlertDialog.show("Připojení k databázi se nezdařilo.", Alert.AlertType.ERROR);
+        }
 
     }
 }

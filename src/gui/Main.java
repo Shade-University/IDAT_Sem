@@ -27,17 +27,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        primaryStage = stage;
+        Parent root;
         try {
             OracleConnection.getConnection();
+             root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
         } catch (SQLException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nelze se připojit k databázi");
-            alert.showAndWait();
-            return;
+             root = FXMLLoader.load(getClass().getResource("SetupPage.fxml"));
         }
-        primaryStage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("SetupPage.fxml"));
         Scene scene = new Scene(root);
-
         primaryStage.setTitle("Sociální síť");
         primaryStage.setScene(scene);
         primaryStage.show();
