@@ -4,7 +4,7 @@ package model;
 import java.util.List;
 
 /**
- * @author Tomáš Vondra
+ * Group model
  */
 public class Group {
 

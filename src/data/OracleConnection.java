@@ -21,6 +21,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Db connector class
+ */
 public class OracleConnection {
 
     private OracleConnection() {} //Singleton
@@ -28,15 +31,11 @@ public class OracleConnection {
     private static Connection connection = null;
     private static model.Configuration configuration = null;
 
-   /* private static final String USERNAME = "st55448"; //Nejlepší by bylo tahat citlivá data z nějakýho zdroje
-    private static final String PASSWORD = "lopata97"; //heslo pro veřejnost
-    private static final String USERNAME = "st55431"; //Nejlepší by bylo tahat citlivá data z nějakýho zdroje
-    private static final String PASSWORD = "Heslo12345"; //heslo pro veřejnost
-    private static final String SERVER_NAME = "fei-sql1.upceucebny.cz";
-    private static final int PORT = 1521;
-    private static final String DBMS = "oracle:thin";
-    private static final String SID = "IDAS";*/
-
+    /**
+     * Get connection to db
+     * @return Connection to db
+     * @throws SQLException
+     */
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
             ConfigurationHandler cf = new ConfigurationHandler();
@@ -49,6 +48,11 @@ public class OracleConnection {
         return connection;
     }
 
+    /**
+     * Test connection
+     * @return Connection
+     * @throws SQLException
+     */
     public static Connection testConnection() throws SQLException {
             ConfigurationHandler cf = new ConfigurationHandler();
             try {
@@ -59,16 +63,22 @@ public class OracleConnection {
         return connection;
     }
 
+    /**
+     * Set up connection to db
+     * Load connection from config
+     * @param config
+     * @throws SQLException
+     */
     private static void setUpConnection(Configuration config) throws SQLException {
 
         configuration = config;
         Properties connectionProps = new Properties();
-        connectionProps.put("user", config.getUSERNAME());
-        connectionProps.put("password", config.getPASSWORD());
+        connectionProps.put("user", config.getUsername());
+        connectionProps.put("password", config.getPassword());
 
-        connection = DriverManager.getConnection("jdbc:" + config.getDBMS() + ":@"
-                        + config.getSERVER_NAME()
-                        + ":" + config.getPORT() + ":" + config.getSID(),
+        connection = DriverManager.getConnection("jdbc:" + config.getDbms() + ":@"
+                        + config.getServer_name()
+                        + ":" + config.getPort() + ":" + config.getSid(),
                 connectionProps);
 
         connection.setAutoCommit(false);
@@ -76,10 +86,19 @@ public class OracleConnection {
         System.out.println("Connected to database");
     }
 
+    /**
+     * Get connection string to db
+     * @return Connection String
+     */
     public static String getConnectionString() {
-        return "//jdbc:" + configuration.getDBMS()+ ":@" + configuration.getSERVER_NAME() + ":" + configuration.getPORT() + ":" + configuration.getSID();
+        return "//jdbc:" + configuration.getDbms()+ ":@" + configuration.getServer_name() + ":" + configuration.getPort() + ":" + configuration.getSid();
     }
 
+    /**
+     * Close connection to db
+     * @param commit
+     * @throws SQLException
+     */
     public static void closeConnection(boolean commit) throws SQLException {
         if (connection != null) {
             if (commit) {
@@ -92,10 +111,10 @@ public class OracleConnection {
         }
     }
     /**
-     *
+     * Helper method for parse date to db
      * @param date
      * @param format
-     * @return
+     * @return sql.Date
      */
     public static java.sql.Date parseDate(String date, String format){
         DateFormat df = new SimpleDateFormat(format, Locale.getDefault());

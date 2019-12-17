@@ -169,7 +169,7 @@ public class OrderDAOImpl implements OrderDAO {
         preparedStatement.setInt(1, user.getId());
 
         ResultSet rs = preparedStatement.executeQuery();
-        Float balance = null;
+        float balance = -1;
         if (rs.next())
             balance = rs.getFloat("castka");
         preparedStatement.close();
@@ -178,7 +178,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     /**
-     * Parser ResultSetu na Transakce
+     * Parser ResultSet to Transaction
      *
      * @param rs
      * @return Order

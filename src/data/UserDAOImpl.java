@@ -77,11 +77,13 @@ public class UserDAOImpl implements UserDAO {
 
         callableStatement.executeQuery();
         String hashedPassword = callableStatement.getString(1);
+        //Hash password from function from db
 
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM getUzivatele WHERE email=? AND heslo=?");
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, hashedPassword);
+        //Compare hashed password with db password
 
         ResultSet rs = preparedStatement.executeQuery();
         User user = null;
@@ -196,9 +198,9 @@ public class UserDAOImpl implements UserDAO {
                 break;
         }
         return user;
-    } //Metoda rozparsuje a vytvoří uživatele
+    } //Parser method for users
 
-    private List<Subject> getSubjects(int id_uzivatel) {
+    private List<Subject> getSubjects(int id_user) {
         List<Subject> collection = new ArrayList<>();
 
         try {
@@ -206,7 +208,7 @@ public class UserDAOImpl implements UserDAO {
                     "SELECT * FROM getVyucovanePredmety " +
                             "where id_uzivatel = ?"
             );
-            preparedStatement.setInt(1, id_uzivatel);
+            preparedStatement.setInt(1, id_user);
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -219,7 +221,7 @@ public class UserDAOImpl implements UserDAO {
         }
         System.out.println("getSubjects");
         return collection;
-    }
+    } //Parser method for subject
 
     @Override
     public BufferedImage readImage(Blob img) throws SQLException {
@@ -235,7 +237,7 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return null;
-    }
+    } //Helper method for reading blob as image
 
     @Override
     public void updateUser(User user) throws SQLException {
@@ -270,6 +272,7 @@ public class UserDAOImpl implements UserDAO {
 
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery("SELECT MAX(id_uzivatel) \"id\" FROM UZIVATELE");
+        //Get last inserted user id and set it
         if (rs.next()) {
             user.setId(rs.getInt("id"));
         }
@@ -358,7 +361,7 @@ public class UserDAOImpl implements UserDAO {
         conn.commit();
         preparedStatement.close();
         System.out.println("Avatar updated");
-    }
+    } //Helper method for update user avatar
 
     private void deleteStudent(Student student) throws SQLException {
         CallableStatement preparedStatement = conn.prepareCall(
@@ -402,5 +405,4 @@ public class UserDAOImpl implements UserDAO {
         System.out.println("Admin inserted");
 
     }
-
 }

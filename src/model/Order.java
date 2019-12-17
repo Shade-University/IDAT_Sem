@@ -5,6 +5,9 @@ import controller.enums.TRANSACTION_TYPE;
 import java.sql.Date;
 import java.util.Objects;
 
+/**
+ * Order model
+ */
 public class Order {
     private int id;
     private User user;

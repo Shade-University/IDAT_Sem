@@ -2,16 +2,12 @@ package controller;
 
 import data.FieldOfStudyDAO;
 import data.FieldOfStudyDAOImpl;
-import data.GroupDAO;
-import data.GroupDAOImpl;
 import gui.AlertDialog;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import model.Field;
-import model.Group;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,17 +15,14 @@ import java.util.ResourceBundle;
 
 public class EditFieldOfStudyPageController implements Initializable {
 
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnDelete;
-    @FXML
-    private TextArea textAreaFieldOfStudyDescription;
-    @FXML
-    private TextField txtFieldFieldOfStudyName;
+    public Button btnSave;
+    public Button btnDelete;
+    public TextArea textAreaFieldOfStudyDescription;
+    public TextField txtFieldFieldOfStudyName;
 
     private static Field editedFieldOfStudy;
     private static AdministrationPageController parent;
+
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
 
     /**
@@ -48,10 +41,11 @@ public class EditFieldOfStudyPageController implements Initializable {
      *
      * @throws SQLException
      */
-    private void reloadData() throws SQLException {
+    private void reloadData() {
         editedFieldOfStudy = null;
         parent.refreshFieldOfStudy();
         parent.stackPaneEditFieldsOfStudy.getChildren().clear();
+        //reload
     }
 
     /**
@@ -63,12 +57,12 @@ public class EditFieldOfStudyPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (editedFieldOfStudy != null) {
-            txtFieldFieldOfStudyName.setText(editedFieldOfStudy.getNazev());
-            textAreaFieldOfStudyDescription.setText(editedFieldOfStudy.getPopis());
+            txtFieldFieldOfStudyName.setText(editedFieldOfStudy.getName());
+            textAreaFieldOfStudyDescription.setText(editedFieldOfStudy.getDescription());
         } else {
             btnSave.setText("Přidat obor");
             btnDelete.setVisible(false);
-        }
+        } //If edit field, set values, else insert field
     }
 
     @FXML
@@ -79,15 +73,15 @@ public class EditFieldOfStudyPageController implements Initializable {
                 fieldDAO.insertField(nf);
                 AlertDialog.show("Nový obor byl vytvořen.", Alert.AlertType.INFORMATION);
             } else {
-                editedFieldOfStudy.setNazev(txtFieldFieldOfStudyName.getText());
-                editedFieldOfStudy.setPopis(textAreaFieldOfStudyDescription.getText());
+                editedFieldOfStudy.setName(txtFieldFieldOfStudyName.getText());
+                editedFieldOfStudy.setDescription(textAreaFieldOfStudyDescription.getText());
                 fieldDAO.updateField(editedFieldOfStudy);
                 AlertDialog.show("Úprava oboru byla úspěšná!", Alert.AlertType.INFORMATION);
             }
             reloadData();
         } catch (SQLException e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
-        }
+        } //If create field, create field. Else edit field
     }
 
     @FXML
@@ -97,8 +91,8 @@ public class EditFieldOfStudyPageController implements Initializable {
             AlertDialog.show("Obor byl úspěšně smazán!", Alert.AlertType.INFORMATION);
             reloadData();
         } catch (SQLException e) {
-            AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
-    }
+    } //Delete field
 
 }

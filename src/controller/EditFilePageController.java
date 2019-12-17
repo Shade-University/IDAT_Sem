@@ -28,15 +28,17 @@ import java.util.ResourceBundle;
 public class EditFilePageController implements Initializable {
 
     private static File editedFile;
+
     public Button btnAddFile;
     public Label lblError;
     public TextField txtFieldTypeFile;
-    private java.io.File selectedFile;
-
-    private FileChooser fileChooser = new FileChooser();
     public ComboBox<ACTION_TYPE> actionTypeComboBox;
 
+    private FileChooser fileChooser = new FileChooser();
+
     private final FileDAO fileDAO = new FileDAOImpl();
+
+    private java.io.File selectedFile;
 
     public static void setEditedFile(File file) {
         editedFile = file;
@@ -63,7 +65,7 @@ public class EditFilePageController implements Initializable {
     void btnAddFileClicked(ActionEvent event) {
         selectedFile = fileChooser.showOpenDialog(Main.primaryStage);
         btnAddFile.setText(selectedFile.getName());
-    }
+    } //Select file
 
     private LocalDate convertToLocalDate(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime())
@@ -86,7 +88,7 @@ public class EditFilePageController implements Initializable {
             actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.INSERT));
             actionTypeComboBox.getSelectionModel().select(0);
         }
-    }
+    } //Init values if we are editing file or creating
 
     public void btnFileUpdateClicked(ActionEvent actionEvent) {
         File newFile = null;
@@ -125,7 +127,7 @@ public class EditFilePageController implements Initializable {
             lblError.setText("Soubor se povedlo aktualizovat.");
         } catch (SQLException ex) {
             lblError.setText("Soubor se nepovedlo aktualizovat.\n" + ex.getMessage());
-        }
+        } //Perform action in db
     }
 
     private void downloadFile(File editedFile) {
@@ -140,6 +142,5 @@ public class EditFilePageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
+    } //Download file to files/
 }

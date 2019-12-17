@@ -4,6 +4,9 @@ import controller.enums.TRANSACTION_TYPE;
 
 import java.util.Objects;
 
+/**
+ * Product model
+ */
 public class Product {
     private int id;
     private String name;

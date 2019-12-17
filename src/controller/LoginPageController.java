@@ -24,12 +24,9 @@ import java.util.logging.Logger;
  */
 public class LoginPageController implements Initializable {
 
-    @FXML
-    private TextField txtFieldUserName;
-    @FXML
-    private TextField txtFieldPassword;
-    @FXML
-    private Label lblError;
+    public TextField txtFieldUserName;
+    public TextField txtFieldPassword;
+    public Label lblError;
 
     /**
      * Initializes the controller class.
@@ -67,6 +64,6 @@ public class LoginPageController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    } //Try to get login
 
 }

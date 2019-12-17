@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * File model
+ */
 public class File {
 
     private Integer id;

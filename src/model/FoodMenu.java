@@ -2,6 +2,9 @@ package model;
 
 import java.sql.Date;
 
+/**
+ * FoodMenu model
+ */
 public class FoodMenu {
     private int id;
     private Date date;

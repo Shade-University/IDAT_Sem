@@ -25,38 +25,21 @@ import java.util.logging.Logger;
 
 public class ISKAMUserPageController {
 
-    Connection conn;
-    ProductDAO productDAO = new ProductDAOImpl();
-    FoodMenuDAO foodMenuDAO = new FoodMenuDAOImpl();
-    OrderDAO orderDAO = new OrderDAOImpl();
-    User loggedUser;
+    private ProductDAO productDAO = new ProductDAOImpl();
+    private FoodMenuDAO foodMenuDAO = new FoodMenuDAOImpl();
+    private OrderDAO orderDAO = new OrderDAOImpl();
 
-    @FXML
-    private TextField txtCVV;
+    private User loggedUser;
 
-    @FXML
-    private ListView<Order> lVFoodOrders;
-
-    @FXML
-    private TextField txtExpiration;
-
-    @FXML
-    private ListView<Order> lVTodayOrders;
-
-    @FXML
-    private TextField txtCardNumber;
-
-    @FXML
-    private TextField txtMoneyToDeposit;
-
-    @FXML
-    private Label lblBalance;
-
-    @FXML
-    private ListView<Product> lVFoodMenu;
-
-    @FXML
-    private DatePicker dPFoodDate;
+    public TextField txtCVV;
+    public ListView<Order> lVFoodOrders;
+    public TextField txtExpiration;
+    public ListView<Order> lVTodayOrders;
+    public TextField txtCardNumber;
+    public TextField txtMoneyToDeposit;
+    public Label lblBalance;
+    public ListView<Product> lVFoodMenu;
+    public DatePicker dPFoodDate;
 
     private void refreshData() throws SQLException {
         getBalance();
@@ -75,9 +58,9 @@ public class ISKAMUserPageController {
                 e.printStackTrace();
             }
         }).start();
-    }
+    } //Reload data from db
 
-    private void getBalance() throws SQLException {
+    private void getBalance() {
         new Thread(() -> {
             try {
                 float balance = orderDAO.getAccountBalance(loggedUser);
@@ -86,7 +69,7 @@ public class ISKAMUserPageController {
                 e.printStackTrace();
             }
         }).start();
-    }
+    } //Get balance from db
 
     public void initData(User loggedUser) {
         this.loggedUser = loggedUser;
@@ -95,7 +78,7 @@ public class ISKAMUserPageController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    } //Set user and get data
 
     @FXML
     private void dateSearchChanged(ActionEvent event) throws SQLException {
@@ -111,7 +94,7 @@ public class ISKAMUserPageController {
                 }
             }).start();
         }
-    }
+    } //Get food menu on day
 
     @FXML
     private void btnPayClicked(ActionEvent actionEvent) {
@@ -126,7 +109,7 @@ public class ISKAMUserPageController {
         } catch (SQLException e){
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
-    }
+    } //Pay
 
     @FXML
     private void btnFoodOrderClicked(ActionEvent actionEvent) {
@@ -146,5 +129,5 @@ public class ISKAMUserPageController {
         } catch (SQLException e){
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
-    }
+    } //Order
 }

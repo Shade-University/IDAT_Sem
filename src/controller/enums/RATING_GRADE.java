@@ -2,6 +2,9 @@ package controller.enums;
 
 import model.Rating;
 
+/**
+ * Rating grade for rating groups
+ */
 public enum RATING_GRADE {
     A("5 - skvělý"),
     B("4 - super"),

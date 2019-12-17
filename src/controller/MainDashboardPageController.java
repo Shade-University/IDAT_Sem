@@ -86,16 +86,16 @@ public class MainDashboardPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initTabs();
-        initFileChooser();
-        loadUserData();
-        loadLabels();
+        initFileChooser(); //Init components
+        loadUserData(); //Load logged user data
+        loadLabels(); //Set user data
 
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             openChatWith(newValue);
         });
         listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             openChatWith(newValue);
-        });
+        }); //On click on user/group, open chat
 
         cbChangeUser.getSelectionModel().select(loggedUser);
         cbChangeUser.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
@@ -105,7 +105,7 @@ public class MainDashboardPageController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }));
+        })); //On administrator evaluate account, login as that user
     }
 
     public void onClickEditProfile(MouseEvent mouseEvent) {
@@ -115,7 +115,7 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Edit user profile
 
     public void onClickLogOut(MouseEvent mouseEvent) {
         try {
@@ -123,7 +123,7 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Log out
 
     public void onImageClicked(MouseEvent mouseEvent) {
         File file = fileChooser.showOpenDialog(Main.primaryStage);
@@ -137,7 +137,7 @@ public class MainDashboardPageController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    } //Change avatar
 
     public void onAdministrationClicked(MouseEvent mouseEvent) {
         try {
@@ -149,7 +149,7 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Open administration
 
     public void onToolboxClicked(MouseEvent mouseEvent) {
         try {
@@ -164,7 +164,7 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Open teacher tools
 
     public void onISKAMClicked(MouseEvent mouseEvent) {
         try {
@@ -179,13 +179,13 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Open iskam
 
     public void selectTab(Tab tab) {
         if (!tabPane.getTabs().contains(tab))
             tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
-    }
+    } //Helper method to open/select tab
 
     public void removeTab(Tab tab) {
         try {
@@ -193,7 +193,7 @@ public class MainDashboardPageController implements Initializable {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-    }
+    } //Helper method to close tab
 
     private void initTabs() {
         editProfileTab.setText("Profil");
@@ -228,7 +228,8 @@ public class MainDashboardPageController implements Initializable {
                     vBoxMenu.getChildren().remove(hBoxToolboxForTeachers);
                     break;
             }
-    }
+    } //Init default tabs
+
     private void loadLabels() {
         lblNickName.setText(loggedUser.getFirstName() + " " + loggedUser.getLastName());
         lblRole.setText(loggedUser.getUserType().getType());
@@ -239,12 +240,13 @@ public class MainDashboardPageController implements Initializable {
             imgView.setImage(new Image("/gui/images/account.png"));
 
         if(loggedUser instanceof Student)
-            lblInfo.setText(((Student)loggedUser).getField().getNazev());
+            lblInfo.setText(((Student)loggedUser).getField().getName());
         else if(loggedUser instanceof Teacher)
             lblInfo.setText(((Teacher)loggedUser).getInstitute());
         else
             lblInfo.setVisible(false);
-    }
+    } //Init user info
+
     private void loadUserData() {
         new Thread(() -> {
             try {
@@ -257,13 +259,14 @@ public class MainDashboardPageController implements Initializable {
                 e.printStackTrace();
             }
         }).start();
-    }
+    } //Load user data
+
     private void initFileChooser() {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("JPG", "*.jpg")
                 , new FileChooser.ExtensionFilter("PNG", "*.png")
         );
-    }
+    } //Init file chooser
 
     private void openChatWith(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
@@ -278,7 +281,7 @@ public class MainDashboardPageController implements Initializable {
         chatWindowPageController.setChatUsers(Arrays.asList(user));
 
         selectTab(chatTab);
-    }
+    } //Open chat with user
 
     private void openChatWith(Group group) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
@@ -293,7 +296,7 @@ public class MainDashboardPageController implements Initializable {
         chatWindowPageController.setChatGroup(group);
 
         selectTab(chatTab);
-    }
+    } //Open chat with group
 
 
     public void onImportClicked(MouseEvent mouseEvent) {
@@ -303,5 +306,5 @@ public class MainDashboardPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Open REST import window
 }

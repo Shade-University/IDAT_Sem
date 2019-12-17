@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author Tomáš Vondra
+ * User role
  */
 
 public enum USER_TYPE {

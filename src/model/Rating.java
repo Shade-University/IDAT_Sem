@@ -1,6 +1,9 @@
 
 package model;
 
+/**
+ * Rating model
+ */
 
 public class Rating {
 

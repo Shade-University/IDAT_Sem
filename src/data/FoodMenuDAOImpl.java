@@ -126,7 +126,7 @@ public class FoodMenuDAOImpl implements FoodMenuDAO {
     }
 
     /**
-     * Parser ResultSetu na Produkt
+     * Parse ResultSet to FoodMenu
      *
      * @param rs
      * @return produkt

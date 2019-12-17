@@ -1,17 +1,12 @@
 package controller;
 
-import data.DatabaseInitDAO;
-import data.DatabaseInitDAOImpl;
-import data.FieldOfStudyDAOImpl;
 import data.OracleConnection;
 import gui.AlertDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 import model.Configuration;
 
 import java.io.IOException;
@@ -19,49 +14,34 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class SetupPageController implements Initializable {
 
     private ConfigurationHandler ch = new ConfigurationHandler();
 
-    @FXML
-    private TextField tFPort;
-
-    @FXML
-    private TextField tFAddress;
-
-    @FXML
-    private TextField tFUserName;
-
-    @FXML
-    private TextField tFDBMS;
-
-    @FXML
-    private PasswordField tFPassword;
-
-    @FXML
-    private TextField tFSID;
-
-    @FXML
-    private Button btnSave;
+    public TextField tFPort;
+    public TextField tFAddress;
+    public TextField tFUserName;
+    public TextField tFDBMS;
+    public PasswordField tFPassword;
+    public TextField tFSID;
+    public Button btnSave;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             Configuration config = ch.getPropValues();
-            tFUserName.setText(config.getUSERNAME());
-            tFPassword.setText(config.getPASSWORD());
-            tFAddress.setText(config.getSERVER_NAME());
-            tFDBMS.setText(config.getDBMS());
-            tFPort.setText(String.valueOf(config.getPORT()));
-            tFSID.setText(config.getSID());
+            tFUserName.setText(config.getUsername());
+            tFPassword.setText(config.getPassword());
+            tFAddress.setText(config.getServer_name());
+            tFDBMS.setText(config.getDbms());
+            tFPort.setText(String.valueOf(config.getPort()));
+            tFSID.setText(config.getSid());
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Default config to Senohrábek db
 
     @FXML
     void btnSaveClicked(ActionEvent event) {
@@ -70,7 +50,7 @@ public class SetupPageController implements Initializable {
                     tFUserName.getText(),
                     tFPassword.getText(),
                     tFAddress.getText(),
-                    Integer.valueOf(tFPort.getText()),
+                    Integer.parseInt(tFPort.getText()),
                     tFDBMS.getText(),
                     tFSID.getText()
             );
@@ -90,6 +70,5 @@ public class SetupPageController implements Initializable {
         } catch (SQLException ex) {
             AlertDialog.show("Připojení k databázi se nezdařilo.", Alert.AlertType.ERROR);
         }
-
-    }
+    } //Save config
 }

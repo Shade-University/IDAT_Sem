@@ -27,7 +27,9 @@ public class EditRatingPageController implements Initializable {
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
     private final RatingDAO ratingDAO = new RatingDAOImpl();
+
     private ObservableList<Rating> ratings;
+
     private static AdministrationPageController parent;
     private static Rating editedRating;
 
@@ -78,7 +80,7 @@ public class EditRatingPageController implements Initializable {
             }
         }).start();
         cBRating.setItems(FXCollections.observableArrayList(RATING_GRADE.values()));
-    }
+    } //Load rating data
 
     /**
      * Obnovení dat ve formuláři a předkovi

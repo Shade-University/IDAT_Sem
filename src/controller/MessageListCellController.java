@@ -4,21 +4,16 @@ import data.LikeDAO;
 import data.LikeDAOImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.File;
 import model.Like;
 import model.Message;
-import model.User;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,20 +81,21 @@ public class MessageListCellController extends ListCell<Message> {
                         ex.printStackTrace();
                     }
                 }
-            });
+            }); //On like click, create/remove like
 
             try {
                 tAMessage.getChildren().clear();
                 String space = new String(new char[(message.getLevel() * 10) - 10]).replace('\0', ' ');
-                lblName.setText(space + message.getOdesilatel().getFirstName() + " " + message.getOdesilatel().getLastName() + " => ");
-                Text text = new Text(message.getObsah());
+                lblName.setText(space + message.getSender().getFirstName() + " " + message.getSender().getLastName() + " => ");
+                Text text = new Text(message.getContent());
                 text.setFill(Color.BLUE);
+                //Tabs as level in hierarchic message
 
                 tAMessage.getChildren().add(text);
-                if (message.getSoubor() != null) {
-                    File file = message.getSoubor();
+                if (message.getAttached_file() != null) {
+                    File file = message.getAttached_file();
 
-                    Hyperlink link = new Hyperlink((message.getSoubor().getName() + message.getSoubor().getExtension()));
+                    Hyperlink link = new Hyperlink((message.getAttached_file().getName() + message.getAttached_file().getExtension()));
                     link.setOnAction(event -> {
                         try {
                             Path directory = Paths.get("files");
@@ -113,7 +109,7 @@ public class MessageListCellController extends ListCell<Message> {
                             e.printStackTrace();
                         }
                     });
-                    tAMessage.getChildren().add(link);
+                    tAMessage.getChildren().add(link); //Add attached file
                 }
             } catch (Exception e){
                 e.printStackTrace();

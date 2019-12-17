@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import model.Group;
 import model.Message;
 import model.Rating;
@@ -26,14 +25,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-import java.sql.Date;
 
 public class ChatWindowPageController implements Initializable {
 
-    @FXML
     public ListView<Message> lVMessages;
     public ListView<User> listViewUsers;
     public TextField txtFieldNewMessage;
@@ -43,10 +39,10 @@ public class ChatWindowPageController implements Initializable {
     public CheckBox checkBox;
     public Button btnFileAdd;
 
-    private MessageDAO messageDAO = new MessageDAOImpl();
-    private RatingDAO ratingDAO = new RatingDAOImpl();
-    private UserDAO userDao = new UserDAOImpl();
-    private FileDAO fileDao = new FileDAOImpl();
+    private final MessageDAO messageDAO = new MessageDAOImpl();
+    private final RatingDAO ratingDAO = new RatingDAOImpl();
+    private final UserDAO userDao = new UserDAOImpl();
+    private final FileDAO fileDao = new FileDAOImpl();
 
     private Group chatedGroup;
     private Message selectedMessage;
@@ -55,6 +51,7 @@ public class ChatWindowPageController implements Initializable {
     private ObservableList<Message> messages;
     private model.File attachedFile;
 
+    //Set users to chatlist
     public void setChatUsers(List<User> users) {
         if (chatedGroup == null) {
             parentRating.getChildren().remove(boxRating);
@@ -64,6 +61,7 @@ public class ChatWindowPageController implements Initializable {
         refreshMessages();
     }
 
+    //set users in group to chatlist and select chat with group
     public void setChatGroup(Group group) {
         chatedGroup = group;
         new Thread(() -> {
@@ -84,7 +82,7 @@ public class ChatWindowPageController implements Initializable {
                 checkBox.setSelected(true);
                 selectedMessage = newValue;
             }
-        });
+        }); //On select message, send message will be answering to this message (this message will be parent)
 
         cBRatingOfGroup.setItems(FXCollections.observableArrayList(RATING_GRADE.values()));
 
@@ -107,7 +105,7 @@ public class ChatWindowPageController implements Initializable {
                     AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
                 }
             }
-        });
+        }); //On change rating, change rating in db
     }
 
     private void refreshMessages() {
@@ -132,6 +130,7 @@ public class ChatWindowPageController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                //Load messages for group
             } else {
                 try {
                     messages = FXCollections.observableArrayList(
@@ -143,6 +142,7 @@ public class ChatWindowPageController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+                //Load messages for user
             }
         }).start();
     }
@@ -168,24 +168,25 @@ public class ChatWindowPageController implements Initializable {
             );
         }
         message.setLevel(1);
+        //Create message for group or user
 
         if(attachedFile != null) {
             try {
                 int id = fileDao.insertFile(attachedFile);
                 attachedFile.setId(id);
-                message.setSoubor(attachedFile);
+                message.setAttached_file(attachedFile);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+        } //Attach file if is attached
 
         if (checkBox.isSelected() && !checkBox.isDisabled()) {
-            message.setRodic(selectedMessage);
+            message.setParent(selectedMessage);
             message.setLevel(selectedMessage.getLevel() + 1);
             messages.add(messages.indexOf(selectedMessage) + 1, message);
         } else {
             messages.add(message);
-        }
+        } //If answering to message, set level
 
         try {
             messageDAO.createMessage(message);
@@ -194,7 +195,7 @@ public class ChatWindowPageController implements Initializable {
             e.printStackTrace();
         }
 
-        lVMessages.refresh();
+        lVMessages.refresh(); //Create message in db and refresh messages
     }
 
     public void btnFileAddClicked(ActionEvent actionEvent) {
@@ -210,7 +211,7 @@ public class ChatWindowPageController implements Initializable {
                 e.printStackTrace();
             }
         }
-    }
+    } //Select file
 
     private model.File convertToModelFile(File selectedFile) throws IOException {
         String fullName = selectedFile.getName();
@@ -226,5 +227,5 @@ public class ChatWindowPageController implements Initializable {
                 java.sql.Date.valueOf(LocalDate.now()),
                 java.sql.Date.valueOf(LocalDate.now())
         );
-    }
+    } //Convert file to sql file
 }

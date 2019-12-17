@@ -1,5 +1,8 @@
 package controller.enums;
 
+/**
+ * INSTITUTE
+ */
 public enum INSTITUTE {
     KE("Katedra elektrotechniky"),
     KIT("Katedra informačních technologií"),

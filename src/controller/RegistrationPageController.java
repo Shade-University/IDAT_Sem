@@ -31,7 +31,6 @@ public class RegistrationPageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         comboBox.setItems(FXCollections.observableArrayList(USER_TYPE.values()));
         comboBox.getSelectionModel().select(1);
-
     }
 
     public void btnRegisterClicked(ActionEvent actionEvent) {
@@ -53,6 +52,5 @@ public class RegistrationPageController implements Initializable {
         } catch (SQLException e) {
             lblError.setText(e.getMessage());
         }
-
-    }
+    } //Insert user to db
 }

@@ -40,21 +40,13 @@ public class AdministrationPageController implements Initializable {
     public StackPane stackPaneISKAM;
 
     public ListView<File> listViewFile;
-
-    @FXML
-    private ListView<User> listViewUsers;
-    @FXML
-    private ListView<Group> listViewGroups;
-    @FXML
-    private ListView<Field> listViewFieldsOfStudy;
-    @FXML
-    private ListView<Subject> listViewSubjects;
-    @FXML
-    private ListView<Rating> listViewRatings;
-    @FXML
-    private ListView<Message> listViewMessage;
-    @FXML
-    private Tab tabISKAM;
+    public ListView<User> listViewUsers;
+    public ListView<Group> listViewGroups;
+    public ListView<Field> listViewFieldsOfStudy;
+    public ListView<Subject> listViewSubjects;
+    public ListView<Rating> listViewRatings;
+    public ListView<Message> listViewMessage;
+    public Tab tabISKAM;
 
     private final UserDAO userDAO = new UserDAOImpl();
     private final GroupDAO groupDAO = new GroupDAOImpl();
@@ -72,7 +64,9 @@ public class AdministrationPageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        refreshAll();
+        refreshAll(); //Load all data from db
+
+        //----------   On change item in list, open edit page for it  --------------------------------
         /*============USERS============*/
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
@@ -131,24 +125,18 @@ public class AdministrationPageController implements Initializable {
             }
         });
 
-        /*============ISKAM============*/
-        try {
-            loadISKAM();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         /*============Files============*/
         listViewFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
-                EditFilePageController.setEditedFile(newValue);
-                AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
-
-                stackPaneEditFile.getChildren().clear();
-                stackPaneEditFile.getChildren().add(parent);
+               loadFile(newValue);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+
+
+        /*============ISKAM============*/
+        loadISKAM();
     }
 
     private void refreshAll() {
@@ -351,7 +339,7 @@ public class AdministrationPageController implements Initializable {
     }
 
     //ISKAM - admin page
-    private void loadISKAM() throws IOException {
+    private void loadISKAM() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ISKAMAdminPage.fxml"));
             Parent iskam = loader.load();
@@ -362,6 +350,15 @@ public class AdministrationPageController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //File - admin page
+    private void loadFile(File newValue) throws IOException {
+        EditFilePageController.setEditedFile(newValue);
+        AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
+
+        stackPaneEditFile.getChildren().clear();
+        stackPaneEditFile.getChildren().add(parent);
     }
 
     public void onClickAddFile(MouseEvent mouseEvent) {

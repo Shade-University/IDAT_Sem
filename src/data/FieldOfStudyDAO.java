@@ -31,7 +31,7 @@ public interface FieldOfStudyDAO {
      * Insert field to db
      * @param field
      */
-    void deleteField(Field field);
+    void deleteField(Field field) throws SQLException;
 
     /**
      * Delete field from db

@@ -1,5 +1,8 @@
 package controller.enums;
 
+/**
+ * Study year
+ */
 public enum YEAR_STUDY {
     FIRST_YEAR("1. ročník"),
     SECOND_YEAR("2. ročník"),

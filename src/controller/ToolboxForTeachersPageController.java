@@ -32,28 +32,17 @@ public class ToolboxForTeachersPageController implements Initializable {
     private User loggedUser;
     private Group selectedGroup;
 
-    @FXML
-    private ListView<Message> lVGroupMessages;
-    @FXML
-    private ListView<User> lVMembersOfGroup;
-    @FXML
+    public ListView<Message> lVGroupMessages;
+    public ListView<User> lVMembersOfGroup;
     public ListView<Group> lVGroups;
-    @FXML
-    private ListView<Subject> lVMySubjects;
-    @FXML
-    private HBox hBoxDescription;
-    @FXML
-    private VBox parentBox;
-    @FXML
-    private Label lblMessages;
-    @FXML
-    private Label lblGroups;
-    @FXML
-    private ComboBox<User> cbUsersToGroup;
-    @FXML
-    private Button btnAddUser;
-    @FXML
-    private Label labelMembers;
+    public ListView<Subject> lVMySubjects;
+    public HBox hBoxDescription;
+    public VBox parentBox;
+    public Label lblMessages;
+    public Label lblGroups;
+    public ComboBox<User> cbUsersToGroup;
+    public Button btnAddUser;
+    public Label labelMembers;
 
     void initData(User loggedUser, MainDashboardPageController mdpc) {
         this.loggedUser = loggedUser;
@@ -71,11 +60,10 @@ public class ToolboxForTeachersPageController implements Initializable {
                 e.printStackTrace();
             }
         }).start();
-    }
+    } //Load teacher data
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         //Předměty
         try {
             lVMySubjects.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -93,12 +81,12 @@ public class ToolboxForTeachersPageController implements Initializable {
                 }).start();
             });
         } catch (Exception e) {
-
-        }
+            e.printStackTrace();
+        } //Load teacher subjects
         //Zprávy
         lVGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             reloadMessagesByGroup(newValue);
-        });
+        }); //On change group, get users in group etc
     }
 
 
@@ -132,7 +120,7 @@ public class ToolboxForTeachersPageController implements Initializable {
                 loading(2, false);
             });
         }).start();
-    }
+    } //Get all users and messages in group
 
     @FXML
     void btnChangeClicked(ActionEvent event) {
@@ -153,7 +141,7 @@ public class ToolboxForTeachersPageController implements Initializable {
         } else {
             AlertDialog.show("Není zvolená žádná zpráva k editaci", Alert.AlertType.ERROR);
         }
-    }
+    } //On edit message, show edit message window
 
     /**
      * Vytvoření upozornění na načítání.
@@ -198,7 +186,7 @@ public class ToolboxForTeachersPageController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    } //Add user to group
 
     @FXML
     void cbUsersToGroupChanged(ActionEvent event) throws SQLException {

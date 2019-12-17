@@ -33,8 +33,8 @@ public class SubjectDAOImpl implements SubjectDAO {
                 "SELECT * FROM PREDMETY");
 
         while (rs.next()) {
-            Subject predmet = getSubject(rs);
-            collection.add(predmet);
+            Subject subject = getSubject(rs);
+            collection.add(subject);
         }
         statement.close();
         System.out.println("GetAllSubjects");
@@ -50,8 +50,8 @@ public class SubjectDAOImpl implements SubjectDAO {
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
-            Subject predmet = getSubject(rs);
-            collection.add(predmet);
+            Subject subject = getSubject(rs);
+            collection.add(subject);
         }
         preparedStatement.close();
         System.out.println("GetAllSubjectsByTeacher");
@@ -70,8 +70,8 @@ public class SubjectDAOImpl implements SubjectDAO {
 
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
-            Subject p = getSubject(rs);
-            collection.add(p);
+            Subject subject = getSubject(rs);
+            collection.add(subject);
         }
         preparedStatement.close();
         System.out.println("GetSujectsForField");
@@ -118,6 +118,7 @@ public class SubjectDAOImpl implements SubjectDAO {
         callableStatement.setString(1, subject.getName());
         callableStatement.setString(2, subject.getDescription());
         callableStatement.executeQuery();
+
         callableStatement.close();
         conn.commit();
         System.out.println("InsertSubject");
@@ -282,13 +283,13 @@ public class SubjectDAOImpl implements SubjectDAO {
     }
 
     @Override
-    public List<Subject> getSubjectsForGroup(int id_skupina) throws SQLException {
+    public List<Subject> getSubjectsForGroup(int id_group) throws SQLException {
         List<Subject> subjects = new ArrayList<>();
 
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM getPredmetyVeSkupine WHERE id_skupina = ?"
         );
-        preparedStatement.setInt(1, id_skupina);
+        preparedStatement.setInt(1, id_group);
 
         ResultSet rs = preparedStatement.executeQuery();
         while(rs.next()) {

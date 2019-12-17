@@ -2,7 +2,7 @@
 package model;
 
 /**
- * @author Tomáš Vondra
+ * Subject model
  */
 public class Subject {
 

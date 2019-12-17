@@ -55,8 +55,8 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
                 "SELECT * FROM getOborySPredmetem g WHERE g.id_predmet = ?"
         );
         preparedStatement.setInt(1, subject.getId());
-        ResultSet rs = preparedStatement.executeQuery();
 
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Field obor = new Field(
                     rs.getInt("id_obor"),
@@ -93,8 +93,8 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         CallableStatement callableStatement = conn.prepareCall(
                 "call insert_studijni_obor(?,?)"
         );
-        callableStatement.setString(1, field.getNazev());
-        callableStatement.setString(2, field.getPopis());
+        callableStatement.setString(1, field.getName());
+        callableStatement.setString(2, field.getDescription());
 
         callableStatement.executeQuery();
         conn.commit();
@@ -110,8 +110,8 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
                         + "popis = ?"
                         + " where id_obor = ?"
         );
-        preparedStatement.setString(1, field.getNazev());
-        preparedStatement.setString(2, field.getPopis());
+        preparedStatement.setString(1, field.getName());
+        preparedStatement.setString(2, field.getDescription());
         preparedStatement.setInt(3, field.getId());
 
         preparedStatement.executeUpdate();
@@ -119,6 +119,4 @@ public class FieldOfStudyDAOImpl implements FieldOfStudyDAO {
         preparedStatement.close();
         System.out.println("UpdateField");
     }
-
-
 }

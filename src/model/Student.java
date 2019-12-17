@@ -7,8 +7,7 @@ import java.awt.image.BufferedImage;
 import java.sql.Date;
 
 /**
- *
- * @author Tomáš Vondra
+ * Student model
  */
 public class Student extends User {
 

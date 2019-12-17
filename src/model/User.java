@@ -8,6 +8,9 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * User model
+ */
 public class User {
 
     private int id;
@@ -24,10 +27,7 @@ public class User {
                 OracleConnection.parseDate(LocalDateTime.now().toString(), "yyyy-MM-dd'T'HH:mm:ss"),
                 type, userAvatar);
         this.password = password;
-        //Pokud vytvářím uživatele, ještě neznám jeho id, takže nastavím -1 a při insertu ho nastavím
-        //Také automaticky vytvořím datum vytvoření
-        //TODO Přemejšlím nad tím, že bych volal insert do databáze už tady
-    }
+    } //Vytvářecí konstruktor
 
     public User(int id, String firstName, String lastName, String email, Date dateCreated, USER_TYPE type, BufferedImage userAvatar) {
         this.id = id;
@@ -39,7 +39,7 @@ public class User {
         this.userAvatar = userAvatar;
 
         //Zde nemám nastavování hesla. Nezískávám password z databáze kvůli bezpečnosti
-    }
+    } //Načítací konstruktor
 
     public int getId() {
         return id;

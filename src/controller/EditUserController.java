@@ -36,7 +36,6 @@ public class EditUserController implements Initializable {
     public static void setEditedUser(User user) {
         editedUser = user;
     }
-
     public static User getEditedUser() {
         return editedUser;
     }
@@ -50,20 +49,6 @@ public class EditUserController implements Initializable {
     private final FieldOfStudyDAO fieldOfStudyDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
-
-    private void initData() {
-        if (editedUser != null) {
-            txtFieldFirstName.setText(editedUser.getFirstName());
-            txtFieldLastName.setText(editedUser.getLastName());
-            txtFieldEmail.setText(editedUser.getEmail());
-            txtFieldPassword.setText(editedUser.getPassword());
-            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.UPDATE, ACTION_TYPE.DELETE));
-            actionTypeComboBox.getSelectionModel().select(0);
-        } else {
-            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.INSERT));
-            actionTypeComboBox.getSelectionModel().select(0);
-        }
-    }
 
     public void btnUpdateClicked(ActionEvent actionEvent) {
         User updateUser = null;
@@ -117,7 +102,7 @@ public class EditUserController implements Initializable {
         } catch (SQLException e) {
             //new Alert(Alert.AlertType.ERROR,"Profil se nepovedlo aktualizovat\n" + e.getMessage(), ButtonType.OK);
             lblError.setText("Profil se nepovedlo aktualizovat.\n" + e.getMessage());
-        }
+        } //Perform action by type of user
     }
 
     @Override
@@ -133,6 +118,20 @@ public class EditUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private void initData() {
+        if (editedUser != null) {
+            txtFieldFirstName.setText(editedUser.getFirstName());
+            txtFieldLastName.setText(editedUser.getLastName());
+            txtFieldEmail.setText(editedUser.getEmail());
+            txtFieldPassword.setText(editedUser.getPassword());
+            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.UPDATE, ACTION_TYPE.DELETE));
+            actionTypeComboBox.getSelectionModel().select(0);
+        } else {
+            actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.INSERT));
+            actionTypeComboBox.getSelectionModel().select(0);
+        }
+    } //Init data by edited user
 
     private void initTeacher() throws SQLException {
         instituteComboBox.setItems(FXCollections.observableArrayList(INSTITUTE.values()));
@@ -153,7 +152,7 @@ public class EditUserController implements Initializable {
 
         gridPane.add(instituteComboBox, 2, 6);
         gridPane.add(subjectListView, 5, 0, 1, 8);
-    }
+    } //Get and init data for teacher
 
     private void initStudent() throws SQLException {
         new Thread(() -> {
@@ -171,5 +170,5 @@ public class EditUserController implements Initializable {
 
         gridPane.add(fieldComboBox, 2, 6);
         gridPane.add(yearStudyComboBox, 0, 6);
-    }
+    } //Get and init data for student
 }

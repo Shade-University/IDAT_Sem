@@ -63,7 +63,7 @@ public class ImportPageController implements Initializable {
             }
         });
         comboBoxImport.getSelectionModel().select(0);
-    }
+    } //Init default pages for REST app
 
     private JSONObject getJsonFromWebPage(String url) {
         try {
@@ -79,7 +79,7 @@ public class ImportPageController implements Initializable {
             e.printStackTrace();
         }
         return null;
-    }
+    } //Get Json data from page
 
     public void btnImportClicked(ActionEvent actionEvent) {
         txtAreaLog.clear();
@@ -105,7 +105,7 @@ public class ImportPageController implements Initializable {
             Platform.runLater(() -> txtAreaLog.appendText("Nalezen nový Obor: " + newField.toString() + "\n"));
             dataFields.add(newField);
         }
-    }
+    } //Parse json for Fields
 
     private void importSubjects(JSONObject json) {
         JSONArray jArray = (JSONArray) json.get("predmetInfo");
@@ -115,7 +115,7 @@ public class ImportPageController implements Initializable {
             Platform.runLater(() -> txtAreaLog.appendText("Nalezen nový předmět: " + newSubject.toString() + "\n"));
             dataSubjects.add(newSubject);
         }
-    }
+    } //Parse json for Subjects
 
     public void btnClickConfirmInport(ActionEvent actionEvent) {
         lblError.setText("Přidávám...");
@@ -148,7 +148,6 @@ public class ImportPageController implements Initializable {
             default:
                 break;
         }
-
         t.start();
-    }
+    } //Import data to db
 }

@@ -1,5 +1,8 @@
 package controller.enums;
 
+/**
+ * ACTION CHOICE IN ADMINISTRATION
+ */
 public enum ACTION_TYPE {
     INSERT("Vložit"),
     UPDATE("Aktualizovat"),

@@ -24,12 +24,15 @@ public class EditSubjectPageController implements Initializable {
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
     private final FieldOfStudyDAO fieldDAO = new FieldOfStudyDAOImpl();
+
     private ObservableList<Group> groupsInSubject;
     private ObservableList<User> usersInSubject;
     private ObservableList<Field> fieldInSubject;
+
     private static AdministrationPageController parent;
     private static Subject editedSubject;
 
+    //Enum to select where we are updating subject
     private enum tableType {
         FIELD("Obory"),
         TEACHER("Učitelé"),
@@ -51,35 +54,16 @@ public class EditSubjectPageController implements Initializable {
         }
     }
 
-    @FXML
-    private ComboBox<Object> comboBoxAddSubjectToUniversal;
-
-    @FXML
-    private ComboBox<tableType> comboBoxSubjectsUniversal;
-
-    @FXML
-    private Button btnAddSubjectToUniversal;
-
-    @FXML
-    private TextField txtFieldSubjectName;
-
-    @FXML
-    private TextArea textAreaSubjectDescription;
-
-    @FXML
-    private ListView<Object> listViewSubjectUniversal;
-
-    @FXML
-    private Label labelAddTo;
-
-    @FXML
-    private Button btnInsert;
-
-    @FXML
-    private Button btnSave;
-
-    @FXML
-    private Button btnDelete;
+    public ComboBox<Object> comboBoxAddSubjectToUniversal;
+    public ComboBox<tableType> comboBoxSubjectsUniversal;
+    public Button btnAddSubjectToUniversal;
+    public TextField txtFieldSubjectName;
+    public TextArea textAreaSubjectDescription;
+    public ListView<Object> listViewSubjectUniversal;
+    public Label labelAddTo;
+    public Button btnInsert;
+    public Button btnSave;
+    public Button btnDelete;
 
 
 
@@ -149,7 +133,7 @@ public class EditSubjectPageController implements Initializable {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-        }).start();
+        }).start(); //Load data by subject type
     }
 
 

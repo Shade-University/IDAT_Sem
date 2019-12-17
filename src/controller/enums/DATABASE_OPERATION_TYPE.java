@@ -3,6 +3,9 @@ package controller.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Database operation action for ISKAM
+ */
 public enum DATABASE_OPERATION_TYPE {
     INSERT("Přidat"),
     UPDATE("Upravit"),

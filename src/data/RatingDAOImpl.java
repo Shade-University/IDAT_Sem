@@ -38,8 +38,8 @@ public class RatingDAOImpl implements RatingDAO {
         ResultSet rs = statement.executeQuery(
                 "SELECT * FROM GETHODNOCENI");
         while (rs.next()) {
-            Rating hodnoceni = getRating(rs);
-            collection.add(hodnoceni);
+            Rating rating = getRating(rs);
+            collection.add(rating);
         }
         statement.close();
         System.out.println("getAllRatings");
@@ -89,7 +89,7 @@ public class RatingDAOImpl implements RatingDAO {
                 groupDAO.getGroup(rs)
         );
         return hodnoceni;
-    }
+    } //Parser method to get Rating
 
     @Override
     public Rating getRatingByUserAndGroup(User user, Group group) throws SQLException {
@@ -98,6 +98,7 @@ public class RatingDAOImpl implements RatingDAO {
         );
         preparedStatement.setInt(1, user.getId());
         preparedStatement.setInt(2, group.getId());
+
         ResultSet rs = preparedStatement.executeQuery();
         if (rs.next())
            return getRating(rs);

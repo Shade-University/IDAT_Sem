@@ -127,7 +127,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     /**
-     * Parser ResultSetu to product
+     * Parser ResultSet to product
      *
      * @param rs
      * @return produkt

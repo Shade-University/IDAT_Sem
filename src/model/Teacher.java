@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Tomáš Vondra
+ * Teacher model
  */
 public class Teacher extends User {
 

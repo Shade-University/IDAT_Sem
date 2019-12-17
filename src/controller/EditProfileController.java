@@ -25,11 +25,11 @@ public class EditProfileController implements Initializable {
     public PasswordField txtFieldPassword;
     public PasswordField txtFieldPasswordConfirm;
     public GridPane gridPane;
+    public Label lblError;
 
     private final FieldOfStudyDAO fieldOfStudyDAO = new FieldOfStudyDAOImpl();
     private final SubjectDAO subjectDAO = new SubjectDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
-    public Label lblError;
 
     private static User editedUser;
 
@@ -57,7 +57,7 @@ public class EditProfileController implements Initializable {
             initStudent();
         } else if (editedUser instanceof Teacher) {
             initTeacher();
-        }
+        } //Init data by edited user
     }
 
     private void initData() {
@@ -88,7 +88,7 @@ public class EditProfileController implements Initializable {
 
         gridPane.add(instituteComboBox, 2, 6);
         gridPane.add(subjectListView, 5, 0, 1, 7);
-    }
+    } //Load and init data for teacher
 
     private void initStudent() {
         new Thread(() -> {
@@ -109,7 +109,7 @@ public class EditProfileController implements Initializable {
 
         gridPane.add(fieldComboBox, 2, 6);
         gridPane.add(yearStudyComboBox, 0, 6);
-    }
+    } //Load and init data for student
 
 
     public void btnUpdateClicked(ActionEvent actionEvent) {
@@ -149,10 +149,8 @@ public class EditProfileController implements Initializable {
             userDAO.updateUser(updateUser);
             MainDashboardPageController.setLoggedUser(updateUser);
         } catch (SQLException e) {
-            //new Alert(Alert.AlertType.ERROR,"Profil se nepovedlo aktualizovat\n" + e.getMessage(), ButtonType.OK);
             lblError.setText("Profil se nepovedlo aktualizovat.\n" + e.getMessage());
         }
-
-    }
+    } //Update user
 
 }

@@ -3,13 +3,20 @@ package controller;
 import model.Configuration;
 
 import java.io.*;
-import java.util.Date;
 import java.util.Properties;
 
+/**
+ * Configuration handler
+ */
 public class ConfigurationHandler {
     private String propFileName = "src/resources/configuration.properties";
     private File file;
 
+    /**
+     * Get configuration from property file
+     * @return Configuration
+     * @throws IOException
+     */
     public Configuration getPropValues() throws IOException {
         try {
             Properties prop = new Properties();
@@ -34,19 +41,28 @@ public class ConfigurationHandler {
     }
 
 
-
+    /**
+     * Set properties values from configuration
+     * @param config
+     * @throws IOException
+     */
     public void setPropValues(Configuration config) throws IOException {
         file = new File(propFileName);
         Properties prop = new Properties();
-        prop.setProperty("USERNAME", config.getUSERNAME());
-        prop.setProperty("PASSWORD", config.getPASSWORD());
-        prop.setProperty("SERVER_NAME", config.getSERVER_NAME());
-        prop.setProperty("PORT", String.valueOf(config.getPORT()));
-        prop.setProperty("DBMS", config.getDBMS());
-        prop.setProperty("SID", config.getSID());
+        prop.setProperty("USERNAME", config.getUsername());
+        prop.setProperty("PASSWORD", config.getPassword());
+        prop.setProperty("SERVER_NAME", config.getServer_name());
+        prop.setProperty("PORT", String.valueOf(config.getPort()));
+        prop.setProperty("DBMS", config.getDbms());
+        prop.setProperty("SID", config.getSid());
         setPropValuesProp(prop);
     }
 
+    /**
+     * Save properties to file
+     * @param config
+     * @throws IOException
+     */
     public void setPropValuesProp(Properties config) throws IOException {
         FileOutputStream fr = new FileOutputStream(file);
         config.store(fr, "Database configuration");

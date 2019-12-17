@@ -59,7 +59,7 @@ public class MessageDAOImpl implements MessageDAO {
                 fileDAO.getFileById(rs.getInt("id_souboru"))
         );
         return newMessage;
-    }
+    } //Parser method return message
 
     @Override
     public Message getMessageWithLevel(ResultSet rs) throws SQLException {
@@ -76,7 +76,7 @@ public class MessageDAOImpl implements MessageDAO {
                 rs.getInt("Uroven")
         );
         return newMessage;
-    }
+    } //Parser method return message with level
 
     @Override
     public Collection<Message> getAllMessages() throws SQLException {
@@ -101,28 +101,29 @@ public class MessageDAOImpl implements MessageDAO {
                 "INSERT INTO ZPRAVY(nazev, telo, datum_vytvoreni, "
                         + "id_uzivatel_odesilatel, id_skupina_prijemce, id_uzivatel_prijemce, ID_RODIC, ID_SOUBORU) "
                         + "VALUES (?,?,?,?,?,?,?,?)");
-        preparedStatement.setString(1, message.getNazev());
-        preparedStatement.setString(2, message.getObsah());
-        preparedStatement.setDate(3, message.getDatum_vytvoreni());
-        preparedStatement.setInt(4, message.getOdesilatel().getId());
+        preparedStatement.setString(1, message.getName());
+        preparedStatement.setString(2, message.getContent());
+        preparedStatement.setDate(3, message.getDate_created());
+        preparedStatement.setInt(4, message.getSender().getId());
 
-        if (message.getPrijemce_uzivatel() != null) {
+        if (message.getUser_receiver() != null) {
             preparedStatement.setNull(5, Types.INTEGER);
-            preparedStatement.setInt(6, message.getPrijemce_uzivatel().getId());
+            preparedStatement.setInt(6, message.getUser_receiver().getId());
         } else {
-            preparedStatement.setInt(5, message.getPrijemce_skupina().getId());
+            preparedStatement.setInt(5, message.getGroup_receiver().getId());
             preparedStatement.setNull(6, Types.INTEGER);
-        } //Načte buď příjemce skupinu nebo uživatele
-        if (message.getRodic() != 0) {
-            preparedStatement.setInt(7, message.getRodic());
+        } //Load receiver group or receiver user
+        if (message.getParent() != 0) {
+            preparedStatement.setInt(7, message.getParent());
         } else {
             preparedStatement.setNull(7, Types.INTEGER);
-        }
-        if (message.getSoubor() != null) {
-            preparedStatement.setInt(8, message.getSoubor().getId());
+        } //If message has parent
+        if (message.getAttached_file() != null) {
+            preparedStatement.setInt(8, message.getAttached_file().getId());
         } else {
             preparedStatement.setNull(8, Types.INTEGER);
-        }
+        } //if is attached file
+
 
         preparedStatement.executeUpdate();
         conn.commit();
@@ -136,30 +137,30 @@ public class MessageDAOImpl implements MessageDAO {
                 "INSERT INTO ZPRAVY(nazev, telo, datum_vytvoreni, "
                         + "id_uzivatel_odesilatel, id_skupina_prijemce, id_uzivatel_prijemce, ID_RODIC, ID_SOUBORU) "
                         + "VALUES (?,?,?,?,?,?,?,?)");
-        preparedStatement.setString(1, message.getNazev());
-        preparedStatement.setString(2, message.getObsah());
-        preparedStatement.setDate(3, message.getDatum_vytvoreni());
-        preparedStatement.setInt(4, message.getOdesilatel().getId());
+        preparedStatement.setString(1, message.getName());
+        preparedStatement.setString(2, message.getContent());
+        preparedStatement.setDate(3, message.getDate_created());
+        preparedStatement.setInt(4, message.getSender().getId());
 
-        if (message.getPrijemce_uzivatel() != null) {
+        if (message.getUser_receiver() != null) {
             preparedStatement.setNull(5, Types.INTEGER);
-            preparedStatement.setInt(6, message.getPrijemce_uzivatel().getId());
+            preparedStatement.setInt(6, message.getUser_receiver().getId());
         } else {
-            preparedStatement.setInt(5, message.getPrijemce_skupina().getId());
+            preparedStatement.setInt(5, message.getGroup_receiver().getId());
             preparedStatement.setNull(6, Types.INTEGER);
-        } //Načte buď příjemce skupinu nebo uživatele
+        } //Load receiver group or receiver user
 
-        if (message.getRodic() == 0) {
+        if (message.getParent() == 0) {
             preparedStatement.setNull(7, Types.INTEGER);
         } else {
-            preparedStatement.setInt(7, message.getRodic());
-        }
+            preparedStatement.setInt(7, message.getParent());
+        } //If message has parent
 
-        if (message.getSoubor() == null) {
+        if (message.getAttached_file() == null) {
             preparedStatement.setNull(8, Types.INTEGER);
         } else {
-            preparedStatement.setInt(8, message.getSoubor().getId());
-        }
+            preparedStatement.setInt(8, message.getAttached_file().getId());
+        } //if is attached file
 
         preparedStatement.executeUpdate();
         conn.commit();
@@ -291,31 +292,32 @@ public class MessageDAOImpl implements MessageDAO {
                 "call update_zprava(?,?,?,?,?,?,?,?,?)"
         );
         callableStatement.setInt(1, message.getId());
-        callableStatement.setString(2, message.getNazev());
-        callableStatement.setString(3, message.getObsah());
-        callableStatement.setDate(4, message.getDatum_vytvoreni());
-        callableStatement.setInt(5, message.getOdesilatel().getId());
+        callableStatement.setString(2, message.getName());
+        callableStatement.setString(3, message.getContent());
+        callableStatement.setDate(4, message.getDate_created());
+        callableStatement.setInt(5, message.getSender().getId());
 
-        if (message.getPrijemce_uzivatel() != null) {
-            callableStatement.setInt(6, message.getPrijemce_uzivatel().getId());
+        if (message.getUser_receiver() != null) {
+            callableStatement.setInt(6, message.getUser_receiver().getId());
         } else {
             callableStatement.setNull(6, Types.INTEGER);
         }
-        if (message.getPrijemce_skupina() != null) {
-            callableStatement.setInt(7, message.getPrijemce_skupina().getId());
+        if (message.getGroup_receiver() != null) {
+            callableStatement.setInt(7, message.getGroup_receiver().getId());
         } else {
             callableStatement.setNull(7, Types.INTEGER);
-        }
-        if (message.getRodic() != 0) {
-            callableStatement.setInt(8, message.getRodic());
+        } //Receiver group or receiver user
+        if (message.getParent() != 0) {
+            callableStatement.setInt(8, message.getParent());
         } else {
             callableStatement.setNull(8, Types.INTEGER);
-        }
-        if (message.getSoubor() != null) {
-            callableStatement.setInt(9, message.getSoubor().getId());
+        } //if message has parent
+        if (message.getAttached_file() != null) {
+            callableStatement.setInt(9, message.getAttached_file().getId());
         } else {
             callableStatement.setNull(9, Types.INTEGER);
-        }
+        } //if is attached file
+
         callableStatement.executeQuery();
         conn.commit();
         callableStatement.close();

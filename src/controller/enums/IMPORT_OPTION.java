@@ -1,5 +1,8 @@
 package controller.enums;
 
+/**
+ * Import options from REST api
+ */
 public enum IMPORT_OPTION {
     SUBJECTS("Předměty"),
     FIELDS("Obory");

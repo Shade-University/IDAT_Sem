@@ -30,7 +30,8 @@ public class EditMessagePageController implements Initializable {
     private UserDAO userDAO = new UserDAOImpl();
     private FileDAO fileDAO = new FileDAOImpl();
     private GroupDAO groupDAO = new GroupDAOImpl();
-    ObservableList<Object> users;
+
+    private ObservableList<Object> users;
     private AdministrationPageController parent;
     private MainDashboardPageController mdpc;
     private ToolboxForTeachersPageController tftp;
@@ -60,40 +61,17 @@ public class EditMessagePageController implements Initializable {
         parent.stackPaneEditMessage.getChildren().clear();
     }
 
-    @FXML
-    private TextField txtFieldMessageName;
+    public TextField txtFieldMessageName;
+    public ComboBox<Object> cBSender;
+    public TextArea textAreaMessageBody;
+    public Button btnSave;
+    public Button btnDelete;
+    public ComboBox<File> cBFile;
+    public DatePicker dateMessagePicker;
+    public ComboBox<Object> cBRecipientUniversal;
+    public ComboBox<RECIPIENT_TYPE> cBRecipientType;
+    public ComboBox<Message> cBMessageParent;
 
-    @FXML
-    private ComboBox<Object> cBSender;
-
-    @FXML
-    private TextArea textAreaMessageBody;
-
-    @FXML
-    private Button btnSave;
-
-    @FXML
-    private Button btnDelete;
-
-    @FXML
-    private ComboBox<File> cBFile;
-
-    @FXML
-    private DatePicker dateMessagePicker;
-
-    @FXML
-    private ComboBox<Object> cBRecipientUniversal;
-
-    @FXML
-    private ComboBox<RECIPIENT_TYPE> cBRecipientType;
-
-    @FXML
-    private ComboBox<Message> cBMessageParent;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // initPane();
-    }
 
     public void initDataFromToolBox(Message msg, Tab tab, MainDashboardPageController mdpc, ToolboxForTeachersPageController tftp) {
         this.editedMessage = msg;
@@ -109,7 +87,7 @@ public class EditMessagePageController implements Initializable {
         this.parent = apc;
         calledFrom = true;
         Thread t = new Thread(this::initPane);
-        t.start();
+        t.start(); //Init edited data
     }
 
     private void initPane() {
@@ -123,10 +101,10 @@ public class EditMessagePageController implements Initializable {
                     cBFile.setItems(FXCollections.observableArrayList(files));
                     cBSender.setItems(users);
 
-                    cBSender.setValue(editedMessage.getOdesilatel());
-                    cBFile.setValue(editedMessage.getSoubor());
+                    cBSender.setValue(editedMessage.getSender());
+                    cBFile.setValue(editedMessage.getAttached_file());
                     try {
-                        cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getRodic()));
+                        cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getParent()));
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -134,54 +112,54 @@ public class EditMessagePageController implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }).start();
+        }).start(); //Load messages data
         cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
         if (editedMessage != null) {
-            txtFieldMessageName.setText(editedMessage.getNazev());
-            textAreaMessageBody.setText(editedMessage.getObsah());
-            dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDatum_vytvoreni()));
+            txtFieldMessageName.setText(editedMessage.getName());
+            textAreaMessageBody.setText(editedMessage.getContent());
+            dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDate_created()));
 
-            if (editedMessage.getPrijemce_uzivatel() == null) {
+            if (editedMessage.getUser_receiver() == null) {
                 cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
                 cBRecipientTypeChanged(null);
-                cBRecipientUniversal.setValue(editedMessage.getPrijemce_skupina());
+                cBRecipientUniversal.setValue(editedMessage.getGroup_receiver());
             } else {
                 cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
                 cBRecipientTypeChanged(null);
-                cBRecipientUniversal.setValue(editedMessage.getPrijemce_uzivatel());
+                cBRecipientUniversal.setValue(editedMessage.getUser_receiver());
             }
         } else {
             cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
             cBRecipientTypeChanged(null);
             btnDelete.setVisible(false);
             btnSave.setText("Vytvořit");
-        }
+        } //Set up default values
     }
 
     @FXML
     void btnSaveClicked(ActionEvent event) {
         try {
             Message msg = new Message();
-            msg.setNazev(txtFieldMessageName.getText());
-            msg.setObsah(textAreaMessageBody.getText());
-            msg.setOdesilatel((User) cBSender.getValue());
-            msg.setDatum_vytvoreni(Date.valueOf(dateMessagePicker.getValue()));
+            msg.setName(txtFieldMessageName.getText());
+            msg.setContent(textAreaMessageBody.getText());
+            msg.setSender((User) cBSender.getValue());
+            msg.setDate_created(Date.valueOf(dateMessagePicker.getValue()));
             if (cBFile.getValue() != null) {
-                msg.setSoubor(cBFile.getValue());
+                msg.setAttached_file(cBFile.getValue());
             } else {
-                msg.setSoubor(null);
+                msg.setAttached_file(null);
             }
             if (cBMessageParent.getValue() != null) {
-                msg.setRodic(cBMessageParent.getValue());
+                msg.setParent(cBMessageParent.getValue());
             } else {
-                msg.setRodic(null);
+                msg.setParent(null);
             }
             if (cBRecipientType.getValue() == RECIPIENT_TYPE.SKUPINA) {
-                msg.setPrijemce_uzivatel(null);
-                msg.setPrijemce_skupina((Group) cBRecipientUniversal.getValue());
+                msg.setUser_receiver(null);
+                msg.setGroup_receiver((Group) cBRecipientUniversal.getValue());
             } else {
-                msg.setPrijemce_skupina(null);
-                msg.setPrijemce_uzivatel((User) cBRecipientUniversal.getValue());
+                msg.setGroup_receiver(null);
+                msg.setUser_receiver((User) cBRecipientUniversal.getValue());
             }
             if (cBRecipientUniversal.getValue() != null) {
                 if (editedMessage != null) {
@@ -201,7 +179,7 @@ public class EditMessagePageController implements Initializable {
             }
         } catch (Exception e) {
             AlertDialog.show("Zadané údaje nejsou správné!", Alert.AlertType.ERROR);
-        }
+        } //Create Message
     }
 
     private void exitTab() {
@@ -238,7 +216,7 @@ public class EditMessagePageController implements Initializable {
             }).start();
         } else {
             cBRecipientUniversal.setItems(users);
-        }
+        } //On change reload data
     }
 
     @FXML
@@ -251,4 +229,8 @@ public class EditMessagePageController implements Initializable {
         cBFile.setValue(null);
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 }

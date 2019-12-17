@@ -23,35 +23,25 @@ import java.util.ResourceBundle;
 
 public class EditGroupPageController implements Initializable {
 
-    @FXML
-    private TextArea textAreaGroupDescription;
-    @FXML
-    private TextField txtFieldGroupName;
-    @FXML
-    private Button btnAddUserToGroup;
-    @FXML
-    private ListView<User> listViewUsersInGroup;
-    @FXML
-    private ComboBox<User> comboBoxAddUserToGroup;
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnDelete;
-    @FXML
-    private Label labelUs;
-    @FXML
-    private Label labelCs;
-    @FXML
-    private GridPane grid;
-    @FXML
-    private Button btnInsert;
+    public TextArea textAreaGroupDescription;
+    public TextField txtFieldGroupName;
+    public Button btnAddUserToGroup;
+    public ListView<User> listViewUsersInGroup;
+    public ComboBox<User> comboBoxAddUserToGroup;
+    public Button btnSave;
+    public Button btnDelete;
+    public Label labelUs;
+    public Label labelCs;
+    public GridPane grid;
+    public Button btnInsert;
 
 
     private final GroupDAO groupDAO = new GroupDAOImpl();
     private final UserDAO userDAO = new UserDAOImpl();
-    private ObservableList<User> usersInGroup;
-    private static AdministrationPageController parent;
 
+    private ObservableList<User> usersInGroup;
+
+    private static AdministrationPageController parent;
     private static Group editedGroup;
 
 
@@ -108,7 +98,7 @@ public class EditGroupPageController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }).start();
+            }).start(); //Load group data
         } else {
             transformToCreatePage();
         }
@@ -133,7 +123,7 @@ public class EditGroupPageController implements Initializable {
         labelUs.setVisible(false);
         btnDelete.setVisible(false);
         btnSave.setVisible(false);
-    }
+    } //Set data for create
 
     /**
      * Vytvoří Alert dialog

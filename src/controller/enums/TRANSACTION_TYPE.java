@@ -3,6 +3,9 @@ package controller.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Transaction type for ISKAM
+ */
 public enum TRANSACTION_TYPE {
     IN("Příjem"),
     OUT("Výdaj");

@@ -63,8 +63,8 @@ public class FileDAOImpl implements FileDAO {
                 "SELECT * FROM soubory WHERE ID_SOUBORU = ?"
         );
         preparedStatement.setInt(1, id);
-        ResultSet rs = preparedStatement.executeQuery();
 
+        ResultSet rs = preparedStatement.executeQuery();
         File file = null;
         if (rs.next()) {
             file = getFile(rs);
@@ -131,5 +131,5 @@ public class FileDAOImpl implements FileDAO {
             return (int) rs.getLong(1);
         }
         return -1;
-    }
+    } //Returns last inserted file id
 }

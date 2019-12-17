@@ -10,6 +10,7 @@ public interface FileDAO {
 
     /**
      * Insert file to db
+     * @return Id of inserted file, INT
      * @param file
      * @throws SQLException
      */

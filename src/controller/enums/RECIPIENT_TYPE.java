@@ -1,5 +1,8 @@
 package controller.enums;
 
+/**
+ * RECIPIENT for message
+ */
 public enum RECIPIENT_TYPE {
     SKUPINA("Skupina"),
     UZIVATEL("Uživatel");

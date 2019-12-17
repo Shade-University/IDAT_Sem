@@ -58,7 +58,7 @@ public class GuestViewController implements Initializable {
                 tableViewUsers.setItems(userData);
                 tableViewGroups.setItems(groupData);
             });
-        }).start();
+        }).start(); //Download user and group data from db
     }
 
     private void initializeTxtField() {
@@ -67,7 +67,7 @@ public class GuestViewController implements Initializable {
                 searchUsers(newValue);
             else
                 searchGroups(newValue);
-        });
+        }); //On change in text search, perform seach
     }
 
     private void prepareTableViewUsers() {
@@ -91,7 +91,7 @@ public class GuestViewController implements Initializable {
         tableViewUsers.getColumns().add(lastNameColumn);
         tableViewUsers.getColumns().add(emailColumn);
         tableViewUsers.getColumns().add(roleColumn);
-    }
+    } //Prepare tableView
 
     private void prepareTableViewGroups() {
         TableColumn<Group, Integer> idColumn = new TableColumn<>("Id");
@@ -110,7 +110,7 @@ public class GuestViewController implements Initializable {
         tableViewGroups.getColumns().add(nameColumn);
         tableViewGroups.getColumns().add(descriptionColumn);
         tableViewGroups.getColumns().add(countPeopleColumn);
-    }
+    } //Prepare tableView
 
     private void searchGroups(String value) {
         List<Group> foundGroups = groupData.stream()
@@ -120,7 +120,7 @@ public class GuestViewController implements Initializable {
             tableViewGroups.setItems(groupData);
         else
             tableViewGroups.setItems(FXCollections.observableArrayList(foundGroups));
-    }
+    } //Search in groups
 
     private void searchUsers(String value) {
         List<User> foundUsers = userData.stream()
@@ -130,5 +130,5 @@ public class GuestViewController implements Initializable {
             tableViewUsers.setItems(userData);
         else
             tableViewUsers.setItems(FXCollections.observableArrayList(foundUsers));
-    }
+    } //Search in users
 }

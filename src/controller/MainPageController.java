@@ -24,15 +24,15 @@ public class MainPageController implements Initializable {
 
     public void onLoginClicked(MouseEvent mouseEvent) {
         switchMainPaneScene("/gui/LoginPage.fxml");
-    }
+    } //Show login page
 
     public void onRegistrationClicked(MouseEvent mouseEvent) {
         switchMainPaneScene("/gui/RegistrationPage.fxml");
-    }
+    } //Show registration page
 
     public void onHomeClicked(MouseEvent mouseEvent) {
         switchMainPaneScene("/gui/GuestViewPage.fxml");
-    }
+    } //Show GuestView
 
     public void onGithubClicked(MouseEvent mouseEvent) {
         try {
@@ -40,15 +40,15 @@ public class MainPageController implements Initializable {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-    }
+    } //Open Github in web browser
 
     public void onDocumentationClicked(MouseEvent mouseEvent) {
         try {
-            Desktop.getDesktop().open(new File("Funkční požadavky.docx"));
+            Desktop.getDesktop().open(new File("Dokumentace_IDAS2.docx"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } //Open documentation
 
     private void switchMainPaneScene(String fxmlLocation) {
         try {
@@ -58,6 +58,5 @@ public class MainPageController implements Initializable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-    }
+    } //Switch scenes in mainStackPane
 }

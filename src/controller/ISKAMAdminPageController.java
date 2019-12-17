@@ -29,83 +29,42 @@ import java.util.Collection;
 
 public class ISKAMAdminPageController {
 
-    OrderDAO orderDAO = new OrderDAOImpl();
-    ProductDAO productDAO = new ProductDAOImpl();
-    FoodMenuDAO foodMenuDAO = new FoodMenuDAOImpl();
-    UserDAO userDAO = new UserDAOImpl();
-    ObservableList<Order> transactionList;
-    ObservableList<Product> productList;
-    ObservableList<FoodMenu> foodMenuList;
-    Order editedOrder;
-    Product editedProduct;
-    FoodMenu editedFoodMenu;
+    private OrderDAO orderDAO = new OrderDAOImpl();
+    private ProductDAO productDAO = new ProductDAOImpl();
+    private FoodMenuDAO foodMenuDAO = new FoodMenuDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl();
+
+    private ObservableList<Order> transactionList;
+    private ObservableList<Product> productList;
+    private ObservableList<FoodMenu> foodMenuList;
+
+    private Order editedOrder;
+    private Product editedProduct;
+    private FoodMenu editedFoodMenu;
 
 
-    @FXML
-    private TabPane iskamPage;
-
-    @FXML
-    private DatePicker dPTDate;
-
-    @FXML
-    private DatePicker dPFDate;
-
-    @FXML
-    private ComboBox<TRANSACTION_TYPE> cbPTypeOfTransaction;
-
-    @FXML
-    private ListView<FoodMenu> lVFoodMenu;
-
-    @FXML
-    private TextField tFPInStock;
-
-    @FXML
-    private ListView<Order> lvOrders;
-
-    @FXML
-    private ComboBox<Product> cBTProduct;
-
-    @FXML
-    private ComboBox<TRANSACTION_TYPE> cBTTransactionType;
-
-    @FXML
-    private ComboBox<User> cBTUser;
-
-    @FXML
-    private ListView<Product> lVProducts;
-
-    @FXML
-    private ListView<Product> lVFProducts;
-
-    @FXML
-    private TextField tFTPrice;
-
-    @FXML
-    private ComboBox<DATABASE_OPERATION_TYPE> cBPOperationType;
-
-    @FXML
-    private ComboBox<DATABASE_OPERATION_TYPE> cBFTypeOfOperation;
-
-    @FXML
-    private ComboBox<DATABASE_OPERATION_TYPE> cBTOperationType;
-
-    @FXML
-    private ComboBox<Product> cBFProducts;
-
-    @FXML
-    private TextArea tATDescription;
-
-    @FXML
-    private Button btnFAddProduct;
-
-    @FXML
-    private TextArea tAPPrice;
-
-    @FXML
-    private TextField tFPName;
-
-    @FXML
-    private TextArea tAPDescription;
+    public TabPane iskamPage;
+    public DatePicker dPTDate;
+    public DatePicker dPFDate;
+    public ComboBox<TRANSACTION_TYPE> cbPTypeOfTransaction;
+    public ListView<FoodMenu> lVFoodMenu;
+    public TextField tFPInStock;
+    public ListView<Order> lvOrders;
+    public ComboBox<Product> cBTProduct;
+    public ComboBox<TRANSACTION_TYPE> cBTTransactionType;
+    public ComboBox<User> cBTUser;
+    public ListView<Product> lVProducts;
+    public ListView<Product> lVFProducts;
+    public TextField tFTPrice;
+    public ComboBox<DATABASE_OPERATION_TYPE> cBPOperationType;
+    public ComboBox<DATABASE_OPERATION_TYPE> cBFTypeOfOperation;
+    public ComboBox<DATABASE_OPERATION_TYPE> cBTOperationType;
+    public ComboBox<Product> cBFProducts;
+    public TextArea tATDescription;
+    public Button btnFAddProduct;
+    public TextArea tAPPrice;
+    public TextField tFPName;
+    public TextArea tAPDescription;
 
     public void initData() {
         try {
@@ -139,7 +98,7 @@ public class ISKAMAdminPageController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }).start();
+        }).start(); //Load data for ISKAM
 
         //Transaction
         cBTTransactionType.setItems(FXCollections.observableArrayList(TRANSACTION_TYPE.values()));
@@ -169,9 +128,7 @@ public class ISKAMAdminPageController {
            editedFoodMenu = newValue;
            cBFTypeOfOperationChanged(null);
         });
-
-
-    }
+    } //Load data and init default values
 
     @FXML
     void btnTDeleteProductClicked(ActionEvent event) {
@@ -225,7 +182,7 @@ public class ISKAMAdminPageController {
         } catch (Exception e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
-    }
+    } //Perform action
 
 
     private void fillTransakcePane(Order newValue) {
@@ -244,9 +201,9 @@ public class ISKAMAdminPageController {
             dPTDate.setValue(null);
             tATDescription.setText("");
         }
-    }
+    } //Fill transaction pane
 
-    private void reloadTransakce() throws SQLException {
+    private void reloadTransakce() {
         editedOrder = null;
         fillTransakcePane(null);
         new Thread(() -> {
@@ -257,7 +214,7 @@ public class ISKAMAdminPageController {
             }
             Platform.runLater(() -> lvOrders.setItems(transactionList));
         }).start();
-    }
+    } //Reload transaction from db
 
     @FXML
     void btnPExecuteClicked(ActionEvent event) {
@@ -304,7 +261,7 @@ public class ISKAMAdminPageController {
         } catch (Exception e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
-    }
+    } //Perform action
 
     private void fillProductPane(Product newValue) {
         if (newValue != null) {
@@ -320,9 +277,9 @@ public class ISKAMAdminPageController {
             cbPTypeOfTransaction.setValue(null);
             tAPPrice.setText("");
         }
-    }
+    } //Fill product pane
 
-    private void reloadProduct() throws SQLException {
+    private void reloadProduct() {
         editedProduct = null;
         fillProductPane(null);
         new Thread(() -> {
@@ -337,7 +294,7 @@ public class ISKAMAdminPageController {
                 cBFProducts.setItems(productList);
             });
         }).start();
-    }
+    } //Reload product from db
 
 
     @FXML
@@ -351,13 +308,13 @@ public class ISKAMAdminPageController {
                 lockFoodMenu(false);
                 break;
         }
-    }
+    } //On operation change
 
     private void lockFoodMenu(boolean val) {
         lVFProducts.setDisable(val);
         cBFProducts.setDisable(val);
         btnFAddProduct.setDisable(val);
-    }
+    } //Lock
 
     @FXML
     void cBFProductsChanged(ActionEvent event) {
@@ -368,7 +325,7 @@ public class ISKAMAdminPageController {
         {
             btnFAddProduct.setText("Přidat");
         }
-    }
+    } //On products changed
 
     @FXML
     void btnFExecuteClicked(ActionEvent event) {
@@ -407,7 +364,7 @@ public class ISKAMAdminPageController {
         } catch (Exception e) {
             AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
         }
-    }
+    } //Perform action
 
     private void fillFoodMenu(FoodMenu newValue) {
         if (newValue != null) {
@@ -429,14 +386,14 @@ public class ISKAMAdminPageController {
             dPFDate.setValue(null);
             lVFProducts.setItems(null);
         }
-    }
+    } //Fill food menu
 
     private void reloadFoodMenu() throws SQLException {
         editedFoodMenu = null;
         fillFoodMenu(null);
         foodMenuList = FXCollections.observableArrayList(foodMenuDAO.getAllFoodMenu());
         lVFoodMenu.setItems(foodMenuList);
-    }
+    } //Reload Food menu from db
 
 
     @FXML
@@ -458,6 +415,5 @@ public class ISKAMAdminPageController {
             }
         }
         fillFoodMenu(editedFoodMenu);
-    }
-
+    } //Perform action
 }

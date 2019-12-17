@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Like model
+ */
 public class Like {
 
     private Integer id_user;
