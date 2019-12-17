@@ -109,17 +109,17 @@ public class RatingDAOImpl implements RatingDAO {
 
     @Override
     public double getAverageRating(Group group) throws SQLException {
-        Statement statement = conn.createStatement();
-
-        ResultSet rs = statement.executeQuery("SELECT AVG(hodnota_hodnoceni) as \"AVERAGE\" FROM getRatings "
-                + "WHERE id_skupina = " + group.getId());
-        Double output = null;
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "select FNC_PRUMER_HODNOCENI (?) as \"Rating\"\n" +
+                        "from dual"
+        );
+        preparedStatement.setInt(1, group.getId());
+        ResultSet rs = preparedStatement.executeQuery();
         if (rs.next())
-            output = rs.getDouble("AVERAGE");
-
-        statement.close();
-        System.out.println("GetAverageRating");
-        return output;
+            return rs.getInt("Rating");
+        preparedStatement.close();
+        System.out.println("getAverageRating");
+        return 0;
     }
 
     @Override

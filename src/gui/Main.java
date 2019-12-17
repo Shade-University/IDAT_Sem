@@ -33,6 +33,7 @@ public class Main extends Application {
             OracleConnection.getConnection();
              root = FXMLLoader.load(getClass().getResource("MainPage.fxml"));
         } catch (SQLException ex) {
+             AlertDialog.show(ex.toString(), Alert.AlertType.ERROR);
              root = FXMLLoader.load(getClass().getResource("SetupPage.fxml"));
         }
         Scene scene = new Scene(root);

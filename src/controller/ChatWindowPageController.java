@@ -38,6 +38,7 @@ public class ChatWindowPageController implements Initializable {
     public ComboBox<RATING_GRADE> cBRatingOfGroup;
     public CheckBox checkBox;
     public Button btnFileAdd;
+    public Label labelAverageRatingOfGroup;
 
     private final MessageDAO messageDAO = new MessageDAOImpl();
     private final RatingDAO ratingDAO = new RatingDAOImpl();
@@ -101,6 +102,7 @@ public class ChatWindowPageController implements Initializable {
                                 chatedGroup);
                         ratingDAO.createRating(groupRating);
                     }
+                    reloadRatingOfGroup();
                 } catch (SQLException e) {
                     AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
                 }
@@ -117,7 +119,7 @@ public class ChatWindowPageController implements Initializable {
                 try {
                     messages = FXCollections.observableArrayList(messageDAO.getMessagesForGroupChatWithLevel(chatedGroup));
                     groupRating = ratingDAO.getRatingByUserAndGroup(MainDashboardPageController.getLoggedUser(), chatedGroup);
-
+                    reloadRatingOfGroup();
                     Platform.runLater(() -> {
                         if (groupRating != null) {
                             cBRatingOfGroup.setValue(RATING_GRADE.convertToRATING_GRADE(groupRating));
@@ -145,6 +147,24 @@ public class ChatWindowPageController implements Initializable {
                 //Load messages for user
             }
         }).start();
+    }
+
+    /**
+     * Reload rating of Group.
+     */
+    public void reloadRatingOfGroup(){
+        new Thread(()->{
+            double ratingOfGroup = 0;
+            try {
+                ratingOfGroup = ratingDAO.getAverageRating(chatedGroup);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            double finalRatingOfGroup = ratingOfGroup;
+            Platform.runLater(()->{
+                labelAverageRatingOfGroup.setText("Průměrné hodnocení je: " + String.valueOf(finalRatingOfGroup));
+            });
+        }).run();
     }
 
     public void btnSendClicked(MouseEvent mouseEvent) {
