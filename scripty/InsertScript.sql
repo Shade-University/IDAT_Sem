@@ -3,6 +3,8 @@ Insert into STUDIJNI_OBORY (ID_OBOR, NAZEV, POPIS)
 values ('1', 'Informaèní technologie', 'Bakaláøskı');
 Insert into STUDIJNI_OBORY (ID_OBOR, NAZEV, POPIS)
 values ('2', 'Øízení procesù', 'Bakaláøskı');
+/*============Obory-END==========*/
+
 /*=========Pøedmìty============*/
 Insert into PREDMETY (ID_PREDMET, NAZEV, POPIS)
 values ('1', 'Odborná praxe - exkurze I', 'IOPEX');
@@ -340,6 +342,8 @@ Insert into PREDMETY (ID_PREDMET, NAZEV, POPIS)
 values ('167', 'Veslování LS', 'VES2');
 Insert into PREDMETY (ID_PREDMET, NAZEV, POPIS)
 values ('168', 'Volejbal LS', 'VOL2');
+/*=========Pøedmìty-END============*/
+
 /* ==========Skupiny============ */
 INSERT INTO SKUPINY(NAZEV, POPIS)
 VALUES ('Skupina: První roèník', 'Skupina prvákù');
@@ -351,6 +355,8 @@ INSERT INTO SKUPINY(NAZEV, POPIS)
 VALUES ('Skupina: Pátı roèník', 'Skupina páákù');
 INSERT INTO SKUPINY(NAZEV, POPIS)
 VALUES ('Skupina: Šestı roèník', 'Skupina šesákù');
+/* ==========Skupiny-END============ */
+
 /* ========Skupiny_predmet=============*/
 begin
     /*Skupina 1*/
@@ -399,12 +405,16 @@ begin
     insert_skupiny_predmety('5', '39');
     insert_skupiny_predmety('5', '40');
 end;
+/* ========skupiny_predmety-END=============*/
+
 /* ========uzivatele_student=============*/
 /*EXECUTE insert_student('Tomáš', 'Vondra', 'st55448@student.upce.cz', 'lopata97', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '2. roèník', 1); */
 
 INSERT INTO UZIVATELE(jmeno, prijmeni, email, heslo, datum_vytvoreni, uzivatel_typ)
 VALUES ('admin', 'admin', 'admin', 'admin',
         TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'admin');
+
+/* ========uzivatele_student=============*/
 begin
     insert_student('student', 'student', 'student', 'student', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'),
                    '2. roèník', 1);
@@ -450,6 +460,8 @@ begin
     insert_student('Jakub', 'Sobotka', 'st99999@student.upce.cz', '99999',
                    TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), '3. roèník', 1);
 end;
+/* ========uzivatele_student=============*/
+
 /*========uzivatel_ucitel========*/
 begin
     insert_ucitel('Jakub', 'ufánek', 'st11111@ucitel.upce.cz', '11111',
@@ -463,6 +475,7 @@ begin
     insert_ucitel('Alena', 'Pozdílková', 'st55555@ucitel.upce.cz', '55555',
                   TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 'FEI');
 end;
+/*========uzivatel_ucitel========*/
 
 /*=======uzivatel_do_skupin=============*/
 INSERT INTO UZIVATELE_SKUPINY(UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
@@ -519,6 +532,7 @@ VALUES (14, 1);
 INSERT INTO UZIVATELE_SKUPINY(UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
 VALUES (15, 3);
 /* Uèitelé do skupin */
+/*=======uzivatel_do_skupin=============*/
 
 /*======zpravy======*/
 INSERT INTO ZPRAVY(Nazev, Telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce, id_skupina_prijemce)
@@ -562,6 +576,7 @@ INSERT INTO ZPRAVY(Nazev, Telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uziv
 VALUES ('Test zpráva19', 'Test19', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 11, null, 1);
 INSERT INTO ZPRAVY(Nazev, Telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce, id_skupina_prijemce)
 VALUES ('Test zpráva20', 'Test20', TO_DATE('2019-05-14 09:00:20', 'YYYY-MM-DD HH24:MI:SS'), 12, null, 5);
+/*======zpravy======*/
 
 /*=====hodnoceni====*/
 INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)
@@ -584,44 +599,46 @@ INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)
 VALUES (2, 'Nic moc', 9, 4);
 INSERT INTO HODNOCENI(HODNOTA_HODNOCENI, POPIS, ID_UZIVATEL, ID_SKUPINA)
 VALUES (1, 'Špatné', 10, 5);
+/*=====hodnoceni====*/
 
 /*=====produkty====*/
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (1, 'peèená kuøecí stehenní ètvrtka na slaninì, rıe
-', 'Hlavní jídlo', 8, 1, 1, null);
+', 'Hlavní jídlo', 8, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
 values (2, 'vepøovı steak z krkovice, slanina, sáz. vejce, hranolky
-', 'Hlavní jídlo', 9, 1, 1, null);
+', 'Hlavní jídlo', 9, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (3, 'peèené vepøové koleno', 'Hlavní jídlo', 7, 1, 1, null);
+values (3, 'peèené vepøové koleno', 'Hlavní jídlo', 7, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (4, 'sma. kuøecí kapsa se sırem a šunkou, bramborová kaše', 'Hlavní jídlo', 6, 1, 1, null);
+values (4, 'sma. kuøecí kapsa se sırem a šunkou, bramborová kaše', 'Hlavní jídlo', 6, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (5, '3ks domácí vdolky s povidly a šlehaèkou', 'Hlavní jídlo', 5, 1, 1, null);
+values (5, '3ks domácí vdolky s povidly a šlehaèkou', 'Hlavní jídlo', 5, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (6, 'míchanı salát s cibulkou', 'Hlavní jídlo', 11, 1, 1, null);
+values (6, 'míchanı salát s cibulkou', 'Hlavní jídlo', 11, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (7, 'listovı salát s cherry rajèaty, grilované tofu, toasty', 'Hlavní jídlo', 12, 1, 1, null);
+values (7, 'listovı salát s cherry rajèaty, grilované tofu, toasty', 'Hlavní jídlo', 12, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (8, 'Thajské kuøecí curry s jasmínovou rıí', 'Hlavní jídlo', 9, 1, 1, null);
+values (8, 'Thajské kuøecí curry s jasmínovou rıí', 'Hlavní jídlo', 9, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (9, '1ks domácí vdolek s povidly a šlehaèkou', 'Hlavní jídlo', 16, 1, 1, null);
+values (9, '1ks domácí vdolek s povidly a šlehaèkou', 'Hlavní jídlo', 16, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (10, 'Moravskı vrabec se špenátem a bramborovımi špalíèky', 'Hlavní jídlo', 10, 1, 1, null);
+values (10, 'Moravskı vrabec se špenátem a bramborovımi špalíèky', 'Hlavní jídlo', 10, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (11, 'Gnocchi al quattro formaggi', 'Hlavní jídlo', 10, 1, 1, null);
+values (11, 'Gnocchi al quattro formaggi', 'Hlavní jídlo', 10, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (12, 'Wrap s hovìzím vyzrálım flank steakem z Namibie', 'Hlavní jídlo', 17, 1, 1, null);
+values (12, 'Wrap s hovìzím vyzrálım flank steakem z Namibie', 'Hlavní jídlo', 17, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (13, 'Chilli con carne s dušenou bylinkovou rıí', 'Hlavní jídlo', 11, 1, 1, null);
+values (13, 'Chilli con carne s dušenou bylinkovou rıí', 'Hlavní jídlo', 11, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (14, 'Panna cotta s malinovou omáèkou', 'Hlavní jídlo', 5, 1, 1, null);
+values (14, 'Panna cotta s malinovou omáèkou', 'Hlavní jídlo', 5, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (15, 'Vepøové ebírka, hoøèice, køen, chléb', 'Hlavní jídlo', 3, 1, 1, null);
+values (15, 'Vepøové ebírka, hoøèice, køen, chléb', 'Hlavní jídlo', 3, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (16, 'Quesadilla s hovìzím masem', 'Hlavní jídlo', 8, 1, 1, null);
+values (16, 'Quesadilla s hovìzím masem', 'Hlavní jídlo', 8, 1, 1);
 insert into PRODUKTY (ID_PRODUKTU, NAZEV, POPIS, SKLADEM, TYP,  CENA)
-values (17, 'Burgr s hovìzím masem, cuketou s èedarem', 'Hlavní jídlo', 9, 1, 1, null);
+values (17, 'Burgr s hovìzím masem, cuketou s èedarem', 'Hlavní jídlo', 9, 1, 1);
+/*=====produkty====*/
 
 
 /*UCITEL_PREDMETY*/
@@ -641,9 +658,9 @@ begin
     INSERT_PREDMET_UCITEL(15, 19);
     INSERT_PREDMET_UCITEL(15, 20);
 end;
+/*UCITEL_PREDMETY*/
 
 /*OBOR_PREDMET*/
-
 begin
     INSERT_OBOR_PREDMET(1,1);
     INSERT_OBOR_PREDMET(1,2);
@@ -657,6 +674,8 @@ begin
     INSERT_OBOR_PREDMET(2,10);
     INSERT_OBOR_PREDMET(2,11);
 end;
+/*OBOR_PREDMET*/
+
 
 
 

@@ -1,3 +1,4 @@
+/*=============INCREMENT=============*/
 create sequence INCREMENT_HODNOCENI
 /
 
@@ -30,7 +31,9 @@ create sequence INCREMENT_PRODUKTY
 
 create sequence INCREMENT_JIDELNI_LISTKY
 /
+/*=============INCREMENT-END=============*/
 
+/*=============DB-STRUKTURA=============*/
 create table PREDMETY
 (
     ID_PREDMET NUMBER not null
@@ -41,24 +44,6 @@ create table PREDMETY
 )
 /
 
-create or replace trigger PREDMETY_TRIGGER
-    before insert or update
-    on PREDMETY
-    for each row
-BEGIN
-
-    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
-        raise_application_error(-20005, 'Název musí být v rozsahu 3 až 50 znakù');
-    end if;
-
-    if (inserting) then
-        SELECT increment_predmety.nextval
-        INTO :new.id_predmet
-        FROM dual;
-    end if;
-END;
-/
-
 create table SKUPINY
 (
     ID_SKUPINA NUMBER not null
@@ -67,23 +52,6 @@ create table SKUPINY
     NAZEV VARCHAR2(50) not null,
     POPIS VARCHAR2(250)
 )
-/
-
-create or replace trigger SKUPINY_TRIGGER
-    before insert or update
-    on SKUPINY
-    for each row
-BEGIN
-    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
-        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znakù');
-    end if;
-
-    if (inserting) then
-        SELECT increment_skupiny.nextval
-        INTO :new.id_skupina
-        FROM dual;
-    end if;
-END;
 /
 
 create table STUDIJNI_OBORY
@@ -105,23 +73,6 @@ create table OBOR_PREDMET
         constraint OBOR_PREDMET_PREDMETY_ID_PREDMET_FK
             references PREDMETY
 )
-/
-
-create or replace trigger OBORY_TRIGGER
-    before insert or update
-    on STUDIJNI_OBORY
-    for each row
-BEGIN
-    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
-        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 50 znakù');
-    end if;
-
-    if (inserting) then
-        SELECT increment_obory.nextval
-        INTO :new.id_obor
-        FROM dual;
-    end if;
-END;
 /
 
 create table UZIVATELE
@@ -153,23 +104,6 @@ create table HODNOCENI
         constraint HODNOCENI_SKUPINA
             references SKUPINY
 )
-/
-
-create or replace trigger HODNOCENI_TRIGGER
-    before insert or update
-    on HODNOCENI
-    for each row
-BEGIN
-    IF (:NEW.hodnota_hodnoceni < 1 OR :NEW.hodnota_hodnoceni > 5) then
-        raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 1-5');
-    end if;
-
-    if (inserting) then
-        SELECT increment_hodnoceni.nextval
-        INTO :new.id_hodnoceni
-        FROM dual;
-    end if;
-END;
 /
 
 create table STUDENTI
@@ -271,6 +205,146 @@ create table ZPRAVY
 )
 /
 
+create table UZIVATELE_SKUPINY
+(
+    UZIVATELE_ID_UZIVATEL NUMBER not null
+        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    SKUPINY_ID_SKUPINA NUMBER not null
+        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
+            references SKUPINY,
+    constraint UZIVATELE_SKUPINY_PK
+        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
+)
+/
+
+create table PRODUKTY
+(
+    ID_PRODUKTU NUMBER not null
+        constraint PRODUKT_PK
+            primary key,
+    NAZEV VARCHAR2(255) not null,
+    POPIS VARCHAR2(255) not null,
+    SKLADEM NUMBER,
+    TYP VARCHAR2(100),
+    CENA NUMBER
+)
+/
+
+create table TRANSAKCE
+(
+    ID_TRANSAKCE NUMBER not null
+        constraint TRANSAKCE_PK
+            primary key,
+    ID_UZIVATELE NUMBER not null
+        constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    ID_PRODUKTU NUMBER
+        constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
+            references PRODUKTY,
+    TYP_TRANSAKCE VARCHAR2(100) not null,
+    CASTKA FLOAT not null,
+    DATUM DATE not null,
+    POPIS VARCHAR2(255) not null
+)
+/
+
+create table JIDELNI_LISTKY
+(
+    ID_LISTKU NUMBER not null
+        constraint JIDELNI_LISTEK_PK
+            primary key,
+    DATUM DATE not null
+)
+/
+
+create unique index JIDELNI_LISTKY_DATUM_UINDEX
+    on JIDELNI_LISTKY (DATUM)
+/
+
+create table LISTEK_PRODUKT
+(
+    ID_PRODUKT NUMBER not null
+        constraint LISTEK_PRODUKT_PRODUKTY_ID_PRODUKTU_FK
+            references PRODUKTY
+                on delete cascade,
+    ID_LISTEK NUMBER not null
+        constraint LISTEK_PRODUKT_JIDELNI_LISTKY_ID_LISTKU_FK
+            references JIDELNI_LISTKY
+                on delete cascade
+)
+/
+
+create table OBLIBENE_ZPRAVY
+(
+    ID_UZIVATEL NUMBER
+        constraint OBLIBENE_ZPRAVY_UZIVATELE_ID_UZIVATEL_FK
+            references UZIVATELE,
+    ID_ZPRAVA NUMBER
+        constraint OBLIBENE_ZPRAVY_ZPRAVY_ID_ZPRAVA_FK
+            references ZPRAVY
+)
+/
+/*=============DB-STRUKTURA-END=============*/
+
+/*=============Triggery=============*/
+create or replace trigger JIDELNI_LISTKY_TRIGGER
+    before insert or update
+    on JIDELNI_LISTKY
+    for each row
+BEGIN
+    if (inserting) then
+        SELECT increment_jidelni_listky.nextval
+        INTO :NEW.id_listku
+        FROM dual;
+    end if;
+END;
+/
+
+create or replace trigger TRANSAKCE_TRIGGER
+    before insert or update
+    on TRANSAKCE
+    for each row
+BEGIN
+    if (inserting) then
+        SELECT increment_transakce.nextval
+        INTO :NEW.id_transakce
+        FROM dual;
+    end if;
+END;
+/
+
+create or replace trigger PRODUKTY_TRIGGER
+    before insert or update
+    on PRODUKTY
+    for each row
+BEGIN
+    if (inserting) then
+        SELECT increment_produkty.nextval
+        INTO :NEW.id_produktu
+        FROM dual;
+    end if;
+END;
+/
+
+create or replace trigger SOUBORY_TRIGGER
+    before insert or update
+    on SOUBORY
+    for each row
+BEGIN
+    if (updating) then
+        :new.upraveno := sysdate;
+    end if;
+
+    if (inserting) then
+        :new.nahrano := sysdate;
+        SELECT increment_soubory.nextval
+        INTO :NEW.id_souboru
+        FROM dual;
+    end if;
+END;
+/
+
 create or replace trigger ZPRAVY_TRIGGER
     before insert or update or delete
     on ZPRAVY
@@ -299,144 +373,102 @@ BEGIN
 END;
 /
 
-create or replace trigger SOUBORY_TRIGGER
+create or replace trigger HODNOCENI_TRIGGER
     before insert or update
-    on SOUBORY
+    on HODNOCENI
     for each row
 BEGIN
-    if (updating) then
-        :new.upraveno := sysdate;
+    IF (:NEW.hodnota_hodnoceni < 1 OR :NEW.hodnota_hodnoceni > 5) then
+        raise_application_error(-200001, 'Hodnota hodnocení musí být v rozmezí 1-5');
     end if;
 
     if (inserting) then
-        :new.nahrano := sysdate;
-        SELECT increment_soubory.nextval
-        INTO :NEW.id_souboru
+        SELECT increment_hodnoceni.nextval
+        INTO :new.id_hodnoceni
         FROM dual;
     end if;
 END;
 /
 
-create table UZIVATELE_SKUPINY
-(
-    UZIVATELE_ID_UZIVATEL NUMBER not null
-        constraint UZIVATELE_SKUPINY_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
-    SKUPINY_ID_SKUPINA NUMBER not null
-        constraint UZIVATELE_SKUPINY_SKUPINY_ID_SKUPINA_FK
-            references SKUPINY,
-    constraint UZIVATELE_SKUPINY_PK
-        unique (UZIVATELE_ID_UZIVATEL, SKUPINY_ID_SKUPINA)
-)
-/
-
-create table PRODUKTY
-(
-    ID_PRODUKTU NUMBER not null
-        constraint PRODUKT_PK
-            primary key,
-    NAZEV VARCHAR2(255) not null,
-    POPIS VARCHAR2(255) not null,
-    SKLADEM NUMBER,
-    TYP VARCHAR2(100),
-    CENA NUMBER
-)
-/
-
-create or replace trigger PRODUKTY_TRIGGER
+create or replace trigger OBORY_TRIGGER
     before insert or update
-    on PRODUKTY
+    on STUDIJNI_OBORY
     for each row
 BEGIN
+    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
+        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 50 znakù');
+    end if;
+
     if (inserting) then
-        SELECT increment_produkty.nextval
-        INTO :NEW.id_produktu
+        SELECT increment_obory.nextval
+        INTO :new.id_obor
         FROM dual;
     end if;
 END;
 /
 
-create table TRANSAKCE
-(
-    ID_TRANSAKCE NUMBER not null
-        constraint TRANSAKCE_PK
-            primary key,
-    ID_UZIVATELE NUMBER not null
-        constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
-    ID_PRODUKTU NUMBER
-        constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
-            references PRODUKTY,
-    TYP_TRANSAKCE VARCHAR2(100) not null,
-    CASTKA FLOAT not null,
-    DATUM DATE not null,
-    POPIS VARCHAR2(255) not null
-)
-/
-
-create or replace trigger TRANSAKCE_TRIGGER
+create or replace trigger PREDMETY_TRIGGER
     before insert or update
-    on TRANSAKCE
+    on PREDMETY
     for each row
 BEGIN
+
+    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 50) then
+        raise_application_error(-20005, 'Název musí být v rozsahu 3 až 50 znakù');
+    end if;
+
     if (inserting) then
-        SELECT increment_transakce.nextval
-        INTO :NEW.id_transakce
+        SELECT increment_predmety.nextval
+        INTO :new.id_predmet
         FROM dual;
     end if;
 END;
 /
 
-create table JIDELNI_LISTKY
-(
-    ID_LISTKU NUMBER not null
-        constraint JIDELNI_LISTEK_PK
-            primary key,
-    DATUM DATE not null
-)
-/
-
-create unique index JIDELNI_LISTKY_DATUM_UINDEX
-    on JIDELNI_LISTKY (DATUM)
-/
-
-create or replace trigger JIDELNI_LISTKY_TRIGGER
+create or replace trigger SKUPINY_TRIGGER
     before insert or update
-    on JIDELNI_LISTKY
+    on SKUPINY
     for each row
 BEGIN
+    if (LENGTH(:NEW.nazev) < 3 or LENGTH(:NEW.nazev) > 30) then
+        raise_application_error(-20002, 'Název musí být v rozsahu 3 až 30 znakù');
+    end if;
+
     if (inserting) then
-        SELECT increment_jidelni_listky.nextval
-        INTO :NEW.id_listku
+        SELECT increment_skupiny.nextval
+        INTO :new.id_skupina
         FROM dual;
     end if;
 END;
 /
 
-create table LISTEK_PRODUKT
-(
-    ID_PRODUKT NUMBER not null
-        constraint LISTEK_PRODUKT_PRODUKTY_ID_PRODUKTU_FK
-            references PRODUKTY
-                on delete cascade,
-    ID_LISTEK NUMBER not null
-        constraint LISTEK_PRODUKT_JIDELNI_LISTKY_ID_LISTKU_FK
-            references JIDELNI_LISTKY
-                on delete cascade
-)
-/
+create or replace trigger UZIVATELE_TRIGGER
+    before insert or update
+    on UZIVATELE
+    for each row
+BEGIN
+    if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
+        raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znakù');
+    elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
+        raise_application_error(-20003, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
+    elsif (LENGTH(:NEW.heslo) < 2) then
+        raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
+    end if;
 
-create table OBLIBENE_ZPRAVY
-(
-    ID_UZIVATEL NUMBER
-        constraint OBLIBENE_ZPRAVY_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
-    ID_ZPRAVA NUMBER
-        constraint OBLIBENE_ZPRAVY_ZPRAVY_ID_ZPRAVA_FK
-            references ZPRAVY
-)
-/
 
+    if (inserting) then
+        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
+        :NEW.datum_vytvoreni := sysdate;
+        SELECT increment_uzivatele.nextval
+        INTO :NEW.id_uzivatel
+        FROM dual;
+
+    end if;
+END;
+/
+/*=============Triggery-END=============*/
+
+/*=============Pohledy=============*/
 create or replace view GETOBORY as
 SELECT o.id_obor    "id_obor",
        o.nazev      "nazev_obor",
@@ -531,8 +563,8 @@ create or replace view GETHODNOCENI as
 SELECT h.id_hodnoceni,
        h.hodnota_hodnoceni,
        h.popis,
-       u."ID_UZIVATEL",u."JMENO",u."PRIJMENI",u."HESLO",u."EMAIL",u."DATUM_VYTVORENI",u."UZIVATEL_TYP",u."AVATAR",u."ROK_STUDIA",u."ID_OBOR",u.nazev_obor "nazev_obor",u.popis_obor "popis_obor",u."KATEDRA",
-       g."ID_SKUPINA",g.nazev_skupina "nazev_skupina",g.popis_skupina "popis_skupina"
+       u."ID_UZIVATEL",u."JMENO",u."PRIJMENI",u."HESLO",u."EMAIL",u."DATUM_VYTVORENI",u."UZIVATEL_TYP",u."AVATAR",u."ROK_STUDIA",u."ID_OBOR",u."nazev_obor" "nazev_obor",u."popis_obor" "popis_obor",u."KATEDRA",
+       g."ID_SKUPINA",g."nazev_skupina" "nazev_skupina",g."popis_skupina" "popis_skupina"
 FROM HODNOCENI h
          JOIN (select * from getUzivatele) u ON u.id_uzivatel = h.id_uzivatel
          JOIN (select * from getSkupiny) g ON g.id_skupina = h.id_skupina
@@ -677,7 +709,59 @@ FROM ZPRAVY z
          left join ZPRAVY zp on z.ID_ZPRAVA = zp.ID_RODIC
          left join SOUBORY s on z.ID_SOUBORU = s.ID_SOUBORU
 /
+/*=============Pohledy-END=============*/
 
+/*=============FUNKCE=============*/
+create or replace FUNCTION fnc_zahashuj_uzivatele(uziv_jmeno_in in varchar2, heslo_in in varchar2) return varchar2
+    IS
+BEGIN
+    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(uziv_jmeno_in) || '/' || upper(heslo_in),
+                                                     1000000000, power(2, 30)),
+                         rpad('X', 29, 'X') || 'X'));
+END;
+/
+
+create or replace FUNCTION fnc_prumer_hodnoceni(id integer)
+    RETURN number
+    IS
+    prumer number;
+BEGIN
+    SELECT AVG(hodnota_hodnoceni) into prumer FROM getHodnoceni where id_skupina = id;
+    return prumer;
+END;
+/
+
+create or replace FUNCTION fnc_get_nejlepe_hodnocenou_skupinu
+    RETURN integer
+    IS
+    max_hodnota  integer := 0;
+    max_id       integer;
+    temp_hodnota integer;
+begin
+    FOR id IN (SELECT id_skupina from skupiny)
+        LOOP
+            temp_hodnota := fnc_prumer_hodnoceni(id.id_skupina);
+            if (temp_hodnota > max_hodnota) then
+                max_hodnota := temp_hodnota; max_id := id.id_skupina;
+            end if;
+        end loop;
+    return max_id;
+end;
+/
+
+create or replace FUNCTION fnc_pocet_uzivatelu_ve_skupine(id_in integer)
+    RETURN number
+    IS
+    pocet number;
+BEGIN
+    select count(*) into pocet from UZIVATELE_SKUPINY where SKUPINY_ID_SKUPINA = id_in;
+    return pocet;
+END;
+/
+
+/*=============FUNKCE-END=============*/
+
+/*=============PROCEDURY=============*/
 create or replace PROCEDURE insert_hodnoceni(hodnoceni_in in INTEGER, popis_in in VARCHAR2, id_uzivatel_in in INTEGER,
                                              id_skupina_in in INTEGER)
     IS
@@ -850,67 +934,12 @@ BEGIN
 END;
 /
 
-create or replace FUNCTION fnc_zahashuj_uzivatele(uziv_jmeno_in in varchar2, heslo_in in varchar2) return varchar2
-    IS
-BEGIN
-    RETURN ltrim(to_char(dbms_utility.get_hash_value(upper(uziv_jmeno_in) || '/' || upper(heslo_in),
-                                                     1000000000, power(2, 30)),
-                         rpad('X', 29, 'X') || 'X'));
-END;
-/
-
-create or replace FUNCTION fnc_prumer_hodnoceni(id integer)
-    RETURN number
-    IS
-    prumer number;
-BEGIN
-    SELECT AVG(hodnota_hodnoceni) into prumer FROM getHodnoceni where id_skupina = id;
-    return prumer;
-END;
-/
-
-create or replace FUNCTION fnc_get_nejlepe_hodnocenou_skupinu
-    RETURN integer
-    IS
-    max_hodnota  integer := 0;
-    max_id       integer;
-    temp_hodnota integer;
-begin
-    FOR id IN (SELECT id_skupina from skupiny)
-        LOOP
-            temp_hodnota := fnc_prumer_hodnoceni(id.id_skupina);
-            if (temp_hodnota > max_hodnota) then
-                max_hodnota := temp_hodnota; max_id := id.id_skupina;
-            end if;
-        end loop;
-    return max_id;
-end;
-/
-
 create or replace PROCEDURE insert_skupiny_predmety(id_skupina_in in INTEGER, id_predmet_in in INTEGER)
     IS
 BEGIN
     INSERT INTO SKUPINY_PREDMETY(SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET)
     VALUES (id_skupina_in, id_predmet_in);
 END;
-/
-
-create or replace FUNCTION fnc_pocet_uzivatelu_ve_skupine(id_in integer)
-    RETURN number
-    IS
-    pocet number;
-BEGIN
-    select count(*) into pocet from UZIVATELE_SKUPINY where SKUPINY_ID_SKUPINA = id_in;
-    return pocet;
-END;
-/
-
-create or replace view GETPOCTYVESKUPINACH as
-SELECT id_skupina,
-       nazev                                         "nazev_skupina",
-       popis                                         "popis_skupina",
-       fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
-from SKUPINY
 /
 
 create or replace PROCEDURE insert_predmet_ucitel(id_ucitel_in INTEGER, id_predmet_in INTEGER)
@@ -985,28 +1014,12 @@ BEGIN
     WHERE z.id_zprava = id_in;
 END;
 /
+/*=============PROCEDURY-END=============*/
 
-create or replace trigger UZIVATELE_TRIGGER
-    before insert or update
-    on UZIVATELE
-    for each row
-BEGIN
-    if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
-        raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znakù');
-    elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
-        raise_application_error(-20003, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
-    elsif (LENGTH(:NEW.heslo) < 2) then
-        raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
-    end if;
-
-
-    if (inserting) then
-        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
-        :NEW.datum_vytvoreni := sysdate;
-        SELECT increment_uzivatele.nextval
-        INTO :NEW.id_uzivatel
-        FROM dual;
-
-    end if;
-END;
+create or replace view GETPOCTYVESKUPINACH as
+SELECT id_skupina,
+       nazev                                         "nazev_skupina",
+       popis                                         "popis_skupina",
+       fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
+from SKUPINY
 /
