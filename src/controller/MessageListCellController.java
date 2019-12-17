@@ -1,5 +1,7 @@
 package controller;
 
+import data.LikeDAO;
+import data.LikeDAOImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -12,13 +14,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.File;
+import model.Like;
 import model.Message;
 import model.User;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 
 public class MessageListCellController extends ListCell<Message> {
@@ -32,9 +37,16 @@ public class MessageListCellController extends ListCell<Message> {
     @FXML
     private AnchorPane anchorPane;
 
+    @FXML
+    private Button btnLike;
+
     private AnchorPane pane;
 
     private FXMLLoader mLLoader;
+
+    private LikeDAO likeDAO = new LikeDAOImpl();
+
+    private Like like;
 
 
     @Override
@@ -57,6 +69,24 @@ public class MessageListCellController extends ListCell<Message> {
                     e.printStackTrace();
                 }
             }
+            btnLike.setOnAction((e) -> {
+                if(btnLike.getText().equals("Like")) {
+                    try {
+                        like = new Like(MainDashboardPageController.getLoggedUser().getId(), message.getId());
+                        likeDAO.createLike(like);
+                        btnLike.setText("Unlike");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    try {
+                        likeDAO.deleteLike(like);
+                        btnLike.setText("Like");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
             try {
                 tAMessage.getChildren().clear();
