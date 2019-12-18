@@ -91,49 +91,51 @@ public class EditMessagePageController implements Initializable {
     }
 
     private void initPane() {
-        new Thread(() -> {
-            try {
-                users = FXCollections.observableArrayList(userDAO.getAllUsers());
-                Collection<Message> messages = messageDAO.getAllMessages();
-                Collection<File> files = fileDAO.getAllFiles();
-                Platform.runLater(() -> {
-                    cBMessageParent.setItems(FXCollections.observableArrayList(messages));
-                    cBFile.setItems(FXCollections.observableArrayList(files));
-                    cBSender.setItems(users);
-
-                    cBSender.setValue(editedMessage.getSender());
-                    cBFile.setValue(editedMessage.getAttached_file());
-                    try {
-                        cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getParent()));
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                });
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start(); //Load messages data
-        cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
         if (editedMessage != null) {
-            txtFieldMessageName.setText(editedMessage.getName());
-            textAreaMessageBody.setText(editedMessage.getContent());
-            dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDate_created()));
+            new Thread(() -> {
+                try {
+                    users = FXCollections.observableArrayList(userDAO.getAllUsers());
+                    Collection<Message> messages = messageDAO.getAllMessages();
+                    Collection<File> files = fileDAO.getAllFiles();
+                    Platform.runLater(() -> {
+                        cBMessageParent.setItems(FXCollections.observableArrayList(messages));
+                        cBFile.setItems(FXCollections.observableArrayList(files));
+                        cBSender.setItems(users);
 
-            if (editedMessage.getUser_receiver() == null) {
-                cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
-                cBRecipientTypeChanged(null);
-                cBRecipientUniversal.setValue(editedMessage.getGroup_receiver());
+                        cBSender.setValue(editedMessage.getSender());
+                        cBFile.setValue(editedMessage.getAttached_file());
+                        try {
+                            cBMessageParent.setValue(messageDAO.getMessageById(editedMessage.getParent()));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }).start(); //Load messages data
+            cBRecipientType.setItems(FXCollections.observableArrayList(RECIPIENT_TYPE.values()));
+            if (editedMessage != null) {
+                txtFieldMessageName.setText(editedMessage.getName());
+                textAreaMessageBody.setText(editedMessage.getContent());
+                dateMessagePicker.setValue(convertToLocalDate(editedMessage.getDate_created()));
+
+                if (editedMessage.getUser_receiver() == null) {
+                    cBRecipientType.setValue(RECIPIENT_TYPE.SKUPINA);
+                    cBRecipientTypeChanged(null);
+                    cBRecipientUniversal.setValue(editedMessage.getGroup_receiver());
+                } else {
+                    cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
+                    cBRecipientTypeChanged(null);
+                    cBRecipientUniversal.setValue(editedMessage.getUser_receiver());
+                }
             } else {
                 cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
                 cBRecipientTypeChanged(null);
-                cBRecipientUniversal.setValue(editedMessage.getUser_receiver());
-            }
-        } else {
-            cBRecipientType.setValue(RECIPIENT_TYPE.UZIVATEL);
-            cBRecipientTypeChanged(null);
-            btnDelete.setVisible(false);
-            btnSave.setText("Vytvořit");
-        } //Set up default values
+                btnDelete.setVisible(false);
+                btnSave.setText("Vytvořit");
+            } //Set up default values
+        }
     }
 
     @FXML
