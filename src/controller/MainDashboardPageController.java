@@ -127,15 +127,17 @@ public class MainDashboardPageController implements Initializable {
 
     public void onImageClicked(MouseEvent mouseEvent) {
         File file = fileChooser.showOpenDialog(Main.primaryStage);
-        try {
-            userDAO.updateAvatar(file, loggedUser);
-            //Store password in plain text
-            String passwordTemp = loggedUser.getPassword();
-            loggedUser = userDAO.getUserByLogin(loggedUser.getEmail(), passwordTemp);
-            loggedUser.setPassword(passwordTemp);
-            this.initialize(null, null);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if(file!=null) {
+            try {
+                userDAO.updateAvatar(file, loggedUser);
+                //Store password in plain text
+                String passwordTemp = loggedUser.getPassword();
+                loggedUser = userDAO.getUserByLogin(loggedUser.getEmail(), passwordTemp);
+                loggedUser.setPassword(passwordTemp);
+                this.initialize(null, null);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     } //Change avatar
 

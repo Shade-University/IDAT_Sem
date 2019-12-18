@@ -164,7 +164,7 @@ public class EditSubjectPageController implements Initializable {
 
     /**
      * Zjištění, jestli je daný objekt členem kolekce
-     * @return True/false
+     * @return True/falsecomboBoxSubjectsUniversal
      */
     private boolean isMemberOf() {
         switch (comboBoxSubjectsUniversal.getValue()) {
@@ -187,6 +187,7 @@ public class EditSubjectPageController implements Initializable {
     @FXML
     void cbSubjectTypeChanged(ActionEvent event) throws SQLException {
         loadDataToUniversal();
+        btnAddSubjectToUniversal.setText("Přidat");
     }
 
 

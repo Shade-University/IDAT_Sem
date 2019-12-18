@@ -8,85 +8,89 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SetupPageController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" stylesheets="@try.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SetupPageController">
    <children>
       <VBox prefHeight="400.0" prefWidth="279.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Nastavení připojení k databazi">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00A2D3;">
+               <children>
+                  <Label text="Nastavení připojení k databazi" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #333645;" VBox.vgrow="ALWAYS">
                <children>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: gray;" HBox.hgrow="ALWAYS">
                      <top>
                         <VBox prefHeight="352.0" prefWidth="292.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label text="Uživatelské jméno">
+                              <Label text="Uživatelské jméno" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="tFUserName">
+                              <TextField fx:id="tFUserName" style="-fx-background-color: #d4dce0;">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Label text="Heslo:">
+                              <Label text="Heslo:" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <PasswordField fx:id="tFPassword">
+                              <PasswordField fx:id="tFPassword" style="-fx-background-color: #d4dce0;">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </PasswordField>
-                              <Label text="Adresa serveru">
+                              <Label text="Adresa serveru" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="tFAddress">
+                              <TextField fx:id="tFAddress" style="-fx-background-color: #d4dce0;">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Label text="Port:">
+                              <Label text="Port:" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="tFPort" text="1521">
+                              <TextField fx:id="tFPort" style="-fx-background-color: #d4dce0;" text="1521">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Label text="DBMS:">
+                              <Label text="DBMS:" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="tFDBMS" text="oracle:thin">
+                              <TextField fx:id="tFDBMS" style="-fx-background-color: #d4dce0;" text="oracle:thin">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Label text="SID:">
+                              <Label text="SID:" textFill="#c0c8cc">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="tFSID" text="IDAS">
+                              <TextField fx:id="tFSID" style="-fx-background-color: #d4dce0;" text="IDAS">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </VBox.margin>
                               </TextField>
-                              <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="1177.0" text="Uložit a otestovat připojení" VBox.vgrow="ALWAYS">
+                              <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="1177.0" style="-fx-background-color: #333645; -fx-border-color: gray;" text="Uložit a otestovat připojení" textFill="#c0c8cc" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>

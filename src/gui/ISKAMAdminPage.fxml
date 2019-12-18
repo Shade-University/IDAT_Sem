@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="468.0" prefWidth="808.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ISKAMAdminPageController">
+<AnchorPane prefHeight="468.0" prefWidth="808.0" style="-fx-background-color: gray;" stylesheets="@try.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ISKAMAdminPageController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="495.0" layoutY="192.0" text="Čekejte prosím. Probíhá načítání modulu ISKAM" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <TabPane fx:id="iskamPage" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -26,27 +26,30 @@
                               </VBox>
                               <GridPane alignment="center" hgap="10" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label contentDisplay="CENTER" text="Transakce " GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                    <Label contentDisplay="CENTER" prefHeight="30.0" prefWidth="406.0" style="-fx-background-color: #00A2D3;" text="Transakce " textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
                                     </Label>
                                     <Label text="Uživatel" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                    <ComboBox fx:id="cBTUser" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="cBTUser" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     <Label text="Produkt" GridPane.rowIndex="2" />
-                                    <ComboBox fx:id="cBTProduct" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    <Button mnemonicParsing="false" onAction="#btnTDeleteProductClicked" prefHeight="25.0" prefWidth="77.0" text="Vymazat" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="cBTProduct" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <Button mnemonicParsing="false" onAction="#btnTDeleteProductClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Vymazat" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                                     <Label text="Typ transakce" GridPane.rowIndex="3" />
-                                    <ComboBox fx:id="cBTTransactionType" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <ComboBox fx:id="cBTTransactionType" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                     <Label text="Částka" GridPane.rowIndex="4" />
-                                    <TextField fx:id="tFTPrice" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <TextField fx:id="tFTPrice" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                     <Label text="Datum" GridPane.rowIndex="5" />
-                                    <DatePicker fx:id="dPTDate" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <DatePicker fx:id="dPTDate" prefHeight="25.0" prefWidth="214.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                                     <Label text="Popis" GridPane.rowIndex="6" />
-                                    <TextArea fx:id="tATDescription" prefHeight="61.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                                    <ComboBox fx:id="cBTOperationType" prefHeight="25.0" prefWidth="212.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                    <TextArea fx:id="tATDescription" prefHeight="61.0" prefWidth="214.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                    <ComboBox fx:id="cBTOperationType" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                                     <Label text="Typ operace" GridPane.rowIndex="7" />
-                                    <Button mnemonicParsing="false" onAction="#btnTExecute" prefHeight="25.0" prefWidth="77.0" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <Button mnemonicParsing="false" onAction="#btnTExecute" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="7" />
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -97,7 +100,7 @@
                               </VBox>
                               <GridPane alignment="center" hgap="10" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label contentDisplay="CENTER" text="Produkty" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                    <Label contentDisplay="CENTER" prefHeight="30.0" prefWidth="405.0" style="-fx-background-color: #00A2D3;" text="Produkty" textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -105,16 +108,16 @@
                                     <Label text="Název" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                                     <Label text="Popis" GridPane.rowIndex="2" />
                                     <Label text="Skladem" GridPane.rowIndex="3" />
-                                    <TextField fx:id="tFPInStock" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <TextField fx:id="tFPInStock" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                     <Label text="Typ transakce" GridPane.rowIndex="4" />
                                     <Label text="Cena" GridPane.rowIndex="5" />
-                                    <TextArea fx:id="tAPPrice" prefHeight="61.0" prefWidth="214.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                    <ComboBox fx:id="cBPOperationType" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                                    <TextArea fx:id="tAPPrice" prefHeight="61.0" prefWidth="214.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <ComboBox fx:id="cBPOperationType" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                     <Label text="Typ operace" GridPane.rowIndex="6" />
-                                    <Button mnemonicParsing="false" onAction="#btnPExecuteClicked" prefHeight="25.0" prefWidth="77.0" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-                                    <TextField fx:id="tFPName" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                    <TextArea fx:id="tAPDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    <ComboBox fx:id="cbPTypeOfTransaction" prefHeight="25.0" prefWidth="217.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <Button mnemonicParsing="false" onAction="#btnPExecuteClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <TextField fx:id="tFPName" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <TextArea fx:id="tAPDescription" prefHeight="200.0" prefWidth="200.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="cbPTypeOfTransaction" prefHeight="25.0" prefWidth="217.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -164,20 +167,20 @@
                               </VBox>
                               <GridPane alignment="center" hgap="10" style="-fx-background-color: #202332;" vgap="10" HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label contentDisplay="CENTER" text="Jídelní lístky " GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                    <Label contentDisplay="CENTER" prefHeight="30.0" prefWidth="432.0" style="-fx-background-color: #00A2D3;" text="Jídelní lístky " textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
                                     </Label>
                                     <Label text="Datum" GridPane.rowIndex="3" />
                                     <Label text="Přidat produkt" GridPane.rowIndex="7" />
-                                    <ComboBox fx:id="cBFTypeOfOperation" onAction="#cBFTypeOfOperationChanged" prefHeight="25.0" prefWidth="216.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="cBFTypeOfOperation" onAction="#cBFTypeOfOperationChanged" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                     <Label text="Typ operace" GridPane.rowIndex="2" />
-                                    <Button mnemonicParsing="false" onAction="#btnFExecuteClicked" prefHeight="25.0" prefWidth="334.0" text="Provést operaci" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
-                                    <DatePicker fx:id="dPFDate" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                    <ComboBox fx:id="cBFProducts" onAction="#cBFProductsChanged" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                    <Button fx:id="btnFAddProduct" mnemonicParsing="false" onAction="#btnFAddProductClicked" prefHeight="25.0" prefWidth="97.0" text="Přidat produkt" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-                                    <ListView fx:id="lVFProducts" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
+                                    <Button mnemonicParsing="false" onAction="#btnFExecuteClicked" prefHeight="25.0" prefWidth="334.0" style="-fx-background-color: #d4dce0;" text="Provést operaci" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+                                    <DatePicker fx:id="dPFDate" prefHeight="25.0" prefWidth="218.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <ComboBox fx:id="cBFProducts" onAction="#cBFProductsChanged" prefHeight="25.0" prefWidth="218.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                    <Button fx:id="btnFAddProduct" mnemonicParsing="false" onAction="#btnFAddProductClicked" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: #d4dce0;" text="Přidat produkt" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <ListView fx:id="lVFProducts" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
                                     <Label text="Produkty" GridPane.rowIndex="4" />
                                  </children>
                                  <columnConstraints>
