@@ -9,9 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import model.File;
+import model.Group;
 
+import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -39,9 +44,11 @@ public class EditFilePageController implements Initializable {
     private final FileDAO fileDAO = new FileDAOImpl();
 
     private java.io.File selectedFile;
+    private static AdministrationPageController parent;
 
-    public static void setEditedFile(File file) {
+    public static void setParams(File file, AdministrationPageController aP) {
         editedFile = file;
+        parent = aP;
     }
 
     @Override
@@ -49,17 +56,10 @@ public class EditFilePageController implements Initializable {
         initData();
     }
 
-    @FXML
-    private DatePicker dateFileEditedDate;
-
-    @FXML
-    private TextField txtFieldFileName;
-
-    @FXML
-    private TextField txtFieldFileSuffix;
-
-    @FXML
-    private DatePicker dateFileUploadedDate;
+    public DatePicker dateFileEditedDate;
+    public TextField txtFieldFileName;
+    public TextField txtFieldFileSuffix;
+    public DatePicker dateFileUploadedDate;
 
     @FXML
     void btnAddFileClicked(ActionEvent event) {
@@ -71,6 +71,12 @@ public class EditFilePageController implements Initializable {
         return Instant.ofEpochMilli(dateToConvert.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    private void reloadData() {
+        editedFile = null;
+        parent.refreshFiles();
+        parent.stackPaneEditFile.getChildren().clear();
     }
 
     private void initData() {
@@ -110,21 +116,25 @@ public class EditFilePageController implements Initializable {
                 case UPDATE:
                     newFile.setId(editedFile.getId());
                     fileDAO.updateFile(newFile);
+                    lblError.setText("Soubor se povedlo aktualizovat.");
                     break;
                 case INSERT:
                     fileDAO.insertFile(newFile);
+                    lblError.setText("Soubor vložen.");
                     break;
                 case DELETE:
                     newFile.setId(editedFile.getId());
                     fileDAO.deleteFile(newFile);
+                    lblError.setText("Soubor smazán");
                     break;
                 case DOWNLOAD:
                     downloadFile(editedFile);
+                    lblError.setText("Soubor stažen");
                     break;
                 default:
                     break;
             }
-            lblError.setText("Soubor se povedlo aktualizovat.");
+            reloadData();
         } catch (SQLException ex) {
             lblError.setText("Soubor se nepovedlo aktualizovat.\n" + ex.getMessage());
         } //Perform action in db
@@ -138,7 +148,19 @@ public class EditFilePageController implements Initializable {
 
             Path path = Paths.get(directory + "/" + editedFile.getName() + editedFile.getExtension());
             Files.write(path, editedFile.getData());
-            lblError.setText("Soubor uložen: " + path);
+
+            Hyperlink linkToFile = new Hyperlink(path.toAbsolutePath().toString());
+            linkToFile.setOnAction((e) -> {
+                try {
+                    Desktop.getDesktop().open(path.toFile());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+            dialog.setHeaderText("Soubor stažen");
+            dialog.getDialogPane().setContent(linkToFile);
+            dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

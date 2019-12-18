@@ -86,16 +86,19 @@ public class ImportPageController implements Initializable {
         dataSubjects.clear();
         dataFields.clear();
 
-        JSONObject json = getJsonFromWebPage(txtFieldImport.getText());
-
-        new Thread(() -> {
-            if (comboBoxImport.getValue() == IMPORT_OPTION.SUBJECTS)
-                importSubjects(json);
-            else
-                importFields(json);
-        }).start();
+        Thread loadData = new Thread(() -> {
+            JSONObject json = getJsonFromWebPage(txtFieldImport.getText());
+            Platform.runLater(() -> {
+                new Thread(() -> {
+                    if (comboBoxImport.getValue() == IMPORT_OPTION.SUBJECTS)
+                        importSubjects(json);
+                    else
+                        importFields(json);
+                }).start();
+            });
+        });
+        loadData.start();
     }
-
 
     private void importFields(JSONObject json) {
         JSONArray jArray = (JSONArray) json.get("programInfo");

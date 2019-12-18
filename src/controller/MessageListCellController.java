@@ -71,7 +71,7 @@ public class MessageListCellController extends ListCell<Message> {
                     e.printStackTrace();
                 }
             }
-
+        btnLike.setVisible(true);
             try {
                 like = likeDAO.getLikeForMessage(MainDashboardPageController.getLoggedUser(), message);
                 if (like != null) {
@@ -82,11 +82,13 @@ public class MessageListCellController extends ListCell<Message> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             try {
                 lblLikeCount.setText(String.valueOf(likeDAO.getLikeCount(message)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             btnLike.setOnAction((e) -> {
                 try {
                     if (btnLike.getText().equals("Like")) {

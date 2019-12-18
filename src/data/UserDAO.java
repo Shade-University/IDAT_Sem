@@ -73,10 +73,11 @@ public interface UserDAO {
 
     /**
      * Update user in db
+     * Select if you want update password too
      * @param user
      * @throws SQLException
      */
-    void updateUser(User user) throws SQLException;
+    void updateUser(User user, boolean updatePassword) throws SQLException;
 
     /**
      * Insert user to db

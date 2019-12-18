@@ -301,4 +301,29 @@ public class SubjectDAOImpl implements SubjectDAO {
         return subjects;
     }
 
+    @Override
+    public void updateTeacherSubjects(Teacher user) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "DELETE FROM UCITELE_PREDMETY" +
+                        " WHERE UCITELE_ID_UCITEL = ?"
+        );
+        preparedStatement.setInt(1, user.getId());
+
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+
+        for (Subject subject : user.getSubjects()) {
+            preparedStatement = conn.prepareStatement(
+                    "INSERT INTO UCITELE_PREDMETY (UCITELE_ID_UCITEL, PREDMET_ID_PREDMET) " +
+                            "VALUES (?,?)"
+            );
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setInt(2, subject.getId());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
+        System.out.println("UpdateTeacherSubjects");
+    }
+
 }

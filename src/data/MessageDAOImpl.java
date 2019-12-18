@@ -268,7 +268,6 @@ public class MessageDAOImpl implements MessageDAO {
 
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM GETZPRAVYHIERARCHICKY z\n" +
-                        "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
                         "WHERE (id_uzivatel_odesilatel = ? OR id_uzivatel_PRIJEMCE = ?)\n"
                         + "AND (id_uzivatel_odesilatel = ? OR id_uzivatel_prijemce = ?)"
         );

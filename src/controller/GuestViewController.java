@@ -124,11 +124,8 @@ public class GuestViewController implements Initializable {
 
     private void searchUsers(String value) {
         List<User> foundUsers = userData.stream()
-                .filter(item -> item.getFirstName().contains(value))
+                .filter(item -> item.getFirstName().toLowerCase().contains(value.toLowerCase()))
                 .collect(Collectors.toList());
-        if (foundUsers.isEmpty())
-            tableViewUsers.setItems(userData);
-        else
             tableViewUsers.setItems(FXCollections.observableArrayList(foundUsers));
     } //Search in users
 }

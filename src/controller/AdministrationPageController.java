@@ -70,7 +70,7 @@ public class AdministrationPageController implements Initializable {
         /*============USERS============*/
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
-                EditUserController.setEditedUser(newValue);
+                EditUserController.setParams(newValue, this);
                 AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditUserPage.fxml"));
 
                 stackPaneEditUser.getChildren().clear();
@@ -149,7 +149,7 @@ public class AdministrationPageController implements Initializable {
         refreshMessage();
     }
 
-    private void refreshUsers() {
+    public void refreshUsers() {
         listViewUsers.getItems().clear();
         new Thread(() -> {
             try {
@@ -161,7 +161,7 @@ public class AdministrationPageController implements Initializable {
         }).start();
     }
 
-    private void refreshFiles() {
+    public void refreshFiles() {
         listViewFile.getItems().clear();
         Thread t = new Thread(() -> {
             try {
@@ -354,7 +354,7 @@ public class AdministrationPageController implements Initializable {
 
     //File - admin page
     private void loadFile(File newValue) throws IOException {
-        EditFilePageController.setEditedFile(newValue);
+        EditFilePageController.setParams(newValue, this);
         AnchorPane parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
 
         stackPaneEditFile.getChildren().clear();
@@ -363,7 +363,7 @@ public class AdministrationPageController implements Initializable {
 
     public void onClickAddFile(MouseEvent mouseEvent) {
         AnchorPane parent = null;
-        EditFilePageController.setEditedFile(null);
+        EditFilePageController.setParams(null, this);
         try {
             parent = FXMLLoader.load(getClass().getResource("/gui/EditFilePage.fxml"));
         } catch (IOException e) {

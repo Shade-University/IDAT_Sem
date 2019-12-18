@@ -91,10 +91,12 @@ public class MainDashboardPageController implements Initializable {
         loadLabels(); //Set user data
 
         listViewUsers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            openChatWith(newValue);
+            if(newValue != null)
+                openChatWith(newValue);
         });
         listViewGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            openChatWith(newValue);
+            if(newValue != null)
+                openChatWith(newValue);
         }); //On click on user/group, open chat
 
         cbChangeUser.getSelectionModel().select(loggedUser);
@@ -273,6 +275,8 @@ public class MainDashboardPageController implements Initializable {
     private void openChatWith(User user) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
         Tab chatTab = new Tab("Chat: " + user.getFirstName());
+        chatTab.setOnClosed((e) -> listViewUsers.getSelectionModel().clearSelection());
+
         try {
             chatTab.setContent(loader.load());
         } catch (IOException e) {
@@ -288,6 +292,8 @@ public class MainDashboardPageController implements Initializable {
     private void openChatWith(Group group) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ChatWindowPage.fxml"));
         Tab chatTab = new Tab("Chat: " + group.getName());
+        chatTab.setOnClosed((e) -> listViewGroups.getSelectionModel().clearSelection());
+
         try {
             chatTab.setContent(loader.load());
         } catch (IOException e) {

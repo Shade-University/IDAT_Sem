@@ -32,12 +32,11 @@ public class EditUserController implements Initializable {
     public ComboBox<ACTION_TYPE> actionTypeComboBox;
 
     private static User editedUser;
+    private static AdministrationPageController parent;
 
-    public static void setEditedUser(User user) {
+    public static void setParams(User user, AdministrationPageController aP) {
         editedUser = user;
-    }
-    public static User getEditedUser() {
-        return editedUser;
+        parent = aP;
     }
 
     private ComboBox<Field> fieldComboBox = new ComboBox<>();
@@ -51,6 +50,16 @@ public class EditUserController implements Initializable {
     private final UserDAO userDAO = new UserDAOImpl();
 
     public void btnUpdateClicked(ActionEvent actionEvent) {
+        boolean updatePassword = true;
+        if (txtFieldPassword.getText().isEmpty()) {
+            updatePassword = false;
+        } else {
+            if (!txtFieldPassword.getText().equals(txtFieldPasswordConfirm.getText())) {
+                lblError.setText("Hesla nejsou stejná");
+                return;
+            }
+        }
+
         User updateUser = null;
         if (editedUser instanceof Student) {
             updateUser = new Student(
@@ -88,19 +97,21 @@ public class EditUserController implements Initializable {
                 case DELETE:
                     updateUser.setId(editedUser.getId());
                     userDAO.deleteUser(updateUser);
+                    lblError.setText("uživatel smazán");
                     break;
                 case INSERT:
                     userDAO.insertUser(updateUser);
+                    lblError.setText("Uživatel vložen");
                     break;
                 case UPDATE:
                     updateUser.setId(editedUser.getId());
-                    userDAO.updateUser(updateUser);
+                    userDAO.updateUser(updateUser, updatePassword);
+                    lblError.setText("Profil se podařilo aktualizovat");
                     break;
                 default:
             }
-            lblError.setText("Profil se podařilo aktualizovat");
+            reloadData();
         } catch (SQLException e) {
-            //new Alert(Alert.AlertType.ERROR,"Profil se nepovedlo aktualizovat\n" + e.getMessage(), ButtonType.OK);
             lblError.setText("Profil se nepovedlo aktualizovat.\n" + e.getMessage());
         } //Perform action by type of user
     }
@@ -119,12 +130,17 @@ public class EditUserController implements Initializable {
         }
     }
 
+    private void reloadData() throws SQLException {
+        editedUser = null;
+        parent.refreshUsers();
+        parent.stackPaneEditUser.getChildren().clear();
+    }
+
     private void initData() {
         if (editedUser != null) {
             txtFieldFirstName.setText(editedUser.getFirstName());
             txtFieldLastName.setText(editedUser.getLastName());
             txtFieldEmail.setText(editedUser.getEmail());
-            txtFieldPassword.setText(editedUser.getPassword());
             actionTypeComboBox.setItems(FXCollections.observableArrayList(ACTION_TYPE.UPDATE, ACTION_TYPE.DELETE));
             actionTypeComboBox.getSelectionModel().select(0);
         } else {
@@ -135,14 +151,19 @@ public class EditUserController implements Initializable {
 
     private void initTeacher() throws SQLException {
         instituteComboBox.setItems(FXCollections.observableArrayList(INSTITUTE.values()));
-        instituteComboBox.getSelectionModel().select(0);
+        instituteComboBox.getSelectionModel().select(INSTITUTE.get(((Teacher)editedUser).getInstitute()));
 
         subjectListView.setPrefHeight(200);
         subjectListView.setPrefWidth(200);
         new Thread(() -> {
             try {
                 Collection<Subject> allSubjects = subjectDAO.getAllSubjects();
-                Platform.runLater(() -> subjectListView.setItems(FXCollections.observableArrayList(allSubjects)));
+                Platform.runLater(() -> {
+                    subjectListView.setItems(FXCollections.observableArrayList(allSubjects));
+                    for (Subject subject : ((Teacher)editedUser).getSubjects()) {
+                        subjectListView.getSelectionModel().select(subject);
+                    }
+                });
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -158,15 +179,17 @@ public class EditUserController implements Initializable {
         new Thread(() -> {
             try {
                 Collection<Field> allFields = fieldOfStudyDAO.getAllFields();
-                Platform.runLater(() -> fieldComboBox.setItems(FXCollections.observableArrayList(allFields)));
+                Platform.runLater(() -> {
+                    fieldComboBox.setItems(FXCollections.observableArrayList(allFields));
+                    fieldComboBox.getSelectionModel().select(((Student)editedUser).getField());
+                });
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }).start();
-        fieldComboBox.getSelectionModel().select(0);
         ObservableList<YEAR_STUDY> year_studies = FXCollections.observableArrayList(YEAR_STUDY.values());
         yearStudyComboBox.setItems(year_studies);
-        yearStudyComboBox.getSelectionModel().select(0);
+        yearStudyComboBox.getSelectionModel().select(YEAR_STUDY.get(((Student)editedUser).getStudyYear()));
 
         gridPane.add(fieldComboBox, 2, 6);
         gridPane.add(yearStudyComboBox, 0, 6);

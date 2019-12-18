@@ -168,6 +168,11 @@ public class ChatWindowPageController implements Initializable {
     }
 
     public void btnSendClicked(MouseEvent mouseEvent) {
+        if(txtFieldNewMessage.getText().isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Zpráva musí mít obsah");
+            return;
+        }
+
         Message message = null;
 
         if (chatedGroup == null) {

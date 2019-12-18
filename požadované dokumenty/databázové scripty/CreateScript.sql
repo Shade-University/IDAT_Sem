@@ -188,6 +188,7 @@ create table ZPRAVY
     ID_SOUBORU NUMBER
         constraint ZPRAVY_SOUBORY_ID_SOUBORU_FK
             references SOUBORY
+             on delete cascade
 )
 /
 
@@ -234,7 +235,7 @@ create table PRODUKTY
     CENA NUMBER
 )
 /
-
+drop table TRANSAKCE;
 create table TRANSAKCE
 (
     ID_TRANSAKCE NUMBER not null
@@ -242,10 +243,12 @@ create table TRANSAKCE
             primary key,
     ID_UZIVATELE NUMBER not null
         constraint TRANSAKCE_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
+            references UZIVATELE
+             on delete cascade,
     ID_PRODUKTU NUMBER
         constraint TRANSAKCE_PRODUKT_ID_PRODUKTU_FK
-            references PRODUKTY,
+            references PRODUKTY
+             on delete cascade,
     TYP_TRANSAKCE VARCHAR2(100) not null,
     CASTKA FLOAT not null,
     DATUM DATE not null,
@@ -1009,9 +1012,9 @@ BEGIN
         raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
     end if;
 
+        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
 
     if (inserting) then
-        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
         :NEW.datum_vytvoreni := sysdate;
         SELECT increment_uzivatele.nextval
         INTO :NEW.id_uzivatel

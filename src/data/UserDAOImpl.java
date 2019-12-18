@@ -239,23 +239,14 @@ public class UserDAOImpl implements UserDAO {
     } //Helper method for reading blob as image
 
     @Override
-    public void updateUser(User user) throws SQLException {
-        PreparedStatement preparedStatement = conn.prepareStatement(
-                "UPDATE Uzivatele SET "
-                        + "jmeno = ?, "
-                        + "prijmeni = ?, "
-                        + "email = ? "
-                        + "WHERE id_uzivatel = ?"
-        );
-        preparedStatement.setString(1, user.getFirstName());
-        preparedStatement.setString(2, user.getLastName());
-        preparedStatement.setString(3, user.getEmail());
-        preparedStatement.setInt(4, user.getId());
-
-        preparedStatement.executeUpdate();
-        conn.commit();
-        preparedStatement.close();
-        System.out.println("UpdateUser");
+    public void updateUser(User user, boolean updatePassword) throws SQLException {
+        if (user instanceof Teacher) {
+            updateTeacher((Teacher) user, updatePassword);
+        } else if (user instanceof Student) {
+            updateStudent((Student) user, updatePassword);
+        } else {
+            updateAdmin(user, updatePassword);
+        }
     }
 
     @Override
@@ -402,6 +393,75 @@ public class UserDAOImpl implements UserDAO {
         conn.commit();
         preparedStatement.close();
         System.out.println("Admin inserted");
+    }
 
+    private void updateAdmin(User user, boolean updatePassword) throws SQLException {
+        PreparedStatement preparedStatement;
+        if(updatePassword) {
+            preparedStatement = conn.prepareStatement(
+                    "UPDATE Uzivatele SET "
+                            + "jmeno = ?, "
+                            + "prijmeni = ?, "
+                            + "email = ?, "
+                            + "heslo = ? "
+                            + "WHERE id_uzivatel = ?"
+            );
+            preparedStatement.setString(4, user.getPassword());
+            preparedStatement.setInt(5, user.getId());
+
+        } else {
+            preparedStatement = conn.prepareStatement(
+                    "UPDATE Uzivatele SET "
+                            + "jmeno = ?, "
+                            + "prijmeni = ?, "
+                            + "email = ? "
+                            + "WHERE id_uzivatel = ?"
+            );
+            preparedStatement.setInt(4, user.getId());
+        }
+        preparedStatement.setString(1, user.getFirstName());
+        preparedStatement.setString(2, user.getLastName());
+        preparedStatement.setString(3, user.getEmail());
+
+
+        preparedStatement.executeUpdate();
+        conn.commit();
+        preparedStatement.close();
+        System.out.println("UpdateUser");
+
+    }
+
+    private void updateStudent(Student user, boolean updatePassword) throws SQLException {
+        updateAdmin(user, updatePassword);
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "UPDATE STUDENTI SET " +
+                        "ROK_STUDIA = ?, " +
+                        "ID_OBOR = ?"
+        );
+        preparedStatement.setString(1, user.getStudyYear());
+        preparedStatement.setInt(2, user.getField().getId());
+
+        preparedStatement.executeUpdate();
+        conn.commit();
+        System.out.println("updateStudent");
+        preparedStatement.close();
+    }
+
+    private void updateTeacher(Teacher user, boolean updatePassword) throws SQLException {
+        updateAdmin(user, updatePassword);
+
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "UPDATE UCITELE SET " +
+                        "KATEDRA = ?"
+        );
+        preparedStatement.setString(1, user.getInstitute());
+
+        preparedStatement.executeUpdate();
+        subjectDAO.updateTeacherSubjects(user);
+        conn.commit();
+        preparedStatement.close();
+        System.out.println("updateTeacher");
+        preparedStatement.close();
     }
 }
