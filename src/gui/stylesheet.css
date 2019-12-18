@@ -31,3 +31,17 @@
 .text-flow .scroll-pane .content{
     -fx-background-color: transparent;
 }
+.text-area{
+    -fx-control-inner-background:  #d4dce0;
+}
+.date-picker{
+    -fx-control-inner-background:  #d4dce0;
+}
+.text-field{
+    -fx-background-color:  #d4dce0;
+}
+.button{
+    -fx-background-color: #333645;
+            -fx-border-color:gray;
+    -fx-text-fill: white;
+}
