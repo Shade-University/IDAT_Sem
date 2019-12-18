@@ -214,7 +214,8 @@ public class ChatWindowPageController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        attachedFile = null;
+        btnFileAdd.setText("Připojit soubor");
         lVMessages.refresh(); //Create message in db and refresh messages
     }
 
