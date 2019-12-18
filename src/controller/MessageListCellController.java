@@ -67,6 +67,18 @@ public class MessageListCellController extends ListCell<Message> {
                     e.printStackTrace();
                 }
             }
+
+            try {
+                like = likeDAO.getLikeForMessage(MainDashboardPageController.getLoggedUser(), message);
+                if(like != null) {
+                    btnLike.setText("Unlike");
+                } else {
+                    btnLike.setText("Like");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             btnLike.setOnAction((e) -> {
                 if(btnLike.getText().equals("Like")) {
                     try {
@@ -89,6 +101,7 @@ public class MessageListCellController extends ListCell<Message> {
             try {
                 tAMessage.getChildren().clear();
                 String space = new String(new char[(message.getLevel() * 10) - 10]).replace('\0', ' ');
+
                 if (message.getSender() != null) {
                     if (message.getSender().equals(MainDashboardPageController.getLoggedUser())) {
                         btnLike.setVisible(false);
@@ -98,6 +111,7 @@ public class MessageListCellController extends ListCell<Message> {
                     lblName.setText(space + "Neexistující uživatel" + " => ");
                     btnLike.setVisible(false);
                 }
+
                 Text text = new Text(message.getContent());
                 text.setFill(Color.BLUE);
                 //Tabs as level in hierarchic message

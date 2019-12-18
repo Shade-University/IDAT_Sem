@@ -3,6 +3,7 @@ package data;
 import model.Like;
 import model.Message;
 import model.Rating;
+import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -74,6 +75,23 @@ public class LikeDAOImpl implements LikeDAO{
         conn.commit();
         System.out.println("getLikeCount");
         return result;
+    }
+
+    @Override
+    public Like getLikeForMessage(User user, Message msg) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM OBLIBENE_ZPRAVY\n" +
+                        "where id_uzivatel = ? AND id_zprava = ?");
+        preparedStatement.setInt(1,user.getId());
+        preparedStatement.setInt(2,msg.getId());
+
+        ResultSet rs = preparedStatement.executeQuery();
+        Like like = null;
+        if(rs.next())
+            like = getLike(rs);
+        preparedStatement.close();
+        System.out.println("getLikeForMessage");
+        return like;
     }
 
     @Override

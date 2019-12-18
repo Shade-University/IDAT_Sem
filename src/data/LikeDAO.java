@@ -2,6 +2,7 @@ package data;
 
 import model.Message;
 import model.Like;
+import model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,5 +46,13 @@ public interface LikeDAO {
      * @throws SQLException
      */
     int getLikeCount(Message msg) throws SQLException;
+
+    /**
+     * Get like status on message for user
+     * @param msg
+     * @return
+     * @throws SQLException
+     */
+    Like getLikeForMessage(User user, Message msg) throws SQLException;
 
 }
