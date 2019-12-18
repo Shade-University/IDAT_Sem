@@ -147,6 +147,7 @@ public class GroupDAOImpl implements GroupDAO {
 
         callableStatement.executeUpdate();
         callableStatement.close();
+        subjectDAO.updateGroupSubjects(group);
         conn.commit();
         System.out.println("UpdateGroup");
     }

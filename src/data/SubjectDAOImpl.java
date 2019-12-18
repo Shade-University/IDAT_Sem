@@ -326,4 +326,29 @@ public class SubjectDAOImpl implements SubjectDAO {
         System.out.println("UpdateTeacherSubjects");
     }
 
+    @Override
+    public void updateGroupSubjects(Group group) throws SQLException {
+        PreparedStatement preparedStatement = conn.prepareStatement(
+                "DELETE FROM SKUPINY_PREDMETY" +
+                        " WHERE SKUPINY_ID_SKUPINA = ?"
+        );
+        preparedStatement.setInt(1, group.getId());
+
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+
+        for (Subject subject : group.getSubject()) {
+            preparedStatement = conn.prepareStatement(
+                    "INSERT INTO SKUPINY_PREDMETY (SKUPINY_ID_SKUPINA, PREDMETY_ID_PREDMET) " +
+                            "VALUES (?,?)"
+            );
+            preparedStatement.setInt(1, group.getId());
+            preparedStatement.setInt(2, subject.getId());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
+        System.out.println("UpdateGroupSubjects");
+    }
+
 }

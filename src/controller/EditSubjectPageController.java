@@ -112,18 +112,28 @@ public class EditSubjectPageController implements Initializable {
                 switch (comboBoxSubjectsUniversal.getValue()) {
                     case TEACHER:
                         usersInSubject = FXCollections.observableArrayList(userDAO.getTeachersBySubject(editedSubject));
-                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(usersInSubject));
-                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(userDAO.getTeachers()));
+                        ObservableList<Object> teachers = FXCollections.observableArrayList(userDAO.getTeachers());
+                        Platform.runLater(() -> {
+                            listViewSubjectUniversal.setItems(FXCollections.observableArrayList(usersInSubject));
+                            comboBoxAddSubjectToUniversal.setItems(teachers);
+                        });
                         break;
                     case FIELD:
                         fieldInSubject = FXCollections.observableArrayList(fieldDAO.getFieldsBySubject(editedSubject));
-                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(fieldInSubject));
-                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(fieldDAO.getAllFields()));
+                        ObservableList<Field> fields = FXCollections.observableArrayList(fieldDAO.getAllFields());
+                        Platform.runLater(() -> {
+                            listViewSubjectUniversal.setItems(FXCollections.observableArrayList(fieldInSubject));
+                            comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(fields));
+                        });
                         break;
                     case GROUP:
                         groupsInSubject = FXCollections.observableArrayList(groupDAO.getSubjectGroups(editedSubject));
-                        listViewSubjectUniversal.setItems(FXCollections.observableArrayList(groupsInSubject));
-                        comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(groupDAO.getAllGroups()));
+                        ObservableList<Group> groups = FXCollections.observableArrayList(groupDAO.getAllGroups());
+                        Platform.runLater(() -> {
+                            listViewSubjectUniversal.setItems(FXCollections.observableArrayList(groupsInSubject));
+                            comboBoxAddSubjectToUniversal.setItems(FXCollections.observableArrayList(groups));
+                        });
+
                         break;
                 }
                 Platform.runLater(() -> {

@@ -142,5 +142,17 @@ public interface SubjectDAO {
      */
     List<Subject> getSubjectsForGroup(int id_group) throws SQLException;
 
+    /**
+     * Update teacher subjects
+     * @param user
+     * @throws SQLException
+     */
     void updateTeacherSubjects(Teacher user) throws SQLException;
+
+    /**
+     * Update group subjects
+     * @param subject
+     * @throws SQLException
+     */
+    void updateGroupSubjects(Group group) throws SQLException;
 }
