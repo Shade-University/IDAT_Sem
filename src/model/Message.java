@@ -188,7 +188,8 @@ public class Message {
 
     @Override
     public String toString() {
-        return getSender() + " => " + getContent();
+        String sender = getSender() == null ? "Neexistující uživatel" : getSender().toString();
+        return sender + " => " + getContent();
     }
 
 

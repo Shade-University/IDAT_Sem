@@ -151,7 +151,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUser(ResultSet rs) throws SQLException {
-        //TODO Admin vlastní tabulka a třída
         User user = null;
         USER_TYPE type = USER_TYPE.get(rs.getString("uzivatel_typ"));
 

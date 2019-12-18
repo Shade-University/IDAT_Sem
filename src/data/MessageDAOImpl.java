@@ -248,7 +248,6 @@ public class MessageDAOImpl implements MessageDAO {
 
         PreparedStatement preparedStatement = conn.prepareStatement(
                 "SELECT * FROM GETZPRAVYHIERARCHICKY z\n" +
-                        "join (select * from GETUZIVATELE) on ID_UZIVATEL = ID_UZIVATEL_ODESILATEL\n" +
                         "where ID_SKUPINA_PRIJEMCE = ?"
         );
         preparedStatement.setInt(1, group.getId());
@@ -257,6 +256,7 @@ public class MessageDAOImpl implements MessageDAO {
         while (rs.next()) {
             collection.add(getMessageWithLevel(rs));
         }
+
         preparedStatement.close();
         System.out.println("getMessagesForGroupChatWithLevel");
         return collection;
@@ -273,7 +273,7 @@ public class MessageDAOImpl implements MessageDAO {
                         + "AND (id_uzivatel_odesilatel = ? OR id_uzivatel_prijemce = ?)"
         );
         preparedStatement.setInt(1, user1.getId());
-        preparedStatement.setInt(2, user2.getId());
+        preparedStatement.setInt(2, user1.getId());
         preparedStatement.setInt(3, user2.getId());
         preparedStatement.setInt(4, user2.getId());
 

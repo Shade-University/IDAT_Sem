@@ -142,20 +142,6 @@ create table UCITELE_PREDMETY
 )
 /
 
-create table ZPRAVY_BACKUP
-(
-    ID_ZPRAVA NUMBER not null
-        constraint ZPRAVA_BACKUP_PK
-            primary key,
-    NAZEV VARCHAR2(50) not null,
-    TELO VARCHAR2(250) not null,
-    DATUM_VYTVORENI DATE not null,
-    ID_UZIVATEL_ODESILATEL NUMBER not null,
-    ID_UZIVATEL_PRIJEMCE NUMBER,
-    ID_SKUPINA_PRIJEMCE NUMBER
-)
-/
-
 create table SKUPINY_PREDMETY
 (
     SKUPINY_ID_SKUPINA NUMBER not null
@@ -201,6 +187,24 @@ create table ZPRAVY
     ID_RODIC NUMBER,
     ID_SOUBORU NUMBER
         constraint ZPRAVY_SOUBORY_ID_SOUBORU_FK
+            references SOUBORY
+)
+/
+
+create table ZPRAVY_BACKUP
+(
+    ID_ZPRAVA NUMBER not null
+        constraint ZPRAVA_BACKUP_PK
+            primary key,
+    NAZEV VARCHAR2(50) not null,
+    TELO VARCHAR2(250) not null,
+    DATUM_VYTVORENI DATE not null,
+    ID_UZIVATEL_ODESILATEL NUMBER not null,
+    ID_UZIVATEL_PRIJEMCE NUMBER,
+    ID_SKUPINA_PRIJEMCE NUMBER,
+    ID_RODIC NUMBER,
+    ID_SOUBORU NUMBER
+        constraint ZPRAVY_BACKUP_SOUBORY_ID_SOUBORU_FK
             references SOUBORY
 )
 /
@@ -274,15 +278,16 @@ create table LISTEK_PRODUKT
                 on delete cascade
 )
 /
-
 create table OBLIBENE_ZPRAVY
 (
     ID_UZIVATEL NUMBER
         constraint OBLIBENE_ZPRAVY_UZIVATELE_ID_UZIVATEL_FK
-            references UZIVATELE,
+            references UZIVATELE
+                on delete cascade,
     ID_ZPRAVA NUMBER
         constraint OBLIBENE_ZPRAVY_ZPRAVY_ID_ZPRAVA_FK
             references ZPRAVY
+                on delete cascade
 )
 /
 /*=============DB-STRUKTURA-END=============*/
@@ -352,9 +357,9 @@ create or replace trigger ZPRAVY_TRIGGER
 BEGIN
     if (deleting) then
         INSERT INTO ZPRAVY_BACKUP(id_zprava, nazev, telo, datum_vytvoreni, id_uzivatel_odesilatel, id_uzivatel_prijemce,
-                                  id_skupina_prijemce)
+                                  id_skupina_prijemce, id_rodic, id_souboru)
         VALUES (:old.id_zprava, :old.nazev, :old.telo, :old.datum_vytvoreni, :old.id_uzivatel_odesilatel,
-                :old.id_uzivatel_prijemce, :old.id_skupina_prijemce);
+                :old.id_uzivatel_prijemce, :old.id_skupina_prijemce, :old.id_rodic, :old.id_souboru);
     else
         if (LENGTH(:NEW.nazev) <= 0 or LENGTH(:NEW.nazev) > 30) then
             raise_application_error(-20006, 'Název zprávy nesmí být prázdný nebo vìtší jak 30 znakù');
@@ -369,7 +374,6 @@ BEGIN
             FROM dual;
         end if;
     end if;
-
 END;
 /
 
@@ -438,31 +442,6 @@ BEGIN
         SELECT increment_skupiny.nextval
         INTO :new.id_skupina
         FROM dual;
-    end if;
-END;
-/
-
-create or replace trigger UZIVATELE_TRIGGER
-    before insert or update
-    on UZIVATELE
-    for each row
-BEGIN
-    if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
-        raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znakù');
-    elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
-        raise_application_error(-20003, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
-    elsif (LENGTH(:NEW.heslo) < 2) then
-        raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
-    end if;
-
-
-    if (inserting) then
-        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
-        :NEW.datum_vytvoreni := sysdate;
-        SELECT increment_uzivatele.nextval
-        INTO :NEW.id_uzivatel
-        FROM dual;
-
     end if;
 END;
 /
@@ -591,19 +570,12 @@ from SKUPINY s
 /
 
 create or replace view GETZPRAVYHIERARCHICKY as
-SELECT ID_ZPRAVA,
-       nazev,
-       telo,
-       ID_UZIVATEL_ODESILATEL,
-       ID_UZIVATEL_PRIJEMCE,
-       ID_SKUPINA_PRIJEMCE,
-       DATUM_VYTVORENI,
-       ID_RODIC,
-       ID_SOUBORU,
+SELECT z.*,
        level as Uroven
-FROM ZPRAVY
-CONNECT BY ID_RODIC = PRIOR ID_ZPRAVA
-START WITH ID_RODIC IS NULL
+FROM
+((SELECT * FROM ZPRAVY) UNION (SELECT * FROM ZPRAVY_BACKUP)) z
+CONNECT BY z.ID_RODIC = PRIOR z.ID_ZPRAVA
+START WITH z.ID_RODIC IS NULL
 /
 
 create or replace view GETSKUPINYUZIVATELE as
@@ -1022,4 +994,29 @@ SELECT id_skupina,
        popis                                         "popis_skupina",
        fnc_pocet_uzivatelu_ve_skupine(id_skupina) as "pocet_skupina"
 from SKUPINY
+/
+
+create or replace trigger UZIVATELE_TRIGGER
+    before insert or update
+    on UZIVATELE
+    for each row
+BEGIN
+    if (LENGTH(:NEW.jmeno) < 3 or LENGTH(:NEW.jmeno) > 30) then
+        raise_application_error(-20002, 'Jméno musí být v rozsahu 3 až 30 znakù');
+    elsif (LENGTH(:NEW.prijmeni) < 3 or LENGTH(:NEW.prijmeni) > 30) then
+        raise_application_error(-20003, 'Pøijmení musí být v rozsahu 3 až 30 znakù');
+    elsif (LENGTH(:NEW.heslo) < 2) then
+        raise_application_error(-20004, 'Pøíliš slabé heslo. Minimální poèet znakù je 2');
+    end if;
+
+
+    if (inserting) then
+        :NEW.heslo := fnc_zahashuj_uzivatele(:NEW.email, :NEW.heslo); /*Na update profilu nebude fungovat heslo */
+        :NEW.datum_vytvoreni := sysdate;
+        SELECT increment_uzivatele.nextval
+        INTO :NEW.id_uzivatel
+        FROM dual;
+
+    end if;
+END;
 /

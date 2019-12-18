@@ -153,7 +153,7 @@ public class ChatWindowPageController implements Initializable {
      * Reload rating of Group.
      */
     public void reloadRatingOfGroup(){
-        new Thread(()->{
+        new Thread(() -> {
             double ratingOfGroup = 0;
             try {
                 ratingOfGroup = ratingDAO.getAverageRating(chatedGroup);
@@ -161,10 +161,10 @@ public class ChatWindowPageController implements Initializable {
                 e.printStackTrace();
             }
             double finalRatingOfGroup = ratingOfGroup;
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 labelAverageRatingOfGroup.setText("Průměrné hodnocení je: " + String.valueOf(finalRatingOfGroup));
             });
-        }).run();
+        }).start();
     }
 
     public void btnSendClicked(MouseEvent mouseEvent) {

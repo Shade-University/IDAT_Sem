@@ -89,7 +89,6 @@ drop procedure insert_zprava;
 drop procedure insert_hodnoceni;
 drop procedure insert_skupiny_predmety;
 drop procedure insert_predmet_ucitel;
-drop procedure GETLIKES;
 drop procedure UPDATE_HODNOCENI;
 drop procedure UPDATE_SKUPINA;
 drop procedure UPDATE_ZPRAVA;

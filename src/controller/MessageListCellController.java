@@ -2,10 +2,12 @@ package controller;
 
 import data.LikeDAO;
 import data.LikeDAOImpl;
+import gui.AlertDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -14,6 +16,7 @@ import model.File;
 import model.Like;
 import model.Message;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,12 +89,20 @@ public class MessageListCellController extends ListCell<Message> {
             try {
                 tAMessage.getChildren().clear();
                 String space = new String(new char[(message.getLevel() * 10) - 10]).replace('\0', ' ');
-                lblName.setText(space + message.getSender().getFirstName() + " " + message.getSender().getLastName() + " => ");
+                if (message.getSender() != null) {
+                    if (message.getSender().equals(MainDashboardPageController.getLoggedUser())) {
+                        btnLike.setVisible(false);
+                    }
+                    lblName.setText(space + message.getSender().getFirstName() + " " + message.getSender().getLastName() + " => ");
+                } else {
+                    lblName.setText(space + "Neexistující uživatel" + " => ");
+                    btnLike.setVisible(false);
+                }
                 Text text = new Text(message.getContent());
                 text.setFill(Color.BLUE);
                 //Tabs as level in hierarchic message
 
-                tAMessage.getChildren().add(text);
+                tAMessage.getChildren().addAll(lblName, text);
                 if (message.getAttached_file() != null) {
                     File file = message.getAttached_file();
 
@@ -104,7 +115,19 @@ public class MessageListCellController extends ListCell<Message> {
 
                             Path path = Paths.get(directory + "/" + file.getName() + file.getExtension());
                             Files.write(path, file.getData());
-                            new Alert(Alert.AlertType.INFORMATION, "Soubor stažen: " + path.toString()).show();
+
+                            Hyperlink linkToFile = new Hyperlink(path.toAbsolutePath().toString());
+                            linkToFile.setOnAction((e) -> {
+                                try {
+                                    Desktop.getDesktop().open(path.toFile());
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                            });
+                            Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+                            dialog.setHeaderText("Soubor stažen");
+                            dialog.getDialogPane().setContent(linkToFile);
+                            dialog.show();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
