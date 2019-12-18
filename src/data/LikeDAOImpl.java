@@ -63,7 +63,7 @@ public class LikeDAOImpl implements LikeDAO{
 
     @Override
     public int getLikeCount(Message msg) throws SQLException {
-        PreparedStatement preparedStatement = conn.prepareStatement("select COUNT(*) \"pocet\" FROM OBLIBENE_ZPRAVY where ID_ZPRAVA = ?;");
+        PreparedStatement preparedStatement = conn.prepareStatement("select COUNT(*) \"pocet\" FROM OBLIBENE_ZPRAVY where ID_ZPRAVA = ?");
         preparedStatement.setInt(1, msg.getId());
 
         ResultSet rs = preparedStatement.executeQuery();

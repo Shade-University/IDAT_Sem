@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -36,7 +37,10 @@ public class MessageListCellController extends ListCell<Message> {
     private AnchorPane anchorPane;
 
     @FXML
-    private Button btnLike;
+    Button btnLike;
+
+    @FXML
+    Label lblLikeCount;
 
     private AnchorPane pane;
 
@@ -70,7 +74,7 @@ public class MessageListCellController extends ListCell<Message> {
 
             try {
                 like = likeDAO.getLikeForMessage(MainDashboardPageController.getLoggedUser(), message);
-                if(like != null) {
+                if (like != null) {
                     btnLike.setText("Unlike");
                 } else {
                     btnLike.setText("Like");
@@ -78,23 +82,26 @@ public class MessageListCellController extends ListCell<Message> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
+            try {
+                lblLikeCount.setText(String.valueOf(likeDAO.getLikeCount(message)));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             btnLike.setOnAction((e) -> {
-                if(btnLike.getText().equals("Like")) {
-                    try {
+                try {
+                    if (btnLike.getText().equals("Like")) {
+
                         like = new Like(MainDashboardPageController.getLoggedUser().getId(), message.getId());
                         likeDAO.createLike(like);
                         btnLike.setText("Unlike");
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-                } else {
-                    try {
+                    } else {
                         likeDAO.deleteLike(like);
                         btnLike.setText("Like");
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
+
                     }
+                    lblLikeCount.setText(String.valueOf(likeDAO.getLikeCount(message)));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }); //On like click, create/remove like
 
