@@ -33,6 +33,7 @@ public class EditUserController implements Initializable {
 
     private static User editedUser;
     private static AdministrationPageController parent;
+    public Button btnAction;
 
     public static void setParams(User user, AdministrationPageController aP) {
         editedUser = user;
@@ -118,6 +119,7 @@ public class EditUserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        btnAction.setDisable(true);
         initData();
         try {
             if (editedUser instanceof Student) {
@@ -163,6 +165,7 @@ public class EditUserController implements Initializable {
                     for (Subject subject : ((Teacher)editedUser).getSubjects()) {
                         subjectListView.getSelectionModel().select(subject);
                     }
+                    btnAction.setDisable(false);
                 });
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -182,6 +185,7 @@ public class EditUserController implements Initializable {
                 Platform.runLater(() -> {
                     fieldComboBox.setItems(FXCollections.observableArrayList(allFields));
                     fieldComboBox.getSelectionModel().select(((Student)editedUser).getField());
+                    btnAction.setDisable(false);
                 });
             } catch (SQLException e) {
                 e.printStackTrace();

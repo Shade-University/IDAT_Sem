@@ -54,7 +54,7 @@
                 <PasswordField fx:id="txtFieldPassword" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                 <Label text="Potvrzení hesla" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                 <PasswordField fx:id="txtFieldPasswordConfirm" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                <Button mnemonicParsing="false" onAction="#btnUpdateClicked" prefHeight="32.0" prefWidth="232.0" text="Aktualizovat profil" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                <Button fx:id="btnAction" mnemonicParsing="false" onAction="#btnUpdateClicked" prefHeight="32.0" prefWidth="232.0" text="Aktualizovat profil" GridPane.columnIndex="4" GridPane.rowIndex="6" />
                 <Label fx:id="lblError" textFill="#e40b0b" GridPane.columnIndex="4" GridPane.rowIndex="7" />
             </children>
 

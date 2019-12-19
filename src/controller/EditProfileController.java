@@ -32,6 +32,7 @@ public class EditProfileController implements Initializable {
     private final UserDAO userDAO = new UserDAOImpl();
 
     private static User editedUser;
+    public Button btnAction;
 
     private ComboBox<Field> fieldComboBox = new ComboBox<>();
     private ComboBox<YEAR_STUDY> yearStudyComboBox = new ComboBox<>();
@@ -51,6 +52,7 @@ public class EditProfileController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        btnAction.setDisable(true);
         initData();
 
         if (editedUser instanceof Student) {
@@ -83,6 +85,7 @@ public class EditProfileController implements Initializable {
                     for (Subject subject : ((Teacher)editedUser).getSubjects()) {
                         subjectListView.getSelectionModel().select(subject);
                     }
+                    btnAction.setDisable(false);
                 });
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -102,6 +105,7 @@ public class EditProfileController implements Initializable {
                 Platform.runLater(() -> {
                     fieldComboBox.setItems(FXCollections.observableArrayList(allFields));
                     fieldComboBox.getSelectionModel().select(((Student)editedUser).getField());
+                    btnAction.setDisable(false);
                 });
             } catch (SQLException e) {
                 e.printStackTrace();
