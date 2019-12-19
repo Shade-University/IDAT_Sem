@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.deploy.security.SelectableSecurityManager;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import controller.enums.DATABASE_OPERATION_TYPE;
 import controller.enums.TRANSACTION_TYPE;
@@ -120,13 +121,13 @@ public class ISKAMAdminPageController {
 
         //Food menu
         cBFTypeOfOperation.setItems(FXCollections.observableArrayList(DATABASE_OPERATION_TYPE.values()));
-        cBFTypeOfOperation.getSelectionModel().select(0);
+        cBFTypeOfOperation.getSelectionModel().select(1);
 
-        cBFProducts.getSelectionModel().select(0);
+        cBFProducts.getSelectionModel().select(1);
         lVFoodMenu.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-           fillFoodMenu(newValue);
-           editedFoodMenu = newValue;
-           cBFTypeOfOperationChanged(null);
+            fillFoodMenu(newValue);
+            editedFoodMenu = newValue;
+            cBFTypeOfOperationChanged(null);
         });
     } //Load data and init default values
 
@@ -318,12 +319,12 @@ public class ISKAMAdminPageController {
 
     @FXML
     void cBFProductsChanged(ActionEvent event) {
-        if(lVFProducts.getItems().contains(cBFProducts.getValue()))
-        {
-          btnFAddProduct.setText("Odebrat");
-        } else
-        {
-            btnFAddProduct.setText("Přidat");
+        if (lVFProducts.getItems() != null) {
+            if (lVFProducts.getItems().contains(cBFProducts.getValue())) {
+                btnFAddProduct.setText("Odebrat");
+            } else {
+                btnFAddProduct.setText("Přidat");
+            }
         }
     } //On products changed
 
@@ -374,7 +375,7 @@ public class ISKAMAdminPageController {
 
                 try {
                     ObservableList<Product> products = FXCollections.observableArrayList(productDAO.getProductByFoodMenu(newValue));
-                    Platform.runLater(() ->  {
+                    Platform.runLater(() -> {
                         lVFProducts.setItems(products);
                         cBFProductsChanged(null);
                     });
@@ -398,19 +399,21 @@ public class ISKAMAdminPageController {
 
     @FXML
     void btnFAddProductClicked(ActionEvent event) {
-        if(lVFProducts.getItems().contains(cBFProducts.getValue()))
-        {
+        if (lVFProducts.getItems().contains(cBFProducts.getValue())) {
             try {
                 foodMenuDAO.deleteProductFromFoodMenu(cBFProducts.getValue(), editedFoodMenu);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             System.out.println("obsahuje!");
-        } else
-        {
+        } else {
             try {
-                foodMenuDAO.addProductToFoodMenu(cBFProducts.getValue(), editedFoodMenu);
-            } catch (SQLException e){
+                if (cBFProducts.getValue() != null) {
+                    foodMenuDAO.addProductToFoodMenu(cBFProducts.getValue(), editedFoodMenu);
+                } else {
+                    AlertDialog.show("Není zvolen žádný produkt.", Alert.AlertType.ERROR);
+                }
+            } catch (SQLException e) {
                 AlertDialog.show(e.toString(), Alert.AlertType.ERROR);
             }
         }

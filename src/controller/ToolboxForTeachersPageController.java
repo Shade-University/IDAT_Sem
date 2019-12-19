@@ -32,6 +32,8 @@ public class ToolboxForTeachersPageController implements Initializable {
     private User loggedUser;
     private Group selectedGroup;
 
+    public ListView<Group> lVSGroups;
+    public ListView<Subject> lVSSubjects;
     public ListView<Message> lVGroupMessages;
     public ListView<User> lVMembersOfGroup;
     public ListView<Group> lVGroups;
@@ -43,6 +45,7 @@ public class ToolboxForTeachersPageController implements Initializable {
     public ComboBox<User> cbUsersToGroup;
     public Button btnAddUser;
     public Label labelMembers;
+    public Label lblSubjectsInGroup;
 
     void initData(User loggedUser, MainDashboardPageController mdpc) {
         this.loggedUser = loggedUser;
@@ -51,10 +54,12 @@ public class ToolboxForTeachersPageController implements Initializable {
             try {
                 Collection<Subject> subjects = subjectDAO.getAllSubjectsByTeacher(loggedUser);
                 Collection<User> users = userDAO.getAllUsers();
+                Collection<Group> groups = groupDAO.getAllGroups();
                 Platform.runLater(() -> {
                     lVMySubjects.setItems(FXCollections.observableArrayList(subjects));
                     cbUsersToGroup.setItems(FXCollections.observableArrayList(users));
                     cbUsersToGroup.getSelectionModel().selectFirst();
+                    lVSGroups.setItems(FXCollections.observableArrayList(groups));
                 });
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -77,6 +82,20 @@ public class ToolboxForTeachersPageController implements Initializable {
                     }
                     Platform.runLater(() -> {
                         loading(1, false);
+                    });
+                }).start();
+            });
+            lVSGroups.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                loading(3, true);
+                new Thread(() -> {
+                    try {
+                        Collection<Subject> subjects = subjectDAO.getSubjectsForGroup(newValue.getId());
+                        Platform.runLater(() -> lVSSubjects.setItems(FXCollections.observableArrayList(subjects)));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    Platform.runLater(() -> {
+                        loading(3, false);
                     });
                 }).start();
             });
@@ -165,6 +184,12 @@ public class ToolboxForTeachersPageController implements Initializable {
                 } else {
                     lblMessages.setText("Komentáře ve skupině: (Načítání...)");
                     labelMembers.setText("Členové: (Načítání...)");
+                }
+            case 3:
+                if (!state) {
+                    lblSubjectsInGroup.setText("Předměty ve skupině:");
+                } else {
+                    lblSubjectsInGroup.setText("Předměty ve skupině: (Načítání...)");
                 }
 
 

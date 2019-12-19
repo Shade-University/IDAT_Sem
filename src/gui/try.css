@@ -1,3 +1,19 @@
 .label {
     -fx-text-fill: white;
 }
+
+.button{
+    -fx-background-color: #333645;
+    -fx-border-color:gray;
+    -fx-text-fill: white;
+}
+
+.text-area{
+    -fx-control-inner-background:  #d4dce0;
+}
+.date-picker{
+    -fx-control-inner-background:  #d4dce0;
+}
+.text-field{
+    -fx-background-color:  #d4dce0;
+}

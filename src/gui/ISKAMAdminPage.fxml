@@ -38,7 +38,7 @@
                                     <ComboBox fx:id="cBTUser" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     <Label text="Produkt" GridPane.rowIndex="2" />
                                     <ComboBox fx:id="cBTProduct" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    <Button mnemonicParsing="false" onAction="#btnTDeleteProductClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Vymazat" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                                    <Button mnemonicParsing="false" onAction="#btnTDeleteProductClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #333645;" text="Vymazat" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                                     <Label text="Typ transakce" GridPane.rowIndex="3" />
                                     <ComboBox fx:id="cBTTransactionType" prefHeight="25.0" prefWidth="214.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                     <Label text="Částka" GridPane.rowIndex="4" />
@@ -49,7 +49,7 @@
                                     <TextArea fx:id="tATDescription" prefHeight="61.0" prefWidth="214.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                     <ComboBox fx:id="cBTOperationType" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                                     <Label text="Typ operace" GridPane.rowIndex="7" />
-                                    <Button mnemonicParsing="false" onAction="#btnTExecute" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <Button mnemonicParsing="false" onAction="#btnTExecute" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #333645;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="7" />
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
@@ -114,7 +114,7 @@
                                     <TextArea fx:id="tAPPrice" prefHeight="61.0" prefWidth="214.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                                     <ComboBox fx:id="cBPOperationType" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                                     <Label text="Typ operace" GridPane.rowIndex="6" />
-                                    <Button mnemonicParsing="false" onAction="#btnPExecuteClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #d4dce0;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                                    <Button mnemonicParsing="false" onAction="#btnPExecuteClicked" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: #333645;" text="Provést" GridPane.columnIndex="4" GridPane.rowIndex="6" />
                                     <TextField fx:id="tFPName" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     <TextArea fx:id="tAPDescription" prefHeight="200.0" prefWidth="200.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                     <ComboBox fx:id="cbPTypeOfTransaction" prefHeight="25.0" prefWidth="217.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
@@ -176,10 +176,10 @@
                                     <Label text="Přidat produkt" GridPane.rowIndex="7" />
                                     <ComboBox fx:id="cBFTypeOfOperation" onAction="#cBFTypeOfOperationChanged" prefHeight="25.0" prefWidth="216.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                     <Label text="Typ operace" GridPane.rowIndex="2" />
-                                    <Button mnemonicParsing="false" onAction="#btnFExecuteClicked" prefHeight="25.0" prefWidth="334.0" style="-fx-background-color: #d4dce0;" text="Provést operaci" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+                                    <Button mnemonicParsing="false" onAction="#btnFExecuteClicked" prefHeight="25.0" prefWidth="334.0" style="-fx-background-color: #333645;" text="Provést operaci" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
                                     <DatePicker fx:id="dPFDate" prefHeight="25.0" prefWidth="218.0" style="-fx-control-inner-background: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                     <ComboBox fx:id="cBFProducts" onAction="#cBFProductsChanged" prefHeight="25.0" prefWidth="218.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                    <Button fx:id="btnFAddProduct" mnemonicParsing="false" onAction="#btnFAddProductClicked" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: #d4dce0;" text="Přidat produkt" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                                    <Button fx:id="btnFAddProduct" mnemonicParsing="false" onAction="#btnFAddProductClicked" prefHeight="25.0" prefWidth="97.0" style="-fx-background-color: #333645;" text="Přidat produkt" wrapText="true" GridPane.columnIndex="4" GridPane.rowIndex="7" />
                                     <ListView fx:id="lVFProducts" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4dce0;" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.rowSpan="3" />
                                     <Label text="Produkty" GridPane.rowIndex="4" />
                                  </children>
