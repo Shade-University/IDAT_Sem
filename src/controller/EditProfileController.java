@@ -60,6 +60,9 @@ public class EditProfileController implements Initializable {
         } else if (editedUser instanceof Teacher) {
             initTeacher();
         } //Init data by edited user
+        else {
+            btnAction.setDisable(false);
+        }
     }
 
     private void initData() {

@@ -126,6 +126,8 @@ public class EditUserController implements Initializable {
                 initStudent();
             } else if (editedUser instanceof Teacher) {
                 initTeacher();
+            } else {
+                btnAction.setDisable(false);
             }
         } catch (SQLException e) {
             e.printStackTrace();
