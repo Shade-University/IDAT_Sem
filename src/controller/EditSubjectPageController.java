@@ -107,6 +107,9 @@ public class EditSubjectPageController implements Initializable {
      * @throws SQLException
      */
     private void loadDataToUniversal() throws SQLException {
+        comboBoxAddSubjectToUniversal.setDisable(true);
+        comboBoxAddSubjectToUniversal.setPromptText("Načítání...");
+        btnAddSubjectToUniversal.setDisable(true);
         new Thread(() -> {
             try {
                 switch (comboBoxSubjectsUniversal.getValue()) {
@@ -139,6 +142,9 @@ public class EditSubjectPageController implements Initializable {
                 Platform.runLater(() -> {
                     comboBoxAddSubjectToUniversal.getSelectionModel().select(0);
                     cbUniversalChanged(null);
+                    comboBoxAddSubjectToUniversal.setDisable(false);
+                    btnAddSubjectToUniversal.setDisable(false);
+                    btnAddSubjectToUniversal.setText("Přidat");
                 });
             } catch (SQLException ex) {
                 ex.printStackTrace();
